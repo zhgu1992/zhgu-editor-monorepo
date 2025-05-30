@@ -3,10 +3,10 @@ import { resolve } from 'path'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
+    // base: '/example/',
     build: {
         rollupOptions: {
             input: {
-                // main: resolve(__dirname, 'index.html'),
                 nested: resolve(__dirname, 'example'),
             },
         },

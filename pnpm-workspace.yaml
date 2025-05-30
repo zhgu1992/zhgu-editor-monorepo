@@ -1,0 +1,9 @@
+packages:
+  # 指定根目录直接子目录中的包
+  - 'app'
+  # packages/ 直接子目录中的所有包
+  - 'packages/*'
+  # utils/ 子目录中的所有包
+  - 'utils/**'
+  # 排除测试目录中的包
+  - '!**/test/**'

@@ -1,5 +1,5 @@
 {
-  "name": "@zhgu/render",
+  "name": "@zhgu/type",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,12 +9,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
-  "dependencies": {
-    "@zhgu/type": "workspace:*",
-    "@zhgu/data": "workspace:*"
-  },
   "devDependencies": {
-    "@types/node": "^22.15.21",
     "typescript": "~5.8.3",
     "vite": "^6.3.5"
   }

@@ -1,5 +1,5 @@
 {
-  "name": "@zhgu/render",
+  "name": "@zhgu/data",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,11 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/lodash-es": "^4.17.12",
     "@zhgu/type": "workspace:*",
-    "@zhgu/data": "workspace:*"
+    "gl-matrix": "^3.4.3",
+    "lodash-es": "^4.17.21",
+    "mutative": "^1.2.0",
+    "nanoid": "^5.1.5"
   },
   "devDependencies": {
-    "@types/node": "^22.15.21",
     "typescript": "~5.8.3",
     "vite": "^6.3.5"
   }
