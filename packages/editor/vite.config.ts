@@ -10,5 +10,5 @@ export default defineConfig({
                 nested: resolve(__dirname, 'example'),
             },
         },
-    },
+    }
 })

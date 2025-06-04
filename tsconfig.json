@@ -16,9 +16,10 @@
     /* Linting */
     "strict": true,
     "noUnusedLocals": false,
-    "noUnusedParameters": true,
+    "noUnusedParameters": false,
     "erasableSyntaxOnly": false,
     "noFallthroughCasesInSwitch": true,
+    "experimentalDecorators": true,
     "noUncheckedSideEffectImports": true
   },
   "include": ["src"]

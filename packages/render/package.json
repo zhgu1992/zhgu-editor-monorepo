@@ -10,8 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@zhgu/data": "workspace:*",
     "@zhgu/type": "workspace:*",
-    "@zhgu/data": "workspace:*"
+    "gl-matrix": "^3.4.3"
   },
   "devDependencies": {
     "@types/node": "^22.15.21",

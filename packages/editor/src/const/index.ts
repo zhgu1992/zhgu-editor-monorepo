@@ -36,8 +36,8 @@ export enum EModeName {
 export enum ERenderGroupKey {
   Render = 'render',
   Name = 'name',
-  Select = 'select',
   Hover = 'hover',
+  Select = 'select',
   Custom = 'custom',
   Top = 'top',
 }

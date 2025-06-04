@@ -29,7 +29,7 @@ const createHelloWorldFileData = () => {
   const documentElement = testDocument(0, [
     // testInternalPage(1, []),
     testPage(2, [
-      testFrame(3, [], {}),
+      // testFrame(3, [], {}),
       testRectangle(5, {
         strokeWeight: 10,
         strokePaints: [

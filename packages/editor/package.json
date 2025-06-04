@@ -14,13 +14,16 @@
     "@zhgu/data": "workspace:*",
     "@zhgu/render": "workspace:*",
     "@zhgu/type": "workspace:*",
+    "autobind-decorator": "^2.4.0",
+    "bezier-easing": "^2.1.0",
+    "eventemitter3": "^5.0.1",
     "gl-matrix": "^3.4.3",
     "lodash-es": "^4.17.21"
   },
   "devDependencies": {
-    "typescript": "~5.8.3",
-    "vite": "^6.3.5",
     "@types/dat.gui": "^0.7.13",
-    "dat.gui": "^0.7.9"
+    "dat.gui": "^0.7.9",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
   }
 }

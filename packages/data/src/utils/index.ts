@@ -75,15 +75,50 @@ const orderByPosition = (
   return 0;
 };
 
-
-export * from './convert.ts';
-export * from './points.ts';
-export * from './rotate.ts';
-export * from './scale.ts';
-export * from './uuid.ts';
 export {
   isNullOrUndefined,
   binarySearchParentPosition,
   comparator,
   orderByPosition,
 };
+
+/**
+ * [对某个数值设置区间]
+ * @param {number} value [需要被设置区间的值]
+ * @param {number} min   [最小值]
+ * @param {number} max   [最大值]
+ * @return {number}      [被限定后的值]
+ */
+export function setRegion(value: number, min: number, max: number) {
+  return Math.max(min, Math.min(value, max));
+}
+
+export function getTwoDecimal(_num: number | string) {
+  if (_num === undefined) {
+    return _num;
+  }
+  return Math.round((_num as number) * 100) / 100;
+}
+
+/**
+ * 误差范围内值是否相等
+ * @param {number} number 比较值
+ * @param {number} theNumber   被比较值
+ * @param {number} err   误差范围，默认0.001
+ * @return {boolean} 是否相等
+ */
+export function isEqualNumber(number: number, theNumber: number, err: number = 0.001) {
+  return Math.abs(theNumber - number) <= err;
+}
+
+
+export * from './convert.ts';
+export * from './points.ts';
+export * from './rotate.ts';
+export * from './scale.ts';
+export * from './uuid.ts';
+export * from './system';
+export * from './color';
+export * from './bounding';
+export * from './matrix';
+export * from './collide';

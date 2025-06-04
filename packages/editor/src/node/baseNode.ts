@@ -4,14 +4,13 @@ import type { RenderManager } from '../render';
 import type { IMetaData, IModuleMetaData, ICustomNode, IBaseNode } from '../interface';
 import { DEFAULT_META_DATA, DEFAULT_MODULE_META_DATA } from '../interface';
 import { cloneDeep } from 'lodash-es';
-// import type { EventManager } from '../event';
 import type { ISizeProps, ISolidPaintProps, RGBAColor, XYPos, XYWH, IRect, PropsElementChange, Paint, RenderCategorySet} from '@zhgu/type';
 import { EElementChangeType } from '@zhgu/type';
-// import { isPolygonInRect, isPolygonIntersectRect, rotate } from '@jsd-core/utils';
 import { mat3 } from 'gl-matrix';
-import { mat2obj, PaintProps } from '@zhgu/data';
+import { mat2obj, PaintProps, isPolygonInRect, isPolygonIntersectRect, rotate } from '@zhgu/data';
 import type { View } from '../view';
 import { IRenderNode } from '@zhgu/render';
+import { BaseCustomUnit } from './customNode';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const _matCache ={
@@ -38,6 +37,7 @@ export class BaseNode extends NodeModel implements IBaseNode {
     this._renderNode = this.createRenderNode()!;
     // this._eventManager = eventManager!;
     this._renderManager = this.view.renderManager!;
+    this._renderManager.setRenderNode(this.id, this);
   }
 
   createRenderNode(){
@@ -61,19 +61,19 @@ export class BaseNode extends NodeModel implements IBaseNode {
     } as PropsElementChange;
   }
 
-  // changeRotation(rotation: number, apivot = this.apivot) {
-  //   const at = rotate(this.at, rotation, apivot);
-  //   const { rt } = this;
-  //   mat3.mul(rt, mat3.invert(_matCache.mRotate, (this.parent as GeometryNode).at), at);
-  //
-  //   return {
-  //     id: this.id,
-  //     type: EElementChangeType.Props,
-  //     props: {
-  //       transform: mat2obj(rt),
-  //     },
-  //   } as PropsElementChange;
-  // }
+  changeRotation(rotation: number, apivot = this.apivot) {
+    const at = rotate(this.at, rotation, apivot);
+    const { rt } = this;
+    mat3.mul(rt, mat3.invert(_matCache.mRotate, (this.parent as GeometryNode).at), at);
+
+    return {
+      id: this.id,
+      type: EElementChangeType.Props,
+      props: {
+        transform: mat2obj(rt),
+      },
+    } as PropsElementChange;
+  }
 
   changeRelativePos(pos: Partial<XYPos>) {
     const trans = { ...this.transform };
@@ -246,36 +246,41 @@ export class BaseNode extends NodeModel implements IBaseNode {
 
   // @ts-ignore
   updateRenderNode(renderCategorySet: RenderCategorySet) {
-    // 这里需要做一层到category的转化，比如w、h对应的是size @zhuguang
+    // 这里需要做一层到category的转化，比如w、h对应的是size
     this.renderManager.updateRenderNode(this._renderNode, this);
     this.renderManager.dirty();
   }
 
-  // updateHoverAndSelect(props: RenderCategorySet = BaseNode.HOVERANDSELECT_RENDER_CATEGORY_SET) {
-  //   const updateKeys = props;
-  //   if (this._hoverNode) {
-  //     this._hoverNode.updateByCategory(updateKeys);
-  //   }
-  //   if (this._selectNode) {
-  //     this._selectNode.updateByCategory(updateKeys);
-  //   }
-  //   this.renderManager.dirty();
-  // }
+  updateHoverAndSelect(props: RenderCategorySet = BaseNode.HOVERANDSELECT_RENDER_CATEGORY_SET) {
+    const updateKeys = props;
+    if (this._hoverNode) {
+      this._hoverNode.update();
+      // this.renderManager.updateWH(this._hoverNode.renderNode, this.w, this.h);
+      // this.renderManager.updateMatrix(this._hoverNode.renderNode, this.at);
+    }
+    if (this._selectNode) {
+      this._selectNode.update();
+      // this.renderManager.updateWH(this._selectNode.renderNode, this.w, this.h);
+      // this.renderManager.updateMatrix(this._selectNode.renderNode, this.at);
 
-  // pick(pos: XYPos){
-  //   const { x, y } = pos;
-  //   return this._renderNode.contains(x, y);
-  // }
+    }
+    this.renderManager.dirty();
+  }
+
+  pick(pos: XYPos){
+    const localPoint = this._renderNode.worldTransform.applyInverse(pos);
+    return this._renderNode?.containsPoint(localPoint);
+  }
   //
-  // pickByBox(rect: XYWH, strict = false) {
-  //   const points = this.apoints;
-  //   const bounds: IRect = [rect.x, rect.y, rect.x + rect.w, rect.y + rect.h];
-  //   if (strict) {
-  //     return isPolygonInRect(points, bounds);
-  //   } else {
-  //     return isPolygonIntersectRect(points, bounds);
-  //   }
-  // }
+  pickByBox(rect: XYWH, strict = false) {
+    const points = this.apoints;
+    const bounds: IRect = [rect.x, rect.y, rect.x + rect.w, rect.y + rect.h];
+    if (strict) {
+      return isPolygonInRect(points, bounds);
+    } else {
+      return isPolygonIntersectRect(points, bounds);
+    }
+  }
 
   // get eventManager() {
   //   return this._eventManager;
@@ -313,37 +318,57 @@ export class BaseNode extends NodeModel implements IBaseNode {
   //   };
   // }
 
-  // /**
-  //  * hover 框
-  //  */
-  // showHover(visible = true) {
-  //   if (!this._hoverNode) {
-  //     this._hoverNode = new BaseCustomUnit(`hover_${this.id}`, this, this.view, {
-  //       strokeWeight: 1,
-  //       colorEnabled: false,
-  //     }) as ICustomNode;
-  //   }
-  //   this._hoverNode.isVisible = visible;
-  //   this.renderManager.renderer.update();
-  //   return this._hoverNode;
-  // }
+  /**
+   * hover 框
+   */
+  showHover(visible = true) {
+    if (!this._hoverNode) {
+      this._hoverNode = new BaseCustomUnit(`hover_${this.id}`, this, this.view, {
+        strokeWeight: 3,
+        colorEnabled: false,
+        // strokeColor: {
+        //   r: 255,
+        //   g: 0,
+        //   b: 0,
+        //   a: 1
+        // }
+      }) as ICustomNode;
+    }
+    this._hoverNode.isVisible = visible;
+    this.renderManager.setHoverRenderNode(this.id, this._hoverNode);
+    return this._hoverNode;
+  }
 
-  // /**
-  //  * 选中
-  //  * @param {boolean} visible
-  //  */
-  // showSelectBox(visible = true) {
-  //   if (!this._selectNode) {
-  //     this._selectNode = new BaseCustomUnit(`select_${this.id}`, this, this.view, {
-  //       // strokeColor: COLOR_CONFIG['dark/purple/700'],
-  //       strokeWeight: 1,
-  //       colorEnabled: false,
-  //     }) as ICustomNode;
-  //   }
-  //   this.renderManager.renderer.update();
-  //   this._selectNode.isVisible = visible;
-  //   return this._selectNode;
-  // }
+  destroy(){
+    this.renderNode.clear();
+    this.renderManager.removeRenderNode(this.id);
+    this._hoverNode?.destroy();
+    this._selectNode?.destroy();
+  }
+
+  /**
+   * 选中
+   * @param {boolean} visible
+   */
+  showSelectBox(visible = true) {
+    if (!this._selectNode) {
+      this._selectNode = new BaseCustomUnit(`select_${this.id}`, this, this.view, {
+        // strokeColor: COLOR_CONFIG['dark/purple/700'],
+        strokeWeight: 2,
+        colorEnabled: false,
+        // strokeColor: {
+        //   r: 255,
+        //   g: 0,
+        //   b: 0,
+        //   a: 1
+        // }
+      }) as ICustomNode;
+    }
+    this.renderManager.setSelectRenderNode(this.id, this._selectNode);
+    // this.renderManager.renderer.update();
+    this._selectNode.isVisible = visible;
+    return this._selectNode;
+  }
 
 
   traverse(drawSelfLayer: (node: IBaseNode) => void): void {
@@ -361,17 +386,5 @@ export class BaseNode extends NodeModel implements IBaseNode {
     }
     callBack(this);
     (parent as IBaseNode).traverseParent(callBack);
-  }
-
-  walkNode(worker: (node: IBaseNode) => void | { shouldBreak: boolean }) {
-    const stack: IBaseNode[] = [this];
-    while (stack.length) {
-      const current = stack.pop();
-      const shouldBreak = worker(current!);
-      if (!shouldBreak) {
-        const childNode = current!.children as IBaseNode[];
-        stack.push(...childNode);
-      }
-    }
   }
 }

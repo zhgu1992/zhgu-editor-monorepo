@@ -11,7 +11,7 @@ import type {
   IElementPropsWithoutType,
 } from '@zhgu/type';
 import { EElementChangeType } from '@zhgu/type';
-import { isDocument } from '../dataUtil';
+import { isDocument, createElementInner } from '../dataUtil';
 import { getShortUUID } from '../utils';
 
 interface TransactionResult {
@@ -260,6 +260,28 @@ class DocExchange {
         reverse: [revElementChange],
       };
     }
+  }
+
+  public createNewId(extra: Set<string> | null = null): string {
+    let id = getShortUUID();
+    const extraNotNull = !isNullOrUndefined(extra);
+    if (extraNotNull && extra!.has(id)) {
+      id = getShortUUID();
+    }
+    if (extraNotNull) {
+      extra!.add(id);
+    }
+    return id;
+  }
+
+  public createElement(elementType: EElementType, elementProps: IElementPropsWithoutType) {
+    const newElement = createElementInner(elementType);
+    const id = this.createNewId();
+    return {
+      ...newElement,
+      ...elementProps,
+      id,
+    };
   }
 
 }

@@ -1,5 +1,5 @@
 import type { ISyncClientFollower, ISavingTransaction } from '../interface';
-import type { Transaction } from '@zhgu/type';
+import type {ElementChange, Transaction} from '@zhgu/type';
 import type { DocExchange } from './DocExchange';
 import { isNullOrUndefined } from '../utils';
 import { mergeTransaction } from '../dataUtil';
@@ -103,26 +103,32 @@ class DataSync {
     this.actionHistory.setLastUndoRedoItem(null);
   }
 
-  undoLocal() {
+  undoLocal(): ElementChange[] {
+    let currentRes: ElementChange[] = [];
     this.resetCompression();
     if (this.actionHistory.canUndo()) {
       const trans = this.actionHistory.undos.pop()!;
+      currentRes = trans.transaction;
       const [reverse] = this.processTransaction(trans.transaction) ?? [[]];
       const redoItem = { transaction: reverse };
       this.addNewPendingChange(new PendingChange(trans.transaction, reverse));
       this.actionHistory.redos.push(redoItem);
     }
+    return currentRes;
   }
 
-  redoLocal() {
+  redoLocal(): ElementChange[] {
+    let currentRes: ElementChange[] = [];
     this.resetCompression();
     if (this.actionHistory.canRedo()) {
       const trans = this.actionHistory.redos.pop()!;
+      currentRes = trans.transaction;
       const [reverse] = this.processTransaction(trans.transaction) ?? [[]];
       const undoItem = { transaction: reverse };
       this.addNewPendingChange(new PendingChange(trans.transaction, reverse));
       this.actionHistory.undos.push(undoItem);
     }
+    return currentRes;
   }
 }
 
