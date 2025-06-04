@@ -1,8 +1,8 @@
-import type {ElementData} from '../dataUtil';
-import type {ElementChangeProps, IElement, ParentIndex, RenderCategorySet, INodeElement} from '@zhgu/type';
-import type {INode} from '../interface';
-import {elementProps2RenderCategorySet} from '../dataUtil';
-import {binarySearchParentPosition} from '../utils';
+import type { ElementData } from '../dataUtil';
+import type { ElementChangeProps, IElement, ParentIndex, RenderCategorySet, INodeElement } from '@zhgu/type';
+import type { INode } from '../interface';
+import { elementProps2RenderCategorySet } from '../dataUtil';
+import { binarySearchParentPosition } from '../utils';
 
 class Node implements INode {
   private _props!: INodeElement;
@@ -116,9 +116,7 @@ class Node implements INode {
   }
 
   // @ts-ignore
-  updateRenderNode(renderCategorySet: RenderCategorySet) {
-
-  }
+  updateRenderNode(renderCategorySet: RenderCategorySet) {}
   updateNodeAt() {}
 }
 

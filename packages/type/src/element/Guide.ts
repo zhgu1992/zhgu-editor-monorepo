@@ -1,7 +1,7 @@
 interface IGuide {
   id: string;
   offset: number;
-  direction: 'x' | 'y'
+  direction: 'x' | 'y';
   isLocked: boolean;
 }
 

@@ -11,9 +11,7 @@ export const COLOR_CONFIG = {
   'dark/purple/700': { r: 179, g: 133, b: 251, a: 1 },
 };
 
-
 export const HOVER_BOX_ID = 'hover-box';
-
 
 export const CREATION_CURSOR = {
   cross: 'cursor-crosshair',
@@ -26,7 +24,7 @@ export const CREATION_CURSOR = {
 export enum EEditorStateName {
   Default = 'Default',
   CreateRectTangle = 'CreateRectTangle',
- CreateFrame = 'CreateFrame',
+  CreateFrame = 'CreateFrame',
 }
 
 export enum EModeName {

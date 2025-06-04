@@ -66,7 +66,7 @@ export class MyCustomNode extends CustomNode {
     super(id, view, options);
     // 初始化代码
   }
-  
+
   // 实现自定义方法和属性
 }
 ```
@@ -83,22 +83,22 @@ export class MyBehavior extends BehaviorNode {
   constructor(view, collectionUIManager) {
     super(view, 'my-behavior', collectionUIManager);
   }
-  
+
   onEnter() {
     super.onEnter();
     // 注册事件监听器
     this.view.eventManager.on('mousemove', this.handleMouseMove);
   }
-  
+
   onExit() {
     super.onExit();
     // 移除事件监听器
     this.view.eventManager.off('mousemove', this.handleMouseMove);
   }
-  
-  handleMouseMove = (e) => {
+
+  handleMouseMove = e => {
     // 处理鼠标移动逻辑
-  }
+  };
 }
 ```
 
@@ -116,23 +116,19 @@ export class MyState extends ActiveStateNode {
   constructor(view) {
     super(view, 'my-state');
   }
-  
+
   initBehaviors() {
     // 注册行为
     const myBehavior = new MyBehavior(this.view, this.collectionUIManager);
     this.registerBehavior(myBehavior);
   }
-  
+
   registerCustomNode() {
     super.registerCustomNode();
-    
+
     // 注册自定义节点
-    const myCustomNode = new MyCustomNode(
-      'my-custom-node',
-      this.collectionUIManager,
-      this.view
-    );
-    
+    const myCustomNode = new MyCustomNode('my-custom-node', this.collectionUIManager, this.view);
+
     this.collectionUIManager.addCustomNode(myCustomNode);
   }
 }
@@ -201,37 +197,40 @@ window.editor = editor;
 // 可选：创建调试面板
 const gui = new GUI();
 const data = {
-    FillColor: [255, 255, 255],
-    StrokeWeight: 0,
-    StrokePaints: [255, 0, 0],
-    debugArea: false,
-    undo: () => {
-        editor.undoHistory();
-    },
-    redo: () => {
-        editor.redoHistory();
-    },
+  FillColor: [255, 255, 255],
+  StrokeWeight: 0,
+  StrokePaints: [255, 0, 0],
+  debugArea: false,
+  undo: () => {
+    editor.undoHistory();
+  },
+  redo: () => {
+    editor.redoHistory();
+  },
 };
 
 // 监听颜色变化并应用到节点
 let _begin = true;
-gui.addColor(data, 'FillColor').onChange((value) => {
-    if(_begin){
-        _begin = false;
-        editor.startCompressTransaction();
+gui
+  .addColor(data, 'FillColor')
+  .onChange(value => {
+    if (_begin) {
+      _begin = false;
+      editor.startCompressTransaction();
     }
     const node = editor.scene.node('5');
     const diff = node.changeFillPaintColor({
-        r: value[0], // 红色通道
-        g: value[1], // 绿色通道
-        b: value[2], // 蓝色通道
-        a: 1 // 透明度通道
+      r: value[0], // 红色通道
+      g: value[1], // 绿色通道
+      b: value[2], // 蓝色通道
+      a: 1, // 透明度通道
     });
     editor.applyTransaction([diff]);
-}).onFinishChange(() => {
+  })
+  .onFinishChange(() => {
     editor.commitHistory();
     _begin = true;
-});
+  });
 
 // 添加撤销和重做按钮
 gui.add(data, 'undo');
@@ -239,8 +238,8 @@ gui.add(data, 'redo');
 
 // 添加热区调试开关
 gui.add(data, 'debugArea').onChange(v => {
-    // 开启热区调试模式，可视化交互区域
-    editor.getCurrentState()?.showArea(v);
+  // 开启热区调试模式，可视化交互区域
+  editor.getCurrentState()?.showArea(v);
 });
 ```
 
@@ -255,6 +254,7 @@ gui.add(data, 'debugArea').onChange(v => {
 4. **状态管理**：`editor.initEditorMode()` 初始化编辑模式和状态。
 
 5. **交互处理**：
+
    - 使用 `editor.applyTransaction([diff])` 应用节点变更
    - 调用 `editor.startCompressTransaction()` 和 `editor.commitHistory()` 包裹多个操作，保证撤销/重做的原子性
 
@@ -262,4 +262,4 @@ gui.add(data, 'debugArea').onChange(v => {
 
 7. **历史记录**：使用 `editor.undoHistory()` 和 `editor.redoHistory()` 实现撤销和重做功能。
 
-开发过程中，合理利用这些API可以快速构建和调试您的自定义编辑功能。 
+开发过程中，合理利用这些API可以快速构建和调试您的自定义编辑功能。

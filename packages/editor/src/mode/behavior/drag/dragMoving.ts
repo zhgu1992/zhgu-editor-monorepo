@@ -5,7 +5,9 @@ import type {
   ICustomNode,
   IInputSnapshot,
   IBaseNode,
-  ICollideMessage, ICustomCollection, ICollectionUIManager
+  ICollideMessage,
+  ICustomCollection,
+  ICollectionUIManager,
 } from '../../../interface';
 import { handleHorizontalOrVertical } from '../../../utils';
 import { getMaxAABB } from '@zhgu/data';
@@ -18,7 +20,7 @@ type INodeInfo = {
   index: number;
   parentId?: string;
   at: mat3;
-}
+};
 export class DragMovingBehavior extends DragBaseBehaviorNode {
   protected hideUIIfDragging = true;
   private beginCenterPos: XYPos = { x: 0, y: 0 };
@@ -29,13 +31,13 @@ export class DragMovingBehavior extends DragBaseBehaviorNode {
   // 记录初期每个节点的状态
   private startNodesInitialParentId: Record<string, INodeInfo> = {};
   // 记录初始拖拽的节点，默认为pageNode
-  private initialCollideGroupNode: IBaseNode|null = null;
-  private currentCollideGroupNode: IBaseNode|null = null;
+  private initialCollideGroupNode: IBaseNode | null = null;
+  private currentCollideGroupNode: IBaseNode | null = null;
   // 集中容器节点的渲染节点
   private focusRenderNode: ICustomNode | null = null;
   // 拖拽起始画板是否为自动布局
   private isInitialAutoLayout: boolean = false;
-  private _lastAlt = false;// 记录上一次alt
+  private _lastAlt = false; // 记录上一次alt
   private _copyNodes: IBaseNode[] | null = null;
   private _diff: XYPos = { x: 0, y: 0 };
 
@@ -50,7 +52,6 @@ export class DragMovingBehavior extends DragBaseBehaviorNode {
       return;
     }
   }
-
 
   override shouldDrag(areaNode: ICustomCollection, inputSnapshot: IInputSnapshot) {
     const { view } = this;
@@ -68,14 +69,14 @@ export class DragMovingBehavior extends DragBaseBehaviorNode {
     const { originPagePoint } = positionMessage;
 
     const selectedNodes = view.eventManager!.selectedNodes;
-    if(selectedNodes.length === 0) {
+    if (selectedNodes.length === 0) {
       return;
     }
 
     // 拖拽初期记录选中的节点位置信息以及父级信息
-    selectedNodes.forEach((node) => {
+    selectedNodes.forEach(node => {
       // @ts-ignore
-      const index = node.parent ? (node.parent.children).indexOf(node) : -1;
+      const index = node.parent ? node.parent.children.indexOf(node) : -1;
       this.startNodesInitialParentId[node.id] = {
         parentId: node.parent?.id,
         index,
@@ -86,7 +87,7 @@ export class DragMovingBehavior extends DragBaseBehaviorNode {
     this.beginCenterPos = { x: x + w / 2, y: y + h / 2 } as XYPos;
     // 记录初始拖拽位置
     // @ts-ignore
-    this.beginPos = selectedNodes.map((node) => ({ x: node.at[6], y: node.at[7] }));
+    this.beginPos = selectedNodes.map(node => ({ x: node.at[6], y: node.at[7] }));
     this.beginAABB = { x, y, w, h };
     this.currentCollideGroupNode = this.initialCollideGroupNode;
   };
@@ -94,24 +95,20 @@ export class DragMovingBehavior extends DragBaseBehaviorNode {
   override onDragMove: TJsDragMoveEvent = (collideMessage: ICollideMessage, positionMessage) => {
     const { view } = this;
     const selectedNodes = view.eventManager!.selectedNodes;
-    if(selectedNodes.length === 0) {
+    if (selectedNodes.length === 0) {
       return;
     }
     this.dragMove(selectedNodes, positionMessage);
   };
 
   override onDragEnd: TJsDragMoveEvent = (collideMessage: ICollideMessage, message) => {
-
     if (this.collisionTimer) {
       window.clearTimeout(this.collisionTimer);
     }
     this.collisionTimer = null;
   };
 
-  private dragMove(
-    nodes: IBaseNode[],
-    options: IPositionMessage,
-  ) {
+  private dragMove(nodes: IBaseNode[], options: IPositionMessage) {
     if (!nodes) {
       return false;
     }
@@ -121,8 +118,8 @@ export class DragMovingBehavior extends DragBaseBehaviorNode {
 
     const { x, y } = this.beginAABB;
 
-    const movementX = (currentPagePoint.x - originPagePoint.x); // 拖拽移动距离
-    const movementY = (currentPagePoint.y - originPagePoint.y);
+    const movementX = currentPagePoint.x - originPagePoint.x; // 拖拽移动距离
+    const movementY = currentPagePoint.y - originPagePoint.y;
 
     const { x: fixX, y: fixY } = this.getPositionDataByPGA({ x: x + movementX, y: y + movementY });
 

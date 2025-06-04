@@ -14,7 +14,7 @@ export function getMaxAABB(boxes: IBox[]) {
 
   let maxPosition: [number, number, number, number] = [Infinity, Infinity, -Infinity, -Infinity];
 
-  boxes.forEach((box) => {
+  boxes.forEach(box => {
     if (!box) {
       return;
     }

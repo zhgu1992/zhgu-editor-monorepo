@@ -1,13 +1,15 @@
 import { DragBaseBehaviorNode } from './dragBase';
 import type {
-  IInputSnapshot, ICustomCollection, ICollectionUIManager,
+  IInputSnapshot,
+  ICustomCollection,
+  ICollectionUIManager,
   TJsDragStartEvent,
   IBaseNode,
   TJsDragEndEvent,
 } from '../../../interface';
 import type { View } from '../../../view/';
 import { mat3, vec2 } from 'gl-matrix';
-import { flipXWithMyself, flipYWithMyself, getMaxAABB} from '@zhgu/data';
+import { flipXWithMyself, flipYWithMyself, getMaxAABB } from '@zhgu/data';
 import type { AllDirection } from '../../../utils';
 import type { Transaction } from '@zhgu/type';
 import type { BaseResizeEventArea } from '../../UIElement';
@@ -45,7 +47,10 @@ export class DragResizeBehavior extends DragBaseBehaviorNode {
     const { area } = areaNode;
     const { originPagePoint } = inputSnapshot;
     const { x, y } = this.getPositionDataByPGA(originPagePoint);
-    const { resizeType, collection: { nodes } } = area as BaseResizeEventArea;
+    const {
+      resizeType,
+      collection: { nodes },
+    } = area as BaseResizeEventArea;
     if (nodes.length === 0) {
       return;
     }
@@ -64,7 +69,9 @@ export class DragResizeBehavior extends DragBaseBehaviorNode {
     const { nodes } = this.dragResizeState;
     const nodeLength = nodes?.length ?? 0;
     const isOneNode = nodeLength === 1;
-    let isRotate = false, isContainer = false, whRelation = false;
+    let isRotate = false,
+      isContainer = false,
+      whRelation = false;
     if (isOneNode) {
       const node = nodes[0];
       // isRotate = isRotated(node);
@@ -97,7 +104,12 @@ export class DragResizeBehavior extends DragBaseBehaviorNode {
     if (!dragResizeState) {
       return;
     }
-    const { nodes: [node], currentDragBounds: bounds, needFlipX, needFlipY } = dragResizeState!;
+    const {
+      nodes: [node],
+      currentDragBounds: bounds,
+      needFlipX,
+      needFlipY,
+    } = dragResizeState!;
     let { w, h, x, y } = bounds;
 
     w = Math.abs(w);
@@ -177,28 +189,28 @@ export type DragBounds = {
   h: number;
   at: mat3;
   invAt: mat3;
-}
+};
 
 export type TAllDirection = AllDirection | 'move'; // 还有 move
 
 // 元素坐标系：四个点&四条边
 const ALT_XY_RATIO = {
-  'lt': [0, 0],
-  'rt': [1, 0],
-  'rb': [1, 1],
-  'lb': [0, 1],
-  't' : [1, 0],
-  'b' : [1, 1],
-  'l' : [0, 1],
-  'r' : [1, 0],
+  lt: [0, 0],
+  rt: [1, 0],
+  rb: [1, 1],
+  lb: [0, 1],
+  t: [1, 0],
+  b: [1, 1],
+  l: [0, 1],
+  r: [1, 0],
 };
 
 // 元素坐标系四个点
 const SHIFT_XY_RATIO = {
-  'lt': [1, 1], // lt
-  'rt': [0, 1], // rt
-  'rb': [0, 0], // br
-  'lb': [1, 0], // bl
+  lt: [1, 1], // lt
+  rt: [0, 1], // rt
+  rb: [0, 0], // br
+  lb: [1, 0], // bl
 };
 
 const cloneBounds = (bounds: DragBounds): DragBounds => {
@@ -215,25 +227,25 @@ export const getCenter = (nodes: IBaseNode[]) => {
 };
 
 export class DragState {
-  public currentPos: vec2;                   // 当前鼠标拖拽点 (绝对坐标)
-  public startDragBounds: DragBounds;        // 起始的拖拽框
-  public currentDragBounds: DragBounds;      // 当前的拖拽框
-  public lastDragBounds: DragBounds;         // 上次的拖拽框
-  public startDragNodesInfo: Pick<IBaseNode, 'w' | 'h' | 'at'>[];         // 拖拽前的Node信息
-  public startPoints: vec2[];                // 起始拖拽框的四个点
-  public startPivot: vec2;                   // 起始的旋转中心
-  public ratio: number;                      // 长宽比
-  public rotation: number;                   // 旋转角
+  public currentPos: vec2; // 当前鼠标拖拽点 (绝对坐标)
+  public startDragBounds: DragBounds; // 起始的拖拽框
+  public currentDragBounds: DragBounds; // 当前的拖拽框
+  public lastDragBounds: DragBounds; // 上次的拖拽框
+  public startDragNodesInfo: Pick<IBaseNode, 'w' | 'h' | 'at'>[]; // 拖拽前的Node信息
+  public startPoints: vec2[]; // 起始拖拽框的四个点
+  public startPivot: vec2; // 起始的旋转中心
+  public ratio: number; // 长宽比
+  public rotation: number; // 旋转角
 
-  public dw: number;                         // 拖拽框宽度变化量
-  public dh: number;                         // 拖拽框高度变化量
+  public dw: number; // 拖拽框宽度变化量
+  public dh: number; // 拖拽框高度变化量
   public needFlipX = false;
   public needFlipY = false;
 
   constructor(
-    public nodes: IBaseNode[],     // 拖拽需要resize的Nodes
-    public startPos: vec2,                    // 起始鼠标拖拽点 (绝对坐标)
-    public cursorKey: TAllDirection,              // 拖拽点的位置
+    public nodes: IBaseNode[], // 拖拽需要resize的Nodes
+    public startPos: vec2, // 起始鼠标拖拽点 (绝对坐标)
+    public cursorKey: TAllDirection // 拖拽点的位置
   ) {
     this.dw = 0; // 拖拽框宽度变化量
     this.dh = 0; // 拖拽框高度变化量
@@ -256,18 +268,21 @@ export class DragState {
       const { w, h, x, y } = getMaxAABB(nodes);
       const at = mat3.fromTranslation(mat3.create(), [x, y]);
       this.startDragBounds = {
-        w, h, x, y,
+        w,
+        h,
+        x,
+        y,
         at,
         invAt: mat3.invert(mat3.create(), at),
       };
       this.startPoints = [
-        vec2.fromValues(x,y),
+        vec2.fromValues(x, y),
         vec2.fromValues(x + w, y),
         vec2.fromValues(x + w, y + h),
-        vec2.fromValues(x,y + h),
+        vec2.fromValues(x, y + h),
       ];
       this.rotation = 0;
-    };
+    }
     this.currentPos = vec2.clone(this.startPos); // 当前鼠标拖拽点
     const { w, h } = this.startDragBounds;
     this.ratio = w / h; // 长宽比
@@ -276,7 +291,14 @@ export class DragState {
     this.startPivot = getCenter(nodes); // 起始中心点
   }
 
-  moveTo(pos: vec2, options: { altKey: boolean; shiftKey: boolean; noFlip?: boolean } = { altKey: false, shiftKey: false, noFlip: false }) {
+  moveTo(
+    pos: vec2,
+    options: { altKey: boolean; shiftKey: boolean; noFlip?: boolean } = {
+      altKey: false,
+      shiftKey: false,
+      noFlip: false,
+    }
+  ) {
     this.currentPos = vec2.clone(pos);
     const { altKey, shiftKey, noFlip } = options;
     this.lastDragBounds = cloneBounds(this.currentDragBounds);
@@ -296,34 +318,41 @@ export class DragState {
       switch (dir) {
         case 't':
           if (sy - dy < 0 && noFlipAndAlt) {
-            rpos[1] = sy; size[1] = dy - sy;
+            rpos[1] = sy;
+            size[1] = dy - sy;
           } else {
-            rpos[1] += dy; size[1] -= dy;
+            rpos[1] += dy;
+            size[1] -= dy;
           }
           break;
         case 'b':
           if (sy + dy < 0 && noFlipAndAlt) {
-            rpos[1] += sy + dy; size[1] = -(dy + sy);
+            rpos[1] += sy + dy;
+            size[1] = -(dy + sy);
           } else {
             size[1] += dy;
           }
           break;
         case 'l':
           if (sx - dx < 0 && noFlipAndAlt) {
-            rpos[0] += sx; size[0] = dx - sx;
+            rpos[0] += sx;
+            size[0] = dx - sx;
           } else {
-            rpos[0] += dx; size[0] -= dx;
+            rpos[0] += dx;
+            size[0] -= dx;
           }
           break;
         case 'r':
           if (sx + dx < 0 && noFlipAndAlt) {
-            rpos[0] += dx + sx; size[0] = -(dx + sx);
+            rpos[0] += dx + sx;
+            size[0] = -(dx + sx);
           } else {
             size[0] += dx;
           }
           break;
         case 'move': // 移动 拖拽resize过程按住space的时候表现为移动
-          rpos[0] += dx; rpos[1] += dy;
+          rpos[0] += dx;
+          rpos[1] += dy;
           break;
         default:
           break;
@@ -331,7 +360,7 @@ export class DragState {
     };
     const { cursorKey } = this;
     if (cursorKey !== 'move') {
-      cursorKey.split('').forEach((dir) => {
+      cursorKey.split('').forEach(dir => {
         resize(dir as 'l');
       });
     } else {
@@ -362,11 +391,11 @@ export class DragState {
         const shiftXY = SHIFT_XY_RATIO[cursorKey as 'lb'];
         if (Math.abs(size[0] / size[1]) > ratio) {
           const nh = Math.sign(size[1]) * Math.abs(size[0] / ratio);
-          rpos[1] -= (altKey ? ((nh - size[1]) / 2) : (shiftXY[1] * (nh - size[1])));
+          rpos[1] -= altKey ? (nh - size[1]) / 2 : shiftXY[1] * (nh - size[1]);
           size[1] = nh;
         } else {
           const nw = Math.sign(size[0]) * Math.abs(size[1] * ratio);
-          rpos[0] -= (altKey ? ((nw - size[0]) / 2) : (shiftXY[0] * (nw - size[0])));
+          rpos[0] -= altKey ? (nw - size[0]) / 2 : shiftXY[0] * (nw - size[0]);
           size[0] = nw;
         }
       }
@@ -421,19 +450,35 @@ export class DragState {
    * @test: 将拖拽点修正到准确的位置上
    * @return {*}
    */
-  fixDragPoint(rStartPos:any) {
+  fixDragPoint(rStartPos: any) {
     const { cursorKey } = this;
     const { w, h } = this.startDragBounds;
 
     switch (cursorKey) {
-      case 't': rStartPos[1] = 0; break;
-      case 'b': rStartPos[1] = h; break;
-      case 'l': rStartPos[0] = 0; break;
-      case 'r': rStartPos[0] = w; break;
-      case 'lt': rStartPos = [0,0]; break;
-      case 'rt': rStartPos = [w,0]; break;
-      case 'rb': rStartPos = [w,h]; break;
-      case 'lb': rStartPos = [0,h]; break;
+      case 't':
+        rStartPos[1] = 0;
+        break;
+      case 'b':
+        rStartPos[1] = h;
+        break;
+      case 'l':
+        rStartPos[0] = 0;
+        break;
+      case 'r':
+        rStartPos[0] = w;
+        break;
+      case 'lt':
+        rStartPos = [0, 0];
+        break;
+      case 'rt':
+        rStartPos = [w, 0];
+        break;
+      case 'rb':
+        rStartPos = [w, h];
+        break;
+      case 'lb':
+        rStartPos = [0, h];
+        break;
     }
     return rStartPos;
   }

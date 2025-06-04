@@ -14,15 +14,15 @@ export class BaseCustomUnit extends CustomNode {
     this.setDefaultStyle();
   }
 
-  get w(){
+  get w() {
     return this.node.w;
   }
 
-  get h(){
+  get h() {
     return this.node.h;
   }
 
-  get at(){
+  get at() {
     return this.node.at;
   }
 

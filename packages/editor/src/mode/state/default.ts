@@ -6,7 +6,7 @@ import {
   DragSelectionBehavior,
   NodeHoverBehaviorNode,
   NodeSelectBehaviorNode,
-  ScreenScrollingBehaviorNode
+  ScreenScrollingBehaviorNode,
 } from '../behavior';
 import {
   BBorderResizeEventArea,
@@ -20,15 +20,13 @@ import {
   RBPointRotateEventArea,
   RTPointResizeEventArea,
   RTPointRotateEventArea,
-  TBorderResizeEventArea
+  TBorderResizeEventArea,
 } from '../UIElement';
 import { BaseCollectionArea } from '../../node';
 import { StateFactory } from '../base/factory';
 import { EEditorStateName } from '../../const';
 
-
-export class DefaultStateNode extends ActiveStateNode{
-
+export class DefaultStateNode extends ActiveStateNode {
   /**
    * 初始化behavior以及其对应的热区
    */

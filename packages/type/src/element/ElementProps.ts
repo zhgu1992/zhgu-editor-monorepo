@@ -9,22 +9,14 @@ import type { ITreeToggleProps } from './TreeToggle.ts';
 import type { EElementType } from './ElementType.ts';
 import type { IParentIndexProps } from './ParentIndex.ts';
 import type { IRectProps } from './Rect.ts';
-import type {
-  ICornerRadiusProps,
-  IRectangleCornerRadiusProps,
-} from './CornerRadius.ts';
+import type { ICornerRadiusProps, IRectangleCornerRadiusProps } from './CornerRadius.ts';
 
 export interface INamedProps {
   name: string;
 }
 
-
 // base:
-interface IHasGeometryProps
-  extends IBlendProps,
-    IPaintProps,
-    IStrokeProps,
-    IStrokePaintsProps {}
+interface IHasGeometryProps extends IBlendProps, IPaintProps, IStrokeProps, IStrokePaintsProps {}
 interface IElementBaseProps extends IParentIndexProps, INamedProps {}
 interface ITransformSizeProps extends ITransformProps, ISizeProps {}
 
@@ -32,32 +24,17 @@ interface IDocumentElementProps extends INamedProps {
   documentColorProfile: string;
 }
 
-interface IPageElementProps
-  extends IElementBaseProps,
-    ITransformSizeProps,
-    IBackgroundProps,
-    IGuideProps {}
+interface IPageElementProps extends IElementBaseProps, ITransformSizeProps, IBackgroundProps, IGuideProps {}
 
-interface ISceneElementBaseProps
-  extends IElementBaseProps,
-    ITreeToggleProps,
-    ITransformSizeProps {}
-
+interface ISceneElementBaseProps extends IElementBaseProps, ITreeToggleProps, ITransformSizeProps {}
 
 interface IGroupElementProps extends IElementBaseProps {}
 
-interface IShapeElementProps
-  extends ISceneElementBaseProps,
-    IHasGeometryProps {}
+interface IShapeElementProps extends ISceneElementBaseProps, IHasGeometryProps {}
 
-interface IRectangleElementProps
-  extends IShapeElementProps,
-    IRectangleCornerRadiusProps {}
+interface IRectangleElementProps extends IShapeElementProps, IRectangleCornerRadiusProps {}
 
-interface IFrameElementProps
-  extends ISceneElementBaseProps,
-    IHasGeometryProps,
-    IGuideProps {
+interface IFrameElementProps extends ISceneElementBaseProps, IHasGeometryProps, IGuideProps {
   clipContent: boolean;
 }
 
@@ -69,11 +46,9 @@ interface ISectionElementProps
 
 type IDerivedDataProps = ITransformProps & ISizeProps;
 
-
 interface IVectorBaseProps extends ISceneElementBaseProps, IHasGeometryProps {}
 
 interface IRectElementProps extends IVectorBaseProps, IRectProps {}
-
 
 type IAllElementProps = IDocumentElementProps &
   IPageElementProps &
@@ -81,8 +56,7 @@ type IAllElementProps = IDocumentElementProps &
   IRectangleElementProps &
   IFrameElementProps;
 
-type IElementProps = Partial<IAllElementProps> &
-  IElementBaseProps & { type: EElementType };
+type IElementProps = Partial<IAllElementProps> & IElementBaseProps & { type: EElementType };
 
 type IElementPropsWithoutType = Partial<IAllElementProps>;
 

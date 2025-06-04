@@ -3,7 +3,7 @@ import type { IBaseNode } from '../interface';
 import { EHoverEventType } from '../const';
 import type { Select } from './select';
 
-export class Hover{
+export class Hover {
   private _eventBus: EventBus;
   private _hoverNode: IBaseNode | null = null;
   private _selectManager: Select;
@@ -19,10 +19,10 @@ export class Hover{
 
   setHoverNode(value: IBaseNode | null) {
     const hoverNode = this._hoverNode;
-    if(hoverNode) {
+    if (hoverNode) {
       hoverNode.showHover(false);
     }
-    if(value){
+    if (value) {
       value.showHover(true);
     }
     this._hoverNode = value;

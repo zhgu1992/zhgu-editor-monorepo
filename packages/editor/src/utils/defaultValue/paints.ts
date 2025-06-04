@@ -1,18 +1,7 @@
-import type {
-  FillPaints,
-  IElementPropsWithoutType,
-  RGBAColor,
-  StrokePaints
-} from '@zhgu/type';
-import {
-  EBlendMode,
-  EPaintType,
-  ESceneElementType,
-  EStrokeAlign
-} from '@zhgu/type';
+import type { FillPaints, IElementPropsWithoutType, RGBAColor, StrokePaints } from '@zhgu/type';
+import { EBlendMode, EPaintType, ESceneElementType, EStrokeAlign } from '@zhgu/type';
 import { getHSLLightness, hex2rgba } from '@zhgu/data';
 import type { View } from '../../view';
-
 
 /**
  * 获取初始渐变颜色
@@ -38,7 +27,7 @@ function getLinearPaints(): FillPaints {
       opacity: 1,
       isEnabled: true,
       blendMode: EBlendMode.Normal,
-    }
+    },
   ];
 }
 
@@ -55,7 +44,7 @@ function getFillPaints(color: RGBAColor): FillPaints {
       opacity: 1,
       isEnabled: true,
       blendMode: EBlendMode.Normal,
-    }
+    },
   ];
 }
 
@@ -72,7 +61,7 @@ export function getStrokePaints(color: RGBAColor): StrokePaints {
       opacity: 1,
       isEnabled: true,
       blendMode: EBlendMode.Normal,
-    }
+    },
   ];
 }
 
@@ -84,8 +73,8 @@ export function getStrokePaints(color: RGBAColor): StrokePaints {
 export function getDefaultStyle(type: ESceneElementType, view: View): Partial<IElementPropsWithoutType> {
   switch (type) {
     case ESceneElementType.Section: {
-      const { r, g, b, a }  = view.scene.currentPage.backgroundColor;
-      const lightness = getHSLLightness(r,g,b);
+      const { r, g, b, a } = view.scene.currentPage.backgroundColor;
+      const lightness = getHSLLightness(r, g, b);
       const isLight = lightness > 0.62;
       const zoom = view.viewPort!.zoom;
 
@@ -107,27 +96,27 @@ export function getDefaultStyle(type: ESceneElementType, view: View): Partial<IE
         strokePaints: [
           {
             type: EPaintType.Solid,
-            color: isLight ? { r: 0, g: 0, b: 0, a:  1 } : { r: 255, g: 255, b: 255, a: 1},
+            color: isLight ? { r: 0, g: 0, b: 0, a: 1 } : { r: 255, g: 255, b: 255, a: 1 },
             opacity: isLight ? 0.13 : 0.25,
             isEnabled: true,
             blendMode: EBlendMode.Normal,
-          }
+          },
         ],
         // @ts-ignore
         cornerRadius: 4,
-        blendMode: EBlendMode.PassThrough
+        blendMode: EBlendMode.PassThrough,
       };
     }
     case ESceneElementType.Frame: {
       return {
         fillPaints: getFillPaints(hex2rgba('FFFFFF')),
-        blendMode: EBlendMode.PassThrough
+        blendMode: EBlendMode.PassThrough,
       };
     }
     case ESceneElementType.RichText: {
       return {};
     }
-    case ESceneElementType.Arrow:{
+    case ESceneElementType.Arrow: {
       return { strokeWeight: 2, blendMode: EBlendMode.PassThrough };
     }
     case ESceneElementType.Line: {

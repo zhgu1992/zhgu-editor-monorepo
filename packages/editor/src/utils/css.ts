@@ -9,6 +9,4 @@ const appendCssToDom = function (cssString: string) {
   document.head.appendChild(styleElement);
 };
 
-export {
-  appendCssToDom,
-};
+export { appendCssToDom };

@@ -55,8 +55,7 @@ class ActionHistory {
   canRedo() {
     return this.redos.length > 0;
   }
-
 }
 
 export { ActionHistory };
-export type { HistoryItem, LastHistoryItem, ActionHistoryState }; 
+export type { HistoryItem, LastHistoryItem, ActionHistoryState };

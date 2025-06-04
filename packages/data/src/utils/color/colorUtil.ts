@@ -1,6 +1,6 @@
 import type { RGBAColor } from '@zhgu/type';
 
-const colorVals: {[key: string]: string} = {
+const colorVals: { [key: string]: string } = {
   blue: '64, 128, 223',
   lineRed: '245, 100, 100',
   // 'elementBaseColor': '230, 230, 230',
@@ -13,7 +13,7 @@ const colorVals: {[key: string]: string} = {
   distanceSize: '157, 122, 240',
   red: '255, 0, 0',
   canvasSymbolTip: '71, 184, 245',
-  black: '0, 0, 0'
+  black: '0, 0, 0',
 };
 /**
  * [获取系统存入的一些基础颜色值]

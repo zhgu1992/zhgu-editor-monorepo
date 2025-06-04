@@ -10,10 +10,12 @@ export class NodeHoverBehaviorNode extends BehaviorNode {
     super(view, 'hover', collectionUIManager);
   }
 
-  override onPointerMove: TJsPointerEvent = (inputSnapshot) => {
+  override onPointerMove: TJsPointerEvent = inputSnapshot => {
     const { isDragging, currentPagePoint } = inputSnapshot;
-    const {view: {eventManager, picker, scene}} = this;
-    if(!eventManager || !picker) {
+    const {
+      view: { eventManager, picker, scene },
+    } = this;
+    if (!eventManager || !picker) {
       return;
     }
     const area = this.collectionUIManager.pickArea(currentPagePoint);
@@ -23,7 +25,7 @@ export class NodeHoverBehaviorNode extends BehaviorNode {
       this.view.canvasManager?.setCursorType('cursor-default');
     }
     const selectedNodes = this.view.eventManager!.selectedNodes;
-    if(area.length && selectedNodes.length > 1){
+    if (area.length && selectedNodes.length > 1) {
       eventManager.hoverNode = null;
       return;
     }
@@ -33,8 +35,10 @@ export class NodeHoverBehaviorNode extends BehaviorNode {
 
   onExit(): void {
     super.onExit();
-    const {view: {eventManager, picker, scene}} = this;
-    if(!eventManager || !picker) {
+    const {
+      view: { eventManager, picker, scene },
+    } = this;
+    if (!eventManager || !picker) {
       return;
     }
     // 切换活动状态时清空 hover

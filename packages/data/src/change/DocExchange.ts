@@ -97,10 +97,7 @@ class DocExchange {
 
   private validate(): void {}
 
-  tryCommitElementChange(
-    elementChange: ElementChange,
-    isIgnoreRevTransaction = false,
-  ): TransactionResult | null {
+  tryCommitElementChange(elementChange: ElementChange, isIgnoreRevTransaction = false): TransactionResult | null {
     try {
       return this.commitElementChange(elementChange, isIgnoreRevTransaction);
     } catch (e) {
@@ -113,7 +110,7 @@ class DocExchange {
   tryTransact(
     transaction: Transaction,
     follower?: (_: ElementChange) => void,
-    isIgnoreRevTransaction = false,
+    isIgnoreRevTransaction = false
   ): [Transaction] | null {
     let revTransaction: Transaction = [];
     let i = 0;
@@ -129,19 +126,14 @@ class DocExchange {
         if (!isIgnoreRevTransaction) {
           revTransaction = revTransaction.concat(changeRes!.reverse);
         }
-        changeRes!.applied.forEach(
-          (elementChange: ElementChange) => follower && follower(elementChange),
-        );
+        changeRes!.applied.forEach((elementChange: ElementChange) => follower && follower(elementChange));
       }
       i += 1;
     }
     return [revTransaction];
   }
 
-  private commitElementChange(
-    elementChange: ElementChange,
-    isIgnoreRevTransaction = false,
-  ): TransactionResult {
+  private commitElementChange(elementChange: ElementChange, isIgnoreRevTransaction = false): TransactionResult {
     const elementChangeId = elementChange.id;
     switch (elementChange.type) {
       case EElementChangeType.Props: {
@@ -181,7 +173,7 @@ class DocExchange {
         }
       }
       case EElementChangeType.Add: {
-        const addedElement =  elementChange.data;
+        const addedElement = elementChange.data;
         if (isNullOrUndefined(addedElement)) {
           return TransactionResult.empty(this);
         } else {
@@ -241,10 +233,7 @@ class DocExchange {
     }
   }
 
-  private deleteElementResult(
-    element: IDocumentOrElement,
-    isIgnoreRevTransaction = false,
-  ): TransactionResult {
+  private deleteElementResult(element: IDocumentOrElement, isIgnoreRevTransaction = false): TransactionResult {
     const elementId = element.id;
     this.elementRegistry.delete(elementId);
     if (isIgnoreRevTransaction) {
@@ -283,7 +272,6 @@ class DocExchange {
       id,
     };
   }
-
 }
 
-export { DocExchange }; 
+export { DocExchange };

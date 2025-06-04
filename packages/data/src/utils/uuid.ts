@@ -7,7 +7,7 @@ import { nanoid } from 'nanoid';
  * @returns {string} id
  */
 export function generateUUID() {
-    return nanoid();
+  return nanoid();
 }
 
 /**
@@ -17,5 +17,5 @@ export function generateUUID() {
  * @returns
  */
 export function getShortUUID() {
-    return nanoid(10);
+  return nanoid(10);
 }

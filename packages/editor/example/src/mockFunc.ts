@@ -4,7 +4,7 @@ import {
   testPage,
   testRectangle,
   buildFileDataFromDocument,
-  testFrame
+  testFrame,
 } from '@zhgu/data';
 import type { DocumentData } from '@zhgu/type';
 import { EPaintType } from '@zhgu/type';
@@ -98,6 +98,4 @@ const createHelloWorldFileData = () => {
   return documentData;
 };
 
-export {
-  createHelloWorldFileData
-};
+export { createHelloWorldFileData };

@@ -53,12 +53,7 @@ export function calcWHSignTranslate(containerNode: ICollection) {
   return { at, d };
 }
 
-export function drawSvgPath(
-  cxt: OffscreenCanvasRenderingContext2D,
-  x: number,
-  y: number,
-  multiple: number
-): void {
+export function drawSvgPath(cxt: OffscreenCanvasRenderingContext2D, x: number, y: number, multiple: number): void {
   // 保存上下文状态
   cxt.save();
 
@@ -96,10 +91,7 @@ export function drawSvgPath(
 }
 
 // 辅助函数：绘制路径
-function drawPath(
-  cxt: OffscreenCanvasRenderingContext2D,
-  points: [number, number][]
-): void {
+function drawPath(cxt: OffscreenCanvasRenderingContext2D, points: [number, number][]): void {
   cxt.beginPath();
   points.forEach(([x, y], index) => {
     if (index === 0) {
@@ -112,12 +104,8 @@ function drawPath(
   cxt.closePath(); // 关闭路径
 }
 
-
 export function getSignText(node: IBaseNode | ICollection, direction: string) {
-  let {
-    w,
-    h,
-  } = node as IBaseNode;
+  let { w, h } = node as IBaseNode;
   return `${getTwoDecimal(direction === 'hori' ? w : h)}`;
 }
 
@@ -128,7 +116,7 @@ export function fillRoundRect(
   width: number,
   height: number,
   radius: number,
-  fillColor?: string,
+  fillColor?: string
 ): boolean {
   if (2 * radius > width || 2 * radius > height) {
     return false;
@@ -146,7 +134,7 @@ export function drawRoundRectPath(
   cxt: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
   width: number,
   height: number,
-  radius: number,
+  radius: number
 ): void {
   // 确保 radius 不超过宽高的一半
   radius = Math.min(radius, width / 2, height / 2);
@@ -160,12 +148,7 @@ export function drawRoundRectPath(
   cxt.beginPath();
 
   // 定义辅助函数，绘制圆角
-  const drawCorner = (
-    cx: number,
-    cy: number,
-    startAngle: number,
-    endAngle: number,
-  ) => {
+  const drawCorner = (cx: number, cy: number, startAngle: number, endAngle: number) => {
     cxt.arc(cx, cy, radius, startAngle, endAngle);
   };
 

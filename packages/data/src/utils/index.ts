@@ -4,7 +4,6 @@ const isNullOrUndefined = (value: any): boolean => {
   return isNull(value) || isUndefined(value);
 };
 
-
 const binarySearchParentPosition = (list: readonly any[], value: string) => {
   let first = 0;
   let last = list.length - 1;
@@ -62,10 +61,7 @@ const comparator = (a: any, b: any): number => {
   }
 };
 
-const orderByPosition = (
-  { parentIndex: { position: a } }: any,
-  { parentIndex: { position: b } }: any,
-): any => {
+const orderByPosition = ({ parentIndex: { position: a } }: any, { parentIndex: { position: b } }: any): any => {
   if (a < b) {
     return -1;
   }
@@ -75,12 +71,7 @@ const orderByPosition = (
   return 0;
 };
 
-export {
-  isNullOrUndefined,
-  binarySearchParentPosition,
-  comparator,
-  orderByPosition,
-};
+export { isNullOrUndefined, binarySearchParentPosition, comparator, orderByPosition };
 
 /**
  * [对某个数值设置区间]
@@ -110,7 +101,6 @@ export function getTwoDecimal(_num: number | string) {
 export function isEqualNumber(number: number, theNumber: number, err: number = 0.001) {
   return Math.abs(theNumber - number) <= err;
 }
-
 
 export * from './convert.ts';
 export * from './points.ts';

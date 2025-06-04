@@ -4,12 +4,11 @@ import { ElementTree } from '@zhgu/data';
  * 场景树
  */
 export class Scene extends ElementTree<any> {
-
   get currentPage() {
-     return this.rootNode.children[0];
+    return this.rootNode.children[0];
   }
 
-  getNodes(){
+  getNodes() {
     return this.currentPage.children;
   }
 

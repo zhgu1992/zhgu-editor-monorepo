@@ -4,7 +4,17 @@ import type { RenderManager } from '../render';
 import type { IMetaData, IModuleMetaData, ICustomNode, IBaseNode } from '../interface';
 import { DEFAULT_META_DATA, DEFAULT_MODULE_META_DATA } from '../interface';
 import { cloneDeep } from 'lodash-es';
-import type { ISizeProps, ISolidPaintProps, RGBAColor, XYPos, XYWH, IRect, PropsElementChange, Paint, RenderCategorySet} from '@zhgu/type';
+import type {
+  ISizeProps,
+  ISolidPaintProps,
+  RGBAColor,
+  XYPos,
+  XYWH,
+  IRect,
+  PropsElementChange,
+  Paint,
+  RenderCategorySet,
+} from '@zhgu/type';
 import { EElementChangeType } from '@zhgu/type';
 import { mat3 } from 'gl-matrix';
 import { mat2obj, PaintProps, isPolygonInRect, isPolygonIntersectRect, rotate } from '@zhgu/data';
@@ -13,11 +23,11 @@ import { IRenderNode } from '@zhgu/render';
 import { BaseCustomUnit } from './customNode';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const _matCache ={
+const _matCache = {
   m1: mat3.create(),
   m2: mat3.create(),
   mRotate: mat3.create(),
-} ;
+};
 
 export class BaseNode extends NodeModel implements IBaseNode {
   private _renderNode: IRenderNode;
@@ -29,7 +39,7 @@ export class BaseNode extends NodeModel implements IBaseNode {
   private _renderManager: RenderManager;
   private _view: View;
 
-  static HOVERANDSELECT_RENDER_CATEGORY_SET = new Set([ 'transform' ]) as RenderCategorySet;
+  static HOVERANDSELECT_RENDER_CATEGORY_SET = new Set(['transform']) as RenderCategorySet;
 
   constructor(elementData: ElementData, view: View) {
     super(elementData);
@@ -40,7 +50,7 @@ export class BaseNode extends NodeModel implements IBaseNode {
     this._renderManager.setRenderNode(this.id, this);
   }
 
-  createRenderNode(){
+  createRenderNode() {
     const { renderManager } = this.view;
     return renderManager!.createRenderNode(this);
   }
@@ -109,7 +119,7 @@ export class BaseNode extends NodeModel implements IBaseNode {
       props: {
         transform: mat2obj(rt),
         w,
-        h
+        h,
       },
     } as PropsElementChange;
   }
@@ -158,7 +168,7 @@ export class BaseNode extends NodeModel implements IBaseNode {
       props: {
         transform: mat2obj(rt),
         w,
-        h
+        h,
       },
     } as PropsElementChange;
   }
@@ -262,12 +272,11 @@ export class BaseNode extends NodeModel implements IBaseNode {
       this._selectNode.update();
       // this.renderManager.updateWH(this._selectNode.renderNode, this.w, this.h);
       // this.renderManager.updateMatrix(this._selectNode.renderNode, this.at);
-
     }
     this.renderManager.dirty();
   }
 
-  pick(pos: XYPos){
+  pick(pos: XYPos) {
     const localPoint = this._renderNode.worldTransform.applyInverse(pos);
     return this._renderNode?.containsPoint(localPoint);
   }
@@ -339,7 +348,7 @@ export class BaseNode extends NodeModel implements IBaseNode {
     return this._hoverNode;
   }
 
-  destroy(){
+  destroy() {
     this.renderNode.clear();
     this.renderManager.removeRenderNode(this.id);
     this._hoverNode?.destroy();
@@ -370,12 +379,11 @@ export class BaseNode extends NodeModel implements IBaseNode {
     return this._selectNode;
   }
 
-
   traverse(drawSelfLayer: (node: IBaseNode) => void): void {
     drawSelfLayer(this);
     if (this.children && this.children.length) {
       const childrenNodes = this.children as IBaseNode[];
-      childrenNodes.forEach((children) => children.traverse(drawSelfLayer));
+      childrenNodes.forEach(children => children.traverse(drawSelfLayer));
     }
   }
 

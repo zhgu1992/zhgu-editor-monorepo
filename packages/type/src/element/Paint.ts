@@ -82,8 +82,6 @@ interface IPaintProps {
   fillPaints: FillPaints;
 }
 
-
-
 export {
   EPaintType,
   EImageScaleMode,
@@ -96,5 +94,5 @@ export {
   IImagePaintProps,
   FillPaints,
   IPaintProps,
-  Paint
+  Paint,
 };

@@ -18,7 +18,7 @@ export class NodeFactory {
     const constructor = this.map.get(type);
     if (constructor) {
       return new constructor(state, view);
-    }else{
+    } else {
       return new BaseNode(state, view);
     }
   }

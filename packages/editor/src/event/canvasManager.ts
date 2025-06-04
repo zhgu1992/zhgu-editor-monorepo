@@ -1,7 +1,6 @@
 import type { IEditorCanvasData, IInputSnapshot } from '../interface';
 import EventEmitter from 'eventemitter3';
 
-
 export interface ICanvasEdgeMovementCbProps {
   autoChangePos: { autoChangePosX: number; autoChangePosY: number };
   ratio?: number[];
@@ -25,19 +24,15 @@ export class EditorCanvasManager extends EventEmitter {
     this.cache_boundingClientRect = canvasDom.getBoundingClientRect();
   }
 
-  setSize(){
+  setSize() {}
 
-  }
-
-  loadCursorResource() {
-
-  }
+  loadCursorResource() {}
 
   async setCursorType(cursorType = 'default') {
     this.canvasDom.className = cursorType;
   }
 
-  registerPreUrl(preUrl: string){
+  registerPreUrl(preUrl: string) {
     this._preUrl = preUrl;
   }
 
@@ -57,8 +52,23 @@ export class EditorCanvasManager extends EventEmitter {
         const scaledWidth = Math.ceil(width / devicePixelRatio);
         const scaledHeight = Math.ceil(height / devicePixelRatio);
         const cursorUrl = canvas.toDataURL();
-        const svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="' + scaledWidth + 'px" height="' + scaledHeight + 'px">' + '<image xlink:href="' + cursorUrl + '" width="' + width + '" height="' + height + '"/>' + '</svg>';
-        res(`url(data:image/svg+xml;base64,${btoa(svg)}) ${hotSpotX / devicePixelRatio} ${hotSpotY / devicePixelRatio}, auto`);
+        const svg =
+          '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="' +
+          scaledWidth +
+          'px" height="' +
+          scaledHeight +
+          'px">' +
+          '<image xlink:href="' +
+          cursorUrl +
+          '" width="' +
+          width +
+          '" height="' +
+          height +
+          '"/>' +
+          '</svg>';
+        res(
+          `url(data:image/svg+xml;base64,${btoa(svg)}) ${hotSpotX / devicePixelRatio} ${hotSpotY / devicePixelRatio}, auto`
+        );
       };
 
       image.onerror = () => {

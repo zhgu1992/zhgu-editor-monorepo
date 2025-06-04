@@ -6,15 +6,11 @@ import {
   IFrameElementProps,
   IRectangleElementProps,
   IDocumentElementProps,
-  ISectionElementProps, IShapeElementProps,
+  ISectionElementProps,
+  IShapeElementProps,
 } from './ElementProps.ts';
 
-import type {
-  EElementType,
-  ESceneElementType,
-  EOtherElementType,
-  ERootElementType,
-} from './ElementType.ts';
+import type { EElementType, ESceneElementType, EOtherElementType, ERootElementType } from './ElementType.ts';
 
 interface IElement extends IElementBaseProps {
   id: string;
@@ -37,7 +33,6 @@ interface IInternalPageElement extends IElement, IPageElementProps {
   id: string;
   type: EOtherElementType.InternalPage;
 }
-
 
 // 节点
 interface INodeElement extends IElement, IShapeElementProps {

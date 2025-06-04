@@ -1,25 +1,31 @@
-export type CustomEventType  = EViewPortEventType | EHoverEventType | ESelectEventType | EConfigEventType | EStateEvent| EHistoryEvent;
+export type CustomEventType =
+  | EViewPortEventType
+  | EHoverEventType
+  | ESelectEventType
+  | EConfigEventType
+  | EStateEvent
+  | EHistoryEvent;
 
 export type IEventArgs = {
   data: any;
-}
+};
 
-export enum EViewPortEventType{
+export enum EViewPortEventType {
   ZoomChange = 'ZoomChange',
   ZoomLevelChange = 'ZoomLevelChange',
-  PositionChange = 'PositionChange'
+  PositionChange = 'PositionChange',
 }
 
-export enum EHoverEventType{
+export enum EHoverEventType {
   HoverChange = 'HoverChange',
 }
 
-export enum ESelectEventType{
-  SelectChange = 'SelectChange'
+export enum ESelectEventType {
+  SelectChange = 'SelectChange',
 }
 
-export enum EConfigEventType{
-  PixelGridChange = 'PixelGridChange'
+export enum EConfigEventType {
+  PixelGridChange = 'PixelGridChange',
 }
 
 /**
@@ -31,7 +37,7 @@ export enum EVectorEditor {
   HoverChange = 'vectorEditorHoverChange',
   BezierShowIdChange = 'vectorEditorBezierShowIdChange',
   CenterPointShowStateChange = 'vectorEditorCenterPointShowStateChange',
-  AloneBezierChange = 'aloneBezierChange'
+  AloneBezierChange = 'aloneBezierChange',
 }
 
 export enum EVectorEditType {
@@ -40,13 +46,11 @@ export enum EVectorEditType {
   Segment = 'segment',
 }
 
-
 export enum EStateEvent {
   ToDefaultState = 'toDefaultState',
   Exit = 'exit',
   Enter = 'enter',
 }
-
 
 export enum EHistoryEvent {
   UndoRedo = 'undoRedo',

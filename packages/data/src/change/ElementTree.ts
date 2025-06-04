@@ -2,15 +2,8 @@ import { INode } from '../interface';
 import type { DocExchange } from './DocExchange';
 import { isNullOrUndefined } from '../utils';
 import type { Node } from '../nodes';
-import type {
-  IElement,
-  IDocumentElement,
-  ElementChange,
-  DocumentData,
-} from '@zhgu/type';
-import {
-  EElementChangeType,
-} from '@zhgu/type';
+import type { IElement, IDocumentElement, ElementChange, DocumentData } from '@zhgu/type';
+import { EElementChangeType } from '@zhgu/type';
 import { isDocument, isInternalPage, ElementData } from '../dataUtil';
 
 class ElementTree<T extends Node> {
@@ -22,11 +15,7 @@ class ElementTree<T extends Node> {
   public _firstPageNode?: T;
   private nodeRegistry = new Map<string, T>();
 
-  constructor(
-    docExchange?: DocExchange,
-    documentData?: DocumentData,
-    nodeBuilder?: (_: ElementData) => T,
-  ) {
+  constructor(docExchange?: DocExchange, documentData?: DocumentData, nodeBuilder?: (_: ElementData) => T) {
     if (docExchange && documentData && nodeBuilder) {
       this.buildTree(docExchange, documentData!, nodeBuilder);
     }
@@ -64,11 +53,7 @@ class ElementTree<T extends Node> {
     this._firstPageNode = node;
   }
 
-  buildTree(
-    docExchange: DocExchange,
-    documentData: DocumentData,
-    nodeBuilder?: (_: ElementData) => T,
-  ) {
+  buildTree(docExchange: DocExchange, documentData: DocumentData, nodeBuilder?: (_: ElementData) => T) {
     this._docExchange = docExchange;
     this._nodeBuilder = nodeBuilder;
 
@@ -138,7 +123,7 @@ class ElementTree<T extends Node> {
         elementData.updateElement(newElement);
         node.doOnPropsChanged(changeProps);
         if (!isNullOrUndefined(changeProps.transform)) {
-          node.children.forEach((node) => node.updateNodeAt());
+          node.children.forEach(node => node.updateNodeAt());
         }
         return;
       }
@@ -180,4 +165,4 @@ class ElementTree<T extends Node> {
   }
 }
 
-export { ElementTree }; 
+export { ElementTree };

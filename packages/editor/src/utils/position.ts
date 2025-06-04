@@ -33,8 +33,8 @@ export function handleHorizontalOrVertical(centerPos: XYPos, currentPagePoint: X
   } else {
     // jsdEditor.setCursorType('cursor-vertical-move');
     return { x: originPagePoint.x, y: currentPagePoint.y };
-  };
-};
+  }
+}
 
 /**
  * 通过传入boxXYWH以及固定位置得到宽高比相等结果
@@ -50,18 +50,18 @@ export function handleEqualInAspectRatio(box: XYWH, fixedPos: XYPos) {
   const resY = h === maxVal ? y : y + h - maxVal;
 
   // 以固定位置为原点，判断box的象限
-  switch(true) {
+  switch (true) {
     // 第一象限
     case isEqualX && !isEqualY: {
       return { x, y: resY, w: maxVal, h: maxVal };
     }
     // 第二象限
     case !isEqualX && !isEqualY: {
-      return { x: resX, y: resY, w: maxVal, h: maxVal};
+      return { x: resX, y: resY, w: maxVal, h: maxVal };
     }
     // 第三象限
     case !isEqualX && isEqualY: {
-      return { x: resX, y, w: maxVal, h: maxVal};
+      return { x: resX, y, w: maxVal, h: maxVal };
     }
     // 第四象限
     case isEqualX && isEqualY: {
@@ -71,7 +71,6 @@ export function handleEqualInAspectRatio(box: XYWH, fixedPos: XYPos) {
 
   return box;
 }
-
 
 /**
  * 通过传入boxXYWH以及中心位置得到从中心调整大小结果
@@ -84,18 +83,18 @@ export function handleResizingFromCenter(box: XYWH, centerPos: XYPos) {
   const isEqualY = y === centerPos.y;
 
   // 以固定位置为原点，判断box的象限
-  switch(true) {
+  switch (true) {
     // 第一象限
     case isEqualX && !isEqualY: {
       return { x: x - w, y, w: w * 2, h: h * 2 };
     }
     // 第二象限
     case !isEqualX && !isEqualY: {
-      return { x, y, w: w * 2, h: h * 2};
+      return { x, y, w: w * 2, h: h * 2 };
     }
     // 第三象限
     case !isEqualX && isEqualY: {
-      return { x, y: y - h, w: w * 2, h: h * 2};
+      return { x, y: y - h, w: w * 2, h: h * 2 };
     }
     // 第四象限
     case isEqualX && isEqualY: {
@@ -123,7 +122,7 @@ export function getBoundingByPos(pos1: XYPos, pos2: XYPos) {
     x: minX,
     y: minY,
     w,
-    h
+    h,
   };
 }
 

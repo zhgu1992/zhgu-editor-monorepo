@@ -62,7 +62,4 @@ class StateCompressor {
   }
 }
 
-export {
-  StateCompressor,
-  ECompressionType
-}; 
+export { StateCompressor, ECompressionType };

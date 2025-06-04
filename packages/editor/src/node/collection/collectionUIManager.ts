@@ -8,7 +8,7 @@ import { type RenderCategorySet, XYPos } from '@zhgu/type';
 /**
  * 热区管理类，用户可以通过该类进行热区绑定和更新操作
  */
-export class CollectionUIManager extends BaseCollection implements ICollectionUIManager{
+export class CollectionUIManager extends BaseCollection implements ICollectionUIManager {
   areas: ICustomCollection[] = [];
   isDestroyed = false;
   customNodes: ICustomCollection[] = [];
@@ -25,29 +25,29 @@ export class CollectionUIManager extends BaseCollection implements ICollectionUI
     this.customNodes.push(node);
   }
 
-  enter(){
+  enter() {
     this.bindEvents();
   }
 
-  exit(){
+  exit() {
     this.removeEvents();
   }
 
   // 设置热区和behavior的关系
-  setAreaRelation(area: ICustomCollection, behavior: IBehaviorNode){
+  setAreaRelation(area: ICustomCollection, behavior: IBehaviorNode) {
     this.areas.push(area);
     this._cache.set(area, behavior);
   }
 
-  removeArea(area: ICustomCollection){
+  removeArea(area: ICustomCollection) {
     this._removeNode(area, this.areas);
   }
 
-  removeCustomNode(node: ICustomCollection){
+  removeCustomNode(node: ICustomCollection) {
     this._removeNode(node, this.customNodes);
   }
 
-  private _removeNode(area: ICustomCollection, queue: ICustomCollection[]){
+  private _removeNode(area: ICustomCollection, queue: ICustomCollection[]) {
     const indexToRemove = queue.indexOf(area);
     if (indexToRemove > -1) {
       queue.splice(indexToRemove, 1);
@@ -55,28 +55,28 @@ export class CollectionUIManager extends BaseCollection implements ICollectionUI
     area.destroy();
   }
 
-  pickArea(position: XYPos){
+  pickArea(position: XYPos) {
     const nodes = this.areas;
     const results: ICustomCollection[] = [];
-    for(let i = 0; i < nodes.length; i++){
+    for (let i = 0; i < nodes.length; i++) {
       const areaNode = nodes[i];
       const renderNode = areaNode.renderNode;
       const localPoint = renderNode.worldTransform.applyInverse(position);
       // todo 判定热区是否开启
       const flag = renderNode.containsPoint(localPoint);
-      if(flag && areaNode){
+      if (flag && areaNode) {
         results.push(areaNode);
       }
     }
-    results.sort((a, b) =>  (b.renderOrder ?? 0) - (a.renderOrder ?? 0));
+    results.sort((a, b) => (b.renderOrder ?? 0) - (a.renderOrder ?? 0));
     return results;
   }
 
-  getBehaviorByArea(area: ICustomCollection){
+  getBehaviorByArea(area: ICustomCollection) {
     return this._cache.get(area);
   }
 
-  get view(){
+  get view() {
     return this._view;
   }
 
@@ -86,29 +86,29 @@ export class CollectionUIManager extends BaseCollection implements ICollectionUI
     this.view.eventManager!.on(EViewPortEventType.ZoomChange, this.updateZoom);
   }
 
-  removeEvents(){
+  removeEvents() {
     this.view.eventManager!.off(ESelectEventType.SelectChange, this.changeSelect);
     this.view.eventManager!.off(EHistoryEvent.UndoRedo, this.updateUndoRedo);
     this.view.eventManager!.off(EViewPortEventType.ZoomChange, this.updateZoom);
   }
 
   @autobind
-  changeSelect(ev: IEventArgs){
+  changeSelect(ev: IEventArgs) {
     const selectNodes = ev.data;
     this.view.renderManager!.forceHideArea = selectNodes.length <= 0;
     this.nodes = selectNodes;
     this.update();
   }
 
-  showArea(val: boolean = true){
-    this.areas.forEach(area=>{
+  showArea(val: boolean = true) {
+    this.areas.forEach(area => {
       area.isVisible = val;
     });
   }
 
   @autobind
-  showCustomNode(val: boolean = true){
-    this.customNodes.forEach(node=>{
+  showCustomNode(val: boolean = true) {
+    this.customNodes.forEach(node => {
       node.isVisible = val;
     });
     this.view.renderManager!.forceHideHoverAndSelect = !val;
@@ -121,9 +121,9 @@ export class CollectionUIManager extends BaseCollection implements ICollectionUI
    */
   showUI(delay = 1000) {
     this.showCustomNode();
-  };
+  }
 
-  hideUI(){
+  hideUI() {
     this.showCustomNode(false);
   }
 
@@ -145,19 +145,19 @@ export class CollectionUIManager extends BaseCollection implements ICollectionUI
   };
 
   @autobind
-  updateUndoRedo(){
+  updateUndoRedo() {
     this.update(new Set(['transform', 'size']));
   }
 
   @autobind
-  updateZoom(){
+  updateZoom() {
     this.update(new Set(['transform']), true);
   }
 
   @autobind
-  update(props?: RenderCategorySet, ignoreArea= false){
+  update(props?: RenderCategorySet, ignoreArea = false) {
     super.update(props);
-    if(!ignoreArea){
+    if (!ignoreArea) {
       this.updateArea();
     }
     this.updateArea();
@@ -165,24 +165,24 @@ export class CollectionUIManager extends BaseCollection implements ICollectionUI
     this.view.renderManager?.dirty();
   }
 
-  updateArea(){
-    this.areas.forEach(area=>{
+  updateArea() {
+    this.areas.forEach(area => {
       area.update();
     });
   }
 
   updateCustomNode() {
-    this.customNodes.forEach(node=>{
+    this.customNodes.forEach(node => {
       node.update();
     });
   }
 
   // 切换状态后必须销毁热区
-  destroy(){
-    this.areas.forEach(v=>{
+  destroy() {
+    this.areas.forEach(v => {
       v.destroy();
     });
-    this.customNodes.forEach(v=>{
+    this.customNodes.forEach(v => {
       v.destroy();
     });
     this.removeListener();

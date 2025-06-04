@@ -16,7 +16,6 @@ interface Color {
  * 颜色
  */
 export class JsColor {
-
   protected _data: Float32Array;
 
   get data(): Readonly<Float32Array> {
@@ -35,7 +34,7 @@ export class JsColor {
     if (typeof args === 'string') {
       const str = args.replace(/\s/g, '').toLowerCase();
       if (REG_HEX.test(str)) {
-        switch(str.length) {
+        switch (str.length) {
           case 4:
             d[0] = parseInt(str.slice(1, 2).repeat(2), 16) / 255.0;
             d[1] = parseInt(str.slice(2, 3).repeat(2), 16) / 255.0;
@@ -98,27 +97,33 @@ export class JsColor {
 
   toHex() {
     const [r, g, b, a] = this._data;
-    const rr = Math.round(r * 255).toString(16).padStart(2, '0');
-    const gg = Math.round(g * 255).toString(16).padStart(2, '0');
-    const bb = Math.round(b * 255).toString(16).padStart(2, '0');
-    const aa = Math.round(a * 255).toString(16).padStart(2, '0');
+    const rr = Math.round(r * 255)
+      .toString(16)
+      .padStart(2, '0');
+    const gg = Math.round(g * 255)
+      .toString(16)
+      .padStart(2, '0');
+    const bb = Math.round(b * 255)
+      .toString(16)
+      .padStart(2, '0');
+    const aa = Math.round(a * 255)
+      .toString(16)
+      .padStart(2, '0');
     return `#${rr}${gg}${bb}${aa}`;
   }
 
   toRGBA(): [r: number, g: number, b: number, a: number] {
     const [r, g, b, a] = this._data;
-    return [
-      Math.round(r * 255),
-      Math.round(g * 255),
-      Math.round(b * 255),
-      a,
-    ];
+    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255), a];
   }
 
   toRGBAObject(): Color {
     const [r, g, b, a] = this._data;
     return {
-      r, g, b, a
+      r,
+      g,
+      b,
+      a,
     };
   }
 }

@@ -5,9 +5,11 @@
   "type": "module",
   "main": "src/index.ts",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite example",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit",
+    "clean": "rimraf dist"
   },
   "dependencies": {
     "@types/lodash-es": "^4.17.12",

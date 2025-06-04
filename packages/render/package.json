@@ -12,7 +12,8 @@
   "dependencies": {
     "@zhgu/data": "workspace:*",
     "@zhgu/type": "workspace:*",
-    "gl-matrix": "^3.4.3"
+    "gl-matrix": "^3.4.3",
+    "pixi.js": "^8.9.2"
   },
   "devDependencies": {
     "@types/node": "^22.15.21",

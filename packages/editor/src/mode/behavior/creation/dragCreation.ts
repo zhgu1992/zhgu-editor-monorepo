@@ -3,7 +3,13 @@ import { ESceneElementType, EElementChangeType } from '@zhgu/type';
 import { DragBaseBehaviorNode } from '../drag/dragBase';
 import type { IBaseNode, ICustomCollection, IInputSnapshot } from '../../../interface';
 import type { View } from '../../../view/';
-import type { ICollectionUIManager, IStateNode, TJsDragEndEvent, TJsDragMoveEvent, TJsDragStartEvent } from '../../../interface';
+import type {
+  ICollectionUIManager,
+  IStateNode,
+  TJsDragEndEvent,
+  TJsDragMoveEvent,
+  TJsDragStartEvent,
+} from '../../../interface';
 import { getBoundingByPos, getDefaultStyle, mat2obj } from '../../../utils';
 import { mat3 } from 'gl-matrix';
 
@@ -23,9 +29,7 @@ export class DragCreationBehaviorNode extends DragBaseBehaviorNode {
     return true;
   }
 
-  override onDragStart: TJsDragStartEvent = (areaNode, inputSnapshot) => {
-
-  };
+  override onDragStart: TJsDragStartEvent = (areaNode, inputSnapshot) => {};
 
   override onDragMove: TJsDragMoveEvent = (message, inputSnapshot) => {
     this.createAndDragMoving(inputSnapshot);
@@ -73,16 +77,18 @@ export class DragCreationBehaviorNode extends DragBaseBehaviorNode {
         transform,
         parentIndex: {
           id: parentId,
-          position: parentPosition
+          position: parentPosition,
         },
         ...fixBox,
       });
 
-      view.applyTransaction([{
-        type: EElementChangeType.Add,
-        id: element.id,
-        data: element,
-      }]);
+      view.applyTransaction([
+        {
+          type: EElementChangeType.Add,
+          id: element.id,
+          data: element,
+        },
+      ]);
 
       const node = view.scene.getNodeById(element.id) as IBaseNode;
       this.node = node;
@@ -92,7 +98,12 @@ export class DragCreationBehaviorNode extends DragBaseBehaviorNode {
     }
   }
 
-  resizeFromAToB(targetPoint: XYPos, currentPagePoint: XYPos, isEqualInAspectRatio: boolean, isResizingFromCenter: boolean) {
+  resizeFromAToB(
+    targetPoint: XYPos,
+    currentPagePoint: XYPos,
+    isEqualInAspectRatio: boolean,
+    isResizingFromCenter: boolean
+  ) {
     const { node } = this;
 
     const { x, y, w, h } = getBoundingByPos(targetPoint, currentPagePoint);
@@ -104,4 +115,4 @@ export class DragCreationBehaviorNode extends DragBaseBehaviorNode {
 
     this.view.applyTransaction(transactions);
   }
-};
+}

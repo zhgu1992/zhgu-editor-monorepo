@@ -14,24 +14,28 @@ export class NodeSelectBehaviorNode extends BehaviorNode {
    * 点选
    * @param e
    */
-  override onPointerDown: TJsPointerEvent = (inputSnapshot) => {
-    const {view: {eventManager, picker, scene}} = this;
-    if(!eventManager || !picker) {
+  override onPointerDown: TJsPointerEvent = inputSnapshot => {
+    const {
+      view: { eventManager, picker, scene },
+    } = this;
+    if (!eventManager || !picker) {
       return;
     }
     const { shiftKey, currentPagePoint, button } = inputSnapshot;
     // 如果拿到热区则证明已经被其他behavior形成热区了，因此可以直接结束
     const area = this.collectionUIManager.pickArea(currentPagePoint);
-    if(area.length){
+    if (area.length) {
       return;
     }
     const result = picker.pick(currentPagePoint);
     eventManager.selectedNodes = result === null ? [] : [result];
   };
 
-  onClick: TJsPointerEvent = (inputSnapshot) => {
-    const {view: {eventManager, picker, scene}} = this;
-    if(!eventManager || !picker) {
+  onClick: TJsPointerEvent = inputSnapshot => {
+    const {
+      view: { eventManager, picker, scene },
+    } = this;
+    if (!eventManager || !picker) {
       return;
     }
     const { shiftKey, currentPagePoint, button } = inputSnapshot;
@@ -41,11 +45,12 @@ export class NodeSelectBehaviorNode extends BehaviorNode {
 
   onExit(): void {
     super.onExit();
-    const {view: {eventManager}} = this;
-    if(!eventManager) {
+    const {
+      view: { eventManager },
+    } = this;
+    if (!eventManager) {
       return;
     }
     eventManager.selectedNodes = [];
   }
-
 }

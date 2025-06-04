@@ -11,7 +11,7 @@ import type {
   ElementChangeProps,
   RenderCategorySet,
   ElementChange,
-  Transaction
+  Transaction,
 } from '@zhgu/type';
 import type { ElementData } from '../dataUtil';
 import type { mat3, vec2 } from 'gl-matrix';
@@ -59,7 +59,7 @@ interface INodeModel extends IGeometryNode {
   isVisible: boolean;
   fillPaints: FillPaints;
   strokePaints: StrokePaints;
-  strokeWeight: number|undefined;
+  strokeWeight: number | undefined;
   strokeProps: IStrokeProps;
   opacity: number;
 }
@@ -75,10 +75,4 @@ interface ISavingTransaction {
   time: number;
 }
 
-export {
-  INode,
-  INodeModel,
-  IGeometryNode,
-  ISyncClientFollower,
-  ISavingTransaction
-};
+export { INode, INodeModel, IGeometryNode, ISyncClientFollower, ISavingTransaction };

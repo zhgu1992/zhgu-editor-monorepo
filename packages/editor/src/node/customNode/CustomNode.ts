@@ -7,14 +7,14 @@ import type { ICustomNode, ICustomStyledOptions } from '../../interface';
 import type { View } from '../../view';
 import type { EventManager } from '../../event';
 import { IRenderNode } from '@zhgu/render';
-import {Matrix} from "pixi.js";
+import { Matrix } from 'pixi.js';
 
 // const pathCache = new Map<string, PxPath>();
 
 /**
  * 自定义渲染节点
  */
-export class CustomNode implements ICustomNode{
+export class CustomNode implements ICustomNode {
   id: string;
   private _isVisible = true;
   private _renderOrder = 0;
@@ -24,7 +24,7 @@ export class CustomNode implements ICustomNode{
   strokeProps?: IStrokeProps;
   private _at = mat3.fromValues(1, 0, 0, 0, 1, 0, 0, 0, 1);
   private _renderNode: IRenderNode;
-  private _cursor: string|null = null;
+  private _cursor: string | null = null;
   private _view: View;
   hoverTip?: string;
   private _options: ICustomStyledOptions;
@@ -35,32 +35,32 @@ export class CustomNode implements ICustomNode{
     this._renderManager = view.renderManager!;
     this._eventManager = view.eventManager!;
     this._options = {
-      strokeWeight : 1.5,
-      strokeColor:COLOR_CONFIG.primary(),
+      strokeWeight: 1.5,
+      strokeColor: COLOR_CONFIG.primary(),
       color: COLOR_CONFIG['light/purple/500'],
       opacity: 0.1,
       colorEnabled: true,
       strokeEnabled: true,
       strokeOpacity: 1,
       sizeAttenuation: false,
-      ...options
+      ...options,
     };
     this._renderNode = view.renderManager!.createEmptyNode();
   }
 
-  get x(){
+  get x() {
     return 0;
   }
 
-  get y(){
+  get y() {
     return 0;
   }
 
-  get w(){
+  get w() {
     return 0;
   }
 
-  get h(){
+  get h() {
     return 0;
   }
 
@@ -68,32 +68,31 @@ export class CustomNode implements ICustomNode{
     return this._options;
   }
 
-  get view(){
+  get view() {
     return this._view;
   }
 
   setDefaultPaint() {
     const { color, opacity, colorEnabled } = this.options;
-    if(!colorEnabled){
+    if (!colorEnabled) {
       this.fillPaints = [];
-    }else{
+    } else {
       this.fillPaints = [
         {
           type: EPaintType.Solid,
           opacity,
           isEnabled: colorEnabled,
-          color: color ,
+          color: color,
         },
       ] as FillPaints;
     }
-
   }
 
-  setDefaultStroke(){
+  setDefaultStroke() {
     const { strokeWeight, strokeColor, strokeEnabled, strokeOpacity } = this.options;
-    if(!strokeEnabled){
+    if (!strokeEnabled) {
       this.strokeProps = {} as IStrokeProps;
-    }else{
+    } else {
       this.strokeProps = {
         strokeWeight,
         strokePaints: [
@@ -103,14 +102,14 @@ export class CustomNode implements ICustomNode{
             isEnabled: strokeEnabled,
             color: strokeColor,
           },
-        ] as FillPaints
+        ] as FillPaints,
       } as IStrokeProps;
     }
   }
   /**
    * 定义自定义节点的默认样式，自定义节点的样式基本不需要修改，但是matrix需要跟随node而变化
    */
-  setDefaultStyle(){
+  setDefaultStyle() {
     this.setDefaultPaint();
     this.setDefaultStroke();
     this.renderManager.updateRenderNode(this.renderNode, this as any);
@@ -136,7 +135,7 @@ export class CustomNode implements ICustomNode{
     return true;
   }
 
-  get renderNode(){
+  get renderNode() {
     return this._renderNode;
   }
 
@@ -158,7 +157,7 @@ export class CustomNode implements ICustomNode{
    * 渲染队列，renderOder大的在上面
    * @returns {number}
    */
-  get renderOrder(){
+  get renderOrder() {
     return this._renderOrder;
   }
 
@@ -177,7 +176,7 @@ export class CustomNode implements ICustomNode{
     // this.renderNode.setFromMatrix(animPixiMatrix);
   }
 
-  setPath(){
+  setPath() {
     // this.renderManager.updateRenderNode(this, this.renderNode, new Set(['size']));
   }
 
@@ -185,20 +184,18 @@ export class CustomNode implements ICustomNode{
     return this._at;
   }
 
-  update(){
+  update() {
     // this.renderNode.setDirty();
     this.renderManager.updateRenderNode(this.renderNode, this as any);
   }
 
-  updateByCategory(renderCategorySet: RenderCategorySet){
+  updateByCategory(renderCategorySet: RenderCategorySet) {
     // this.renderManager.updateRenderNode(this, this.renderNode, renderCategorySet);
   }
 
-  updateMatrix(){
+  updateMatrix() {}
 
-  }
-
-  destroy(){
+  destroy() {
     this.renderManager.removeHoverRenderNode(this.id);
     this.renderManager.removeSelectNode(this.id);
     this.renderNode.clear();

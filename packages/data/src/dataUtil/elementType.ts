@@ -1,9 +1,5 @@
 import type { EElementType } from '@zhgu/type';
-import {
-  ESceneElementType,
-  EOtherElementType,
-  ERootElementType,
-} from '@zhgu/type';
+import { ESceneElementType, EOtherElementType, ERootElementType } from '@zhgu/type';
 
 const isSymbol = (type: EElementType | null) => {
   return type === ESceneElementType.Symbol;
@@ -37,13 +33,4 @@ const isDocument = (type: EElementType | null) => {
   return type === ERootElementType.Document;
 };
 
-export {
-  isInternalPage,
-  isDocument,
-  isSymbol,
-  isInstance,
-  isFrame,
-  isPage,
-  isFrameLike,
-  isGroupLike,
-};
+export { isInternalPage, isDocument, isSymbol, isInstance, isFrame, isPage, isFrameLike, isGroupLike };

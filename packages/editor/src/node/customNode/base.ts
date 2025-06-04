@@ -9,7 +9,7 @@ import type { NodeGroup } from '../../render';
 /**
  * 自定义集合节点
  */
-export class CustomCollection extends CustomNode implements ICustomCollection{
+export class CustomCollection extends CustomNode implements ICustomCollection {
   collection: ICollection;
   private _mat3Cache = mat3.create();
   group: NodeGroup;
@@ -48,13 +48,13 @@ export class CustomCollection extends CustomNode implements ICustomCollection{
     return mat3.mul(this._mat3Cache, this.collection.at, rt);
   }
 
-  update(){
+  update() {
     super.update();
     this.renderNode.setTransform(this.at);
     this.setPath();
   }
 
-  destroy(){
+  destroy() {
     this.group.removeNodeById(this.id);
     super.destroy();
   }
@@ -66,16 +66,20 @@ export class CustomCollection extends CustomNode implements ICustomCollection{
 export class BaseCollectionArea extends CustomCollection {
   private _canCalculate = true;
   public isArea = true;
-  constructor(id: string, collection: ICollection, view: View,
-              options: Partial<ICustomStyledOptions>={
-                opacity: 0.2,
-                color: COLOR_CONFIG['light/purple/500'] ,
-                strokeEnabled: false,
-              }) {
+  constructor(
+    id: string,
+    collection: ICollection,
+    view: View,
+    options: Partial<ICustomStyledOptions> = {
+      opacity: 0.2,
+      color: COLOR_CONFIG['light/purple/500'],
+      strokeEnabled: false,
+    }
+  ) {
     super(id, collection, view, options);
   }
 
-  set canCalculate(val: boolean){
+  set canCalculate(val: boolean) {
     this._canCalculate = val;
   }
 

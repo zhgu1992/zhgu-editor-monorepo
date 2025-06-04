@@ -1,13 +1,12 @@
 import { vec2 } from 'gl-matrix';
 
-import type { mat3} from 'gl-matrix';
-
+import type { mat3 } from 'gl-matrix';
 
 type Geometry = {
   w: number;
   h: number;
-  mat: mat3
-}
+  mat: mat3;
+};
 export const getObbPoints = function ({ w, h, mat }: Geometry) {
   const p0 = vec2.fromValues(0, 0);
   const p1 = vec2.fromValues(w, 0);
@@ -26,7 +25,7 @@ type XYWH = {
   y: number;
   w: number;
   h: number;
-}
+};
 
 export function aabb(points: ([number, number] | vec2)[]): XYWH {
   let minX = 0;

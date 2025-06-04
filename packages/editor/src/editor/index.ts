@@ -1,5 +1,5 @@
 import { View } from '../view';
-import { EModeName, EEditorStateName} from '../const';
+import { EModeName, EEditorStateName } from '../const';
 import type { IInputSnapshot } from '../interface';
 import { appendCssToDom } from '../utils/css';
 import { EElementChangeType } from '@zhgu/type';
@@ -15,7 +15,7 @@ export class Editor extends View {
     super();
   }
 
-  initEditorMode(){
+  initEditorMode() {
     // 鼠标样式
     this.registerCursor();
     // 快捷键
@@ -24,7 +24,7 @@ export class Editor extends View {
     this.registerMode();
   }
 
-  registerMode(){
+  registerMode() {
     const modeManager = this.modeManager!;
     // 创建编辑器模式
     const mode = new Mode(this, EModeName.Editor);
@@ -35,58 +35,58 @@ export class Editor extends View {
     this.modeManager?.changeMode(EModeName.Editor);
   }
 
-  getCurrentState(){
+  getCurrentState() {
     const modeManager = this.modeManager!;
     const mode = modeManager.getMode(EModeName.Editor)!;
     return mode.getCurrentState();
   }
 
-  getEditorState(id: string){
+  getEditorState(id: string) {
     const modeManager = this.modeManager!;
     const mode = modeManager.getMode(EModeName.Editor)!;
     return mode.getState(id);
   }
 
-  changeEditorState(id: string){
+  changeEditorState(id: string) {
     const modeManager = this.modeManager!;
     const mode = modeManager.getMode(EModeName.Editor)!;
     mode.changeState(id);
   }
 
-  goToDefaultState(id: string){
+  goToDefaultState(id: string) {
     const modeManager = this.modeManager!;
     const mode = modeManager.getMode(EModeName.Editor)!;
     mode.changeState(EEditorStateName.Default);
   }
 
-  registerCursor(){
+  registerCursor() {
     appendCssToDom(style);
   }
 
   /**
    * todo先简单支持一下快捷键，后续需要修改
    */
-  registerShortCut(){
+  registerShortCut() {
     const config = [
       {
         key: 'f',
-        func: ()=>{
+        func: () => {
           this.changeEditorState(EEditorStateName.CreateFrame);
-        }
+        },
       },
       {
         key: 'r',
-        func: ()=>{
+        func: () => {
           this.changeEditorState(EEditorStateName.CreateRectTangle);
-        }
+        },
       },
       {
-        key:'Backspace',
-        func: ()=>{
+        key: 'Backspace',
+        func: () => {
           const transactions: Transaction = [];
           const selectedNodes = this.eventManager!.selectedNodes;
-          selectedNodes.forEach((node) => {
-            node.traverse((node) => {
+          selectedNodes.forEach(node => {
+            node.traverse(node => {
               transactions.push({
                 id: node.id,
                 type: EElementChangeType.Delete,
@@ -98,56 +98,55 @@ export class Editor extends View {
           this.eventManager!.selectedNodes = [];
           this.commitHistory();
           this.processUpdate();
-        }
+        },
       },
       {
         key: 'cmd+a',
-        func: ()=>{
+        func: () => {
           this.eventManager!.selectedNodes = this.scene.getNodes();
-        }
+        },
       },
       {
         key: 'cmd+shift+z',
-        func: ()=>{
+        func: () => {
           this.redoHistory();
-        }
+        },
       },
       {
         key: 'cmd+z',
-        func: ()=>{
+        func: () => {
           this.undoHistory();
-        }
+        },
       },
     ];
 
     const cmdConfig: Record<string, string> = {
-      'shift': 'shiftKey',
-      'cmd': 'cmdKey',
+      shift: 'shiftKey',
+      cmd: 'cmdKey',
     };
-
 
     this.eventManager!.on('keydown', (e: IInputSnapshot) => {
       const code = e.key;
-      for(let i = 0; i < config.length; i++){
+      for (let i = 0; i < config.length; i++) {
         const key = config[i].key;
         const arr = key.split('+');
         let flag = true;
-        for(let j = 0; j < arr.length; j++) {
+        for (let j = 0; j < arr.length; j++) {
           const cur = arr[j];
-          if(cmdConfig[cur]){
+          if (cmdConfig[cur]) {
             //@ts-ignore
-            if(!e[cmdConfig[cur]]){
+            if (!e[cmdConfig[cur]]) {
               flag = false;
               break;
             }
-          }else{
-            if(code !== cur){
+          } else {
+            if (code !== cur) {
               flag = false;
               break;
             }
           }
         }
-        if(flag){
+        if (flag) {
           config[i].func();
           break;
         }

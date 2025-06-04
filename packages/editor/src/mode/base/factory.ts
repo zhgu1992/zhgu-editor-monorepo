@@ -12,8 +12,8 @@ export class StateFactory {
   }
 
   static init(view: View, mode: Mode) {
-    this.map.forEach((constructor, id)=>{
-      const state =  new constructor(view, id);
+    this.map.forEach((constructor, id) => {
+      const state = new constructor(view, id);
       mode.registerState(state, id === EEditorStateName.Default);
     });
   }

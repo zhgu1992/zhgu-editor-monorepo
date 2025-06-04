@@ -13,9 +13,5 @@ export function mat2obj(v: mat3): Transform {
 }
 
 export function obj2mat(t: Transform): mat3 {
-  return mat3.fromValues(
-    t.m00, t.m10, 0,
-    t.m01, t.m11, 0,
-    t.m02, t.m12, 1
-  );
+  return mat3.fromValues(t.m00, t.m10, 0, t.m01, t.m11, 0, t.m02, t.m12, 1);
 }

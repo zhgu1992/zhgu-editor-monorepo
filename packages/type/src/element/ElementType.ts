@@ -17,7 +17,7 @@ enum ESceneElementType {
 
 enum EOtherElementType {
   Page = 'Page',
-  InternalPage = 'InternalPage'
+  InternalPage = 'InternalPage',
 }
 
 enum ERootElementType {
@@ -26,12 +26,6 @@ enum ERootElementType {
 
 type EElementType = ESceneElementType | EOtherElementType | ERootElementType;
 
-type EInstancedType = EElementType
+type EInstancedType = EElementType;
 
-export {
-  ESceneElementType,
-  EOtherElementType,
-  ERootElementType,
-  EElementType,
-  EInstancedType,
-};
+export { ESceneElementType, EOtherElementType, ERootElementType, EElementType, EInstancedType };

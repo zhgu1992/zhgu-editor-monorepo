@@ -5,7 +5,7 @@ import { EStateEvent } from '../const';
 /**
  * 定义模式，后续编辑器可以加载不同的模式，目前只有编辑模式
  */
-export class Mode extends BaseModelNode{
+export class Mode extends BaseModelNode {
   currentStateId?: string;
   lastStateId?: string;
   defaultStateId = '';
@@ -13,23 +13,23 @@ export class Mode extends BaseModelNode{
 
   constructor(view: View, type: string) {
     super(view, type);
-    this.view.eventManager!.on(EStateEvent.ToDefaultState, ()=>{
+    this.view.eventManager!.on(EStateEvent.ToDefaultState, () => {
       this.changeState(this.defaultStateId);
     });
   }
 
   registerState(state: IStateNode, isDefault = false) {
-    if(isDefault){
+    if (isDefault) {
       this.defaultStateId = state.id;
     }
     this._cache.set(state.id, state);
   }
 
-  changeState(stateId: string){
+  changeState(stateId: string) {
     const state = this.getState(stateId);
-    if(state){
+    if (state) {
       const currentId = this.currentStateId;
-      if(currentId){
+      if (currentId) {
         this.lastStateId = currentId;
         this.getState(currentId)?.exit();
       }
@@ -38,24 +38,24 @@ export class Mode extends BaseModelNode{
     }
   }
 
-  prev(){
+  prev() {
     this.changeState(this.lastStateId ?? this.defaultStateId);
   }
 
-  enter(){
+  enter() {
     this.changeState(this.defaultStateId);
   }
 
-  getState(stateId: string){
+  getState(stateId: string) {
     return this._cache.get(stateId);
   }
 
-  getCurrentState(){
+  getCurrentState() {
     const stateId = this.currentStateId ?? this.defaultStateId;
     return this.getState(stateId);
   }
 
-  exit(){
+  exit() {
     this._cache.forEach((state: IStateNode) => {
       state.exit();
     });

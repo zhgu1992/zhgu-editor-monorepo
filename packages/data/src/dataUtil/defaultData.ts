@@ -26,9 +26,18 @@ import type {
   ICornerRadiusProps,
   IRectangleCornerRadiusProps,
   ISizeProps,
-  IBackgroundProps
+  IBackgroundProps,
 } from '@zhgu/type';
-import { ERootElementType, EOtherElementType, ESceneElementType, EBlendMode, EPaintType, EImageScaleMode, EStrokeAlign, EStrokeJoin } from '@zhgu/type';
+import {
+  ERootElementType,
+  EOtherElementType,
+  ESceneElementType,
+  EBlendMode,
+  EPaintType,
+  EImageScaleMode,
+  EStrokeAlign,
+  EStrokeJoin,
+} from '@zhgu/type';
 import { isNullOrUndefined } from '../utils';
 import { create } from 'mutative';
 
@@ -38,7 +47,7 @@ export class ElementData {
   constructor(elementData: IDocumentOrElement) {
     this._element = elementData;
   }
-  get element(){
+  get element() {
     return this._element;
   }
   updateElement(element: IDocumentOrElement) {
@@ -52,8 +61,7 @@ export class ElementData {
   }
 }
 
-export class shapeElement extends ElementData {
-}
+export class shapeElement extends ElementData {}
 
 //----Transform----
 namespace TransformProps {
@@ -149,10 +157,7 @@ namespace ParentIndex {
     },
   });
 
-  export const changeParentIndex = (
-    parentIndex: ParentIndexType,
-    changeRecipe: ChangeRecipe<ParentIndexType>,
-  ) => {
+  export const changeParentIndex = (parentIndex: ParentIndexType, changeRecipe: ChangeRecipe<ParentIndexType>) => {
     const newParentIndex = create(parentIndex, changeRecipe);
     return newParentIndex;
   };
@@ -238,10 +243,7 @@ namespace RectangleCornerRadiusProps {
   });
 }
 
-export {
-  CornerRadiusProps,
-  RectangleCornerRadiusProps
-};
+export { CornerRadiusProps, RectangleCornerRadiusProps };
 
 //----Size----
 namespace SizeProps {
@@ -371,7 +373,7 @@ const createElementInner = (elementType: EElementType): IDocumentOrElement => {
 const createNewElement = (
   elementType: EElementType,
   id: string,
-  elementProps: IElementPropsWithoutType,
+  elementProps: IElementPropsWithoutType
 ): IDocumentOrElement => {
   const newElement = createElementInner(elementType);
   return {

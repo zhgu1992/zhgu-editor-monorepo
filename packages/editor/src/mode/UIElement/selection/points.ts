@@ -10,7 +10,7 @@ export class LBPointRenderNode extends BaseRenderPoint {
   get diffXY() {
     return {
       x: -this.diffSize,
-      y: this.collection.h - this.diffSize
+      y: this.collection.h - this.diffSize,
     };
   }
 }
@@ -23,7 +23,7 @@ export class LTPointRenderNode extends BaseRenderPoint {
 
     return {
       x: -diffSize,
-      y: -diffSize
+      y: -diffSize,
     };
   }
 }
@@ -34,11 +34,10 @@ export class RBPointRenderNode extends BaseRenderPoint {
   get diffXY() {
     return {
       x: this.collection.w - this.diffSize,
-      y: this.collection.h - this.diffSize
+      y: this.collection.h - this.diffSize,
     };
   }
 }
-
 
 export class RTPointRenderNode extends BaseRenderPoint {
   protected _resizeType: CornerDirection = 'rt';
@@ -46,7 +45,7 @@ export class RTPointRenderNode extends BaseRenderPoint {
   get diffXY() {
     return {
       x: this.collection.w - this.diffSize,
-      y: -this.diffSize
+      y: -this.diffSize,
     };
   }
 }
@@ -55,14 +54,13 @@ export class RTPointRenderNode extends BaseRenderPoint {
  * 选中框四个渲染Resize热区
  */
 
-
 export class LTPointResizeEventArea extends BaseRectangleResizePoint {
   protected _resizeType: CornerDirection = 'lt';
 
   get diffXY() {
     return {
       x: -this.diffSize,
-      y: -this.diffSize
+      y: -this.diffSize,
     };
   }
 }
@@ -74,7 +72,7 @@ export class RTPointResizeEventArea extends BaseRectangleResizePoint {
     const { offset, collection, diffSize } = this;
     return {
       x: collection.w - diffSize + offset,
-      y: -diffSize
+      y: -diffSize,
     };
   }
 }
@@ -87,7 +85,7 @@ export class RBPointResizeEventArea extends BaseRectangleResizePoint {
 
     return {
       x: collection.w - diffSize + offset,
-      y: collection.h - diffSize + offset
+      y: collection.h - diffSize + offset,
     };
   }
 }
@@ -99,13 +97,10 @@ export class LBPointResizeEventArea extends BaseRectangleResizePoint {
     const { offset, collection, diffSize } = this;
     return {
       x: -diffSize,
-      y: collection.h - diffSize + offset
+      y: collection.h - diffSize + offset,
     };
   }
 }
-
-
-
 
 /**
  * 选中框四个Rotate热区
@@ -116,7 +111,7 @@ export class LTPointRotateEventArea extends BaseRectangleRotatePoint {
   get diffXY() {
     return {
       x: -this.rectSize + this.diffSize,
-      y: -this.rectSize + this.diffSize
+      y: -this.rectSize + this.diffSize,
     };
   }
 }
@@ -128,7 +123,7 @@ export class RTPointRotateEventArea extends BaseRectangleRotatePoint {
     const { rectSize, diffSize, collection, offset } = this;
     return {
       x: collection.w - diffSize,
-      y: -rectSize + diffSize
+      y: -rectSize + diffSize,
     };
   }
 }
@@ -140,11 +135,10 @@ export class RBPointRotateEventArea extends BaseRectangleRotatePoint {
     const { collection, diffSize } = this;
     return {
       x: collection.w - diffSize,
-      y: collection.h - diffSize
+      y: collection.h - diffSize,
     };
   }
 }
-
 
 export class LBPointRotateEventArea extends BaseRectangleRotatePoint {
   protected _rotateType: CornerDirection = 'lb';
@@ -153,7 +147,7 @@ export class LBPointRotateEventArea extends BaseRectangleRotatePoint {
     const { rectSize, diffSize, collection, offset } = this;
     return {
       x: -rectSize + diffSize,
-      y: collection.h - diffSize
+      y: collection.h - diffSize,
     };
   }
 }

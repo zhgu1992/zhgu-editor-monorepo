@@ -1,8 +1,10 @@
 import { DragBaseBehaviorNode } from './dragBase';
 import type {
-  IInputSnapshot, ICustomCollection, ICollectionUIManager,
+  IInputSnapshot,
+  ICustomCollection,
+  ICollectionUIManager,
   TJsDragStartEvent,
-  TJsDragMoveEvent
+  TJsDragMoveEvent,
 } from '../../../interface';
 import type { View } from '../../../view/';
 import { mat3 } from 'gl-matrix';
@@ -12,7 +14,6 @@ import { getAngleByRotate, getMaxAABB } from '@zhgu/data';
 import { getRotateCursor, type CornerDirection } from '../../../utils';
 
 export class DragRotateBehavior extends DragBaseBehaviorNode {
-
   private startAngle: number = 0;
   private originAngle: number = 0;
   private lastAngle: number = 0;
@@ -40,15 +41,14 @@ export class DragRotateBehavior extends DragBaseBehaviorNode {
     if (!area) {
       return;
     }
-    const { collection: { nodes } } = area as BaseRotatePoint;
+    const {
+      collection: { nodes },
+    } = area as BaseRotatePoint;
     const { x, y, w, h } = getMaxAABB(nodes);
     this.centerScreenPos = { x: x + w / 2, y: y + h / 2 } as XYPos;
     this.originAngle = nodes.length === 1 ? nodes[0].rotation : 0;
     this.originAt = nodes.length === 1 ? mat3.clone(nodes[0].at) : mat3.create();
-    this.startAngle = -getAngleByRotate(
-      this.centerScreenPos,
-      inputSnapshot.currentPagePoint,
-    );
+    this.startAngle = -getAngleByRotate(this.centerScreenPos, inputSnapshot.currentPagePoint);
   };
 
   onDragMove: TJsDragMoveEvent = (message, inputSnapshot) => {
@@ -56,7 +56,7 @@ export class DragRotateBehavior extends DragBaseBehaviorNode {
     this.dragRotate(area as BaseRotatePoint, inputSnapshot);
   };
 
-  onDragEnd?: TJsDragStartEvent | undefined = (message) => {
+  onDragEnd?: TJsDragStartEvent | undefined = message => {
     this.lastAngle = 0;
   };
 
@@ -68,7 +68,9 @@ export class DragRotateBehavior extends DragBaseBehaviorNode {
   private dragRotate(collideArea: BaseRotatePoint, inputSnapshot: IInputSnapshot) {
     const { startAngle, lastAngle, originAngle, centerScreenPos } = this;
     const { shiftKey, currentPagePoint } = inputSnapshot;
-    const { collection: { nodes } } = collideArea;
+    const {
+      collection: { nodes },
+    } = collideArea;
 
     const currentAngle = -getAngleByRotate(centerScreenPos, currentPagePoint); // 当前三点钟, 逆时针为正角度
     let changeAngle = currentAngle - startAngle; // 鼠标从点击到现在的旋转角度
@@ -87,7 +89,7 @@ export class DragRotateBehavior extends DragBaseBehaviorNode {
     this.lastAngle = changeAngle;
 
     const transactions: Transaction = [];
-    nodes.forEach((node) => {
+    nodes.forEach(node => {
       transactions.push(node.changeRotation(dr, [this.centerScreenPos.x, this.centerScreenPos.y]));
     });
     this.updateRotateCursor(collideArea.rotateType, dr);

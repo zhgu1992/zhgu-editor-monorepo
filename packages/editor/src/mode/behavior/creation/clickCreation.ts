@@ -14,8 +14,8 @@ export class ClickCreationBehaviorNode extends BehaviorNode {
     this._clickState = state;
   }
 
-  override onClick: TJsPointerEvent = (inputSnapshot) => {
-    const {view} = this;
+  override onClick: TJsPointerEvent = inputSnapshot => {
+    const { view } = this;
     const parentNode = view.scene.currentPage;
     // 获取初始化点击创建大小 [1, 100]
     const canvasDom = view.canvas!;
@@ -58,16 +58,18 @@ export class ClickCreationBehaviorNode extends BehaviorNode {
       h: boundingBox.h,
       parentIndex: {
         id: parentId,
-        position: parentPosition
+        position: parentPosition,
       },
     });
     const elementId = element.id;
 
-    view.applyTransaction([{
-      type: EElementChangeType.Add,
-      id: elementId,
-      data: element,
-    }]);
+    view.applyTransaction([
+      {
+        type: EElementChangeType.Add,
+        id: elementId,
+        data: element,
+      },
+    ]);
 
     const node = view.scene.getNodeById(elementId);
     view.commitHistory();

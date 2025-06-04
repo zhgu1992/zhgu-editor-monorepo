@@ -5,7 +5,8 @@ import type { EventManager } from '../../event';
 /**
  * 基础模板
  */
-export class BaseModelNode { // 活动名称
+export class BaseModelNode {
+  // 活动名称
   readonly id: string;
   private _view: View;
 
@@ -33,7 +34,7 @@ export class BaseModelNode { // 活动名称
     this._view = view;
   }
 
-  public get view(){
+  public get view() {
     return this._view;
   }
 
@@ -63,7 +64,7 @@ export class BaseModelNode { // 活动名称
   }
 
   removeEvent() {
-    const eventManager = this.view.eventManager!;    // if(!eventManager) {
+    const eventManager = this.view.eventManager!; // if(!eventManager) {
     this.onPointerDown && eventManager.off('mousedown', this.onPointerDown);
     this.onPointerMove && eventManager.off('mousemove', this.onPointerMove);
     this.onPointerUp && eventManager.off('mouseup', this.onPointerUp);
@@ -76,17 +77,16 @@ export class BaseModelNode { // 活动名称
     this.removeDragEvents(eventManager);
   }
 
-  protected bindDragEvents(eventManager: EventManager){
+  protected bindDragEvents(eventManager: EventManager) {
     // todo drag event
     this.onDragStart && eventManager.on('dragstart', this.onDragStart);
     this.onDragMove && eventManager.on('dragmove', this.onDragMove);
     this.onDragEnd && eventManager.on('dragend', this.onDragEnd);
   }
 
-  protected removeDragEvents(eventManager: EventManager){
+  protected removeDragEvents(eventManager: EventManager) {
     this.onDragStart && eventManager.off('dragstart', this.onDragStart);
     this.onDragMove && eventManager.off('dragmove', this.onDragMove);
     this.onDragEnd && eventManager.off('dragend', this.onDragEnd);
   }
-
 }

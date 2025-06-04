@@ -4,46 +4,44 @@ interface IRectProps {
    * @type {number}
    * @memberof rectangleState
    */
-  rectangleBottomLeftCornerRadius?: number
+  rectangleBottomLeftCornerRadius?: number;
   /**
    * 矩形右下角的圆角半径。
    * @type {number}
    * @memberof rectangleState
    */
-  rectangleBottomRightCornerRadius?: number
+  rectangleBottomRightCornerRadius?: number;
   /**
    * 矩形圆角是否独立。
    * @type {boolean}
    * @memberof rectangleState
    */
-  rectangleCornerRadiiIndependent?: boolean
+  rectangleCornerRadiiIndependent?: boolean;
   /**
    * 矩形左上角的圆角半径。
    * @type {number}
    * @memberof rectangleState
    */
-  rectangleTopLeftCornerRadius?: number
+  rectangleTopLeftCornerRadius?: number;
   /**
    * 矩形右上角的圆角半径。
    * @type {number}
    * @memberof rectangleState
    */
-  rectangleTopRightCornerRadius?: number
+  rectangleTopRightCornerRadius?: number;
 
-  strokeTopWeight?: number
+  strokeTopWeight?: number;
 
-  strokeBottomWeight?: number
+  strokeBottomWeight?: number;
 
-  strokeLeftWeight?: number
+  strokeLeftWeight?: number;
 
-  strokeRightWeight?: number
+  strokeRightWeight?: number;
 
   /**
    * 圆角平滑度
    */
-  smoothing?: number
+  smoothing?: number;
 }
 
-export {
-  IRectProps,
-};
+export { IRectProps };

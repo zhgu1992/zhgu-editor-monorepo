@@ -6,8 +6,8 @@ import type { Scene } from '../node';
 export class Picker {
   private _lastPickFrame = -1;
   private _frameTime = -1;
-  private _pickInfo: IBaseNode|null = null;
-  private _lastPos: XYPos = { x:0, y:0 };
+  private _pickInfo: IBaseNode | null = null;
+  private _lastPos: XYPos = { x: 0, y: 0 };
   private _pickAreaInfo: ICustomNode[] = [];
   private _renderManager: RenderManager;
   private _scene: Scene;
@@ -17,7 +17,7 @@ export class Picker {
     this._scene = scene;
   }
 
-  get renderManager(){
+  get renderManager() {
     return this._renderManager;
   }
 
@@ -29,10 +29,7 @@ export class Picker {
     return this._frameTime;
   }
 
-  pick(
-    position: XYPos,
-    ignoreFrameCheck = false,
-  ): IBaseNode | null {
+  pick(position: XYPos, ignoreFrameCheck = false): IBaseNode | null {
     const page = this._scene.currentPage;
     const { x, y } = position;
     // if (this._isSameFrame(x, y, ignoreFrameCheck)) {
@@ -40,23 +37,23 @@ export class Picker {
     // }
     const nodes = page.children as IBaseNode[];
     const len = nodes.length;
-    for(let i = len-1; i >= 0; i--){
+    for (let i = len - 1; i >= 0; i--) {
       const flag = nodes[i].pick(position);
-      if(flag){
-        this._pickInfo =  nodes[i];
+      if (flag) {
+        this._pickInfo = nodes[i];
         return nodes[i];
       }
     }
     return null;
   }
 
-  pickByBox(bounds: XYWH, containerNode?: IBaseNode){
+  pickByBox(bounds: XYWH, containerNode?: IBaseNode) {
     const page = containerNode ?? this._scene.currentPage;
     const nodes = page.children as IBaseNode[];
     const results = [];
-    for(let i = 0; i < nodes.length; i++){
+    for (let i = 0; i < nodes.length; i++) {
       const flag = nodes[i].pickByBox(bounds);
-      if(flag){
+      if (flag) {
         results.push(nodes[i]);
       }
     }
@@ -69,12 +66,12 @@ export class Picker {
     }
     // 如果是同一帧
     if (this._lastPickFrame === this._frameTime) {
-      if(this._lastPos.x === x && this._lastPos.y === y) {
+      if (this._lastPos.x === x && this._lastPos.y === y) {
         this._lastPickFrame = this._frameTime;
         return true;
       }
     }
-    this._lastPos = {x, y};
+    this._lastPos = { x, y };
     this._lastPickFrame = this._frameTime;
     return false;
   }

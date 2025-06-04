@@ -4,26 +4,26 @@ import type { Mode } from './mode';
  */
 export class ModeManager {
   private _cache: Map<string, Mode> = new Map();
-  currentMode: Mode|null = null;
+  currentMode: Mode | null = null;
 
-  registerMode(mode: Mode){
+  registerMode(mode: Mode) {
     this._cache.set(mode.id, mode);
   }
 
-  changeMode(modeId: string){
+  changeMode(modeId: string) {
     const mode = this.getMode(modeId);
-    if(mode){
+    if (mode) {
       this.currentMode?.exit();
       this.currentMode = mode;
       mode.enter();
     }
   }
 
-  getMode(modeId: string){
+  getMode(modeId: string) {
     return this._cache.get(modeId);
   }
 
-  destroy(){
+  destroy() {
     this._cache.forEach((mode: Mode) => {
       mode.exit();
     });

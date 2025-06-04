@@ -1,11 +1,10 @@
 import { GeometryNode } from './GeometryNode';
-import type {StrokePaints, FillPaints, IStrokeProps, IStrokeBaseProps, INodeElement} from '@zhgu/type';
+import type { StrokePaints, FillPaints, IStrokeProps, IStrokeBaseProps, INodeElement } from '@zhgu/type';
 import { EStrokeCap } from '@zhgu/type';
 import type { INodeModel } from '../interface';
-import type {ElementData} from '../dataUtil';
+import type { ElementData } from '../dataUtil';
 
 class NodeModel extends GeometryNode implements INodeModel {
-
   constructor(_elementData: ElementData) {
     super(_elementData);
   }
@@ -26,7 +25,7 @@ class NodeModel extends GeometryNode implements INodeModel {
     return this.props.strokePaints ?? [];
   }
 
-  get strokeWeight(): number | undefined{
+  get strokeWeight(): number | undefined {
     return this.props.strokeWeight;
   }
 

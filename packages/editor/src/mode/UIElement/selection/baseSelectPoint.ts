@@ -5,7 +5,7 @@ import { COLOR_CONFIG } from '../../../const';
 import type { AllEventType } from '../../../interface';
 import type { AllDirection } from '../../../utils';
 import type { View } from '../../../view';
-import {mat3} from "gl-matrix";
+import { mat3 } from 'gl-matrix';
 
 // 选中框的四个角的热区， 是vector
 const getPathMap = (w: number, isMini = false) => {
@@ -27,9 +27,8 @@ const getPathMap = (w: number, isMini = false) => {
   };
 };
 
-
-export class BaseSelectBorder extends CustomCollection{
-  update(){
+export class BaseSelectBorder extends CustomCollection {
+  update() {
     super.update();
     this.isVisible = this.collection.nodes.length > 0;
   }
@@ -39,15 +38,19 @@ export class BaseSelectBorder extends CustomCollection{
  * 选中框的四个点渲染基类，另外也是非闭合矢量的选中线的两个点的渲染基类
  */
 export class BaseRenderPoint extends CustomCollection {
-  constructor(id: string, collection: ICollection, view: View,
+  constructor(
+    id: string,
+    collection: ICollection,
+    view: View,
     options: Partial<ICustomStyledOptions> = {
-      strokeWeight : 1,
+      strokeWeight: 1,
       color: COLOR_CONFIG['light/purple/50'],
       opacity: 1,
       colorEnabled: true,
       strokeEnabled: true,
       strokeOpacity: 1,
-    }) {
+    }
+  ) {
     super(id, collection, view, options);
   }
   get w() {
@@ -74,13 +77,17 @@ export class BaseRenderPoint extends CustomCollection {
 export class BaseResizeEventArea extends BaseCollectionArea {
   protected _resizeType: AllDirection = 'l';
 
-  constructor(id: string, collection: ICollection, view: View,
-    options: Partial<ICustomStyledOptions>={
+  constructor(
+    id: string,
+    collection: ICollection,
+    view: View,
+    options: Partial<ICustomStyledOptions> = {
       opacity: 0.5,
-      color: COLOR_CONFIG['light/purple/50'] ,
+      color: COLOR_CONFIG['light/purple/50'],
       strokeEnabled: false,
-    }) {
-    super(id, collection,view, options);
+    }
+  ) {
+    super(id, collection, view, options);
     this.isVisible = false;
   }
 
@@ -135,12 +142,16 @@ export class BaseResizeEventArea extends BaseCollectionArea {
 }
 export class BaseResizePoint extends BaseResizeEventArea {
   protected _resizeType: CornerDirection = 'lt';
-  constructor(id: string, collection: ICollection, view: View,
-    options: Partial<ICustomStyledOptions>={
+  constructor(
+    id: string,
+    collection: ICollection,
+    view: View,
+    options: Partial<ICustomStyledOptions> = {
       opacity: 1.0,
       color: COLOR_CONFIG['light/purple/600'],
       strokeEnabled: false,
-    }) {
+    }
+  ) {
     super(id, collection, view, options);
     this.isVisible = false;
   }
@@ -181,7 +192,6 @@ export class BaseRectangleResizePoint extends BaseResizePoint {
     }
     return 0;
   }
-
 }
 
 /**

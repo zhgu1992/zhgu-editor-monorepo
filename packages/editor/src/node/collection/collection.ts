@@ -6,10 +6,10 @@ import type { RenderCategorySet, XYWH } from '@zhgu/type';
 /**
  *  集合对象,主要用于多选
  */
-export class BaseCollection implements ICollection{
+export class BaseCollection implements ICollection {
   id: string;
   private _dataNodes: IBaseNode[];
-  private _aabb: XYWH|null = null;
+  private _aabb: XYWH | null = null;
   constructor(id: string, nodes: IBaseNode[]) {
     this.id = id;
     this._dataNodes = nodes;
@@ -19,7 +19,7 @@ export class BaseCollection implements ICollection{
     this._dataNodes = nodes;
   }
 
-  get nodes(){
+  get nodes() {
     return this._dataNodes;
   }
 
@@ -79,22 +79,22 @@ export class BaseCollection implements ICollection{
   }
 
   get absoluteAABB() {
-    if(!this._aabb){
-      if(this._dataNodes.length === 0) {
+    if (!this._aabb) {
+      if (this._dataNodes.length === 0) {
         this._aabb = {
           x: 0,
           y: 0,
           w: 1,
           h: 1,
         };
-      }else{
+      } else {
         this._aabb = getMaxAABB(this._dataNodes);
       }
     }
     return this._aabb;
   }
 
-  update(props?: RenderCategorySet){
+  update(props?: RenderCategorySet) {
     this._aabb = null;
     this._dataNodes.forEach(node => {
       node.updateHoverAndSelect(props);

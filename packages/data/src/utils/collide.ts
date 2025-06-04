@@ -1,12 +1,7 @@
 import type { XYWH } from '@zhgu/type';
 import type { vec2 } from 'gl-matrix';
 
-export type IRect = [
-  left: number,
-  top: number,
-  right: number,
-  bottom: number,
-];
+export type IRect = [left: number, top: number, right: number, bottom: number];
 
 /**
  * 判断点是否在矩形内
@@ -16,12 +11,7 @@ export type IRect = [
  */
 export const isPointInRect = (point: vec2, rect: IRect) => {
   const [x, y] = point;
-  return (
-    x >= rect[0] &&
-    x <= rect[2] &&
-    y >= rect[1] &&
-    y <= rect[3]
-  );
+  return x >= rect[0] && x <= rect[2] && y >= rect[1] && y <= rect[3];
 };
 
 /**
@@ -34,9 +24,11 @@ export const isPointInPolygon = (point: vec2, polygon: vec2[]) => {
   const [x, y] = point;
   let inside = false;
   for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-    const xi = polygon[i][0], yi = polygon[i][1];
-    const xj = polygon[j][0], yj = polygon[j][1];
-    const intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+    const xi = polygon[i][0],
+      yi = polygon[i][1];
+    const xj = polygon[j][0],
+      yj = polygon[j][1];
+    const intersect = yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
     if (intersect) {
       inside = !inside;
     }
@@ -53,7 +45,7 @@ export const isPointInPolygon = (point: vec2, polygon: vec2[]) => {
  */
 const orientation = (p: vec2, q: vec2, r: vec2) => {
   const val = (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1]);
-  return val === 0 ? 0 : (val > 0 ? 1 : 2);
+  return val === 0 ? 0 : val > 0 ? 1 : 2;
 };
 
 /**
@@ -203,7 +195,6 @@ export const isPolygonIntersectRect = (polygon: vec2[], rect: IRect) => {
   return false;
 };
 
-
 /**
  * 检查包围框A是否完全包含包围框B
  * @param {Object} rectA - 包含x, y, w, h的对象，表示矩形A
@@ -227,9 +218,13 @@ export function isRectCompletelyContained(rectA: XYWH, rectB: XYWH) {
  * @returns {boolean} - 如果两个矩形相交，返回true；否则返回false
  */
 export function isRectanglesIntersect(rectA: XYWH, rectB: XYWH) {
-  return rectA.x + rectA.w > rectB.x && rectA.x < rectB.x + rectB.w && rectA.y + rectA.h > rectB.y && rectA.y < rectB.y + rectB.h;
+  return (
+    rectA.x + rectA.w > rectB.x &&
+    rectA.x < rectB.x + rectB.w &&
+    rectA.y + rectA.h > rectB.y &&
+    rectA.y < rectB.y + rectB.h
+  );
 }
-
 
 /**
  * 计算两个矩形的相交区域
@@ -254,10 +249,9 @@ export function getIntersectionRect(rectA: XYWH, rectB: XYWH): XYWH | null {
     x: x1,
     y: y1,
     w: x2 - x1,
-    h: y2 - y1
+    h: y2 - y1,
   };
 }
-
 
 /**
  * 判断两个包围盒是否等大小
@@ -266,8 +260,5 @@ export function getIntersectionRect(rectA: XYWH, rectB: XYWH): XYWH | null {
  * @returns {boolean} - true / false
  */
 export function isEqualRectangles(rectA: XYWH, rectB: XYWH): boolean {
-  return rectA.x === rectB.x &&
-    rectA.y === rectB.y &&
-    rectA.w === rectB.w &&
-    rectA.h === rectB.h;
+  return rectA.x === rectB.x && rectA.y === rectB.y && rectA.w === rectB.w && rectA.h === rectB.h;
 }

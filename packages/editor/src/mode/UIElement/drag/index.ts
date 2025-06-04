@@ -10,18 +10,22 @@ import type { NodeGroup } from '../../../render';
  */
 export class DragNodeState extends CustomNode {
   group: NodeGroup;
-  constructor(id: string, view: View, options: Partial<ICustomStyledOptions> = {
-    color: COLOR_CONFIG.primary(),
-    opacity: 0.1,
-    strokeColor: COLOR_CONFIG.primary(),
-    strokeWeight: 1,
-  }) {
+  constructor(
+    id: string,
+    view: View,
+    options: Partial<ICustomStyledOptions> = {
+      color: COLOR_CONFIG.primary(),
+      opacity: 0.1,
+      strokeColor: COLOR_CONFIG.primary(),
+      strokeWeight: 1,
+    }
+  ) {
     super(id, view, options);
     this.group = this.renderManager.getNodeGroup(ERenderGroupKey.Top)!;
     this.group.addNode(this);
   }
 
-  init(){
+  init() {
     this.setDefaultStyle();
   }
 
@@ -42,10 +46,10 @@ export class DragNodeState extends CustomNode {
 
   get h() {
     const { currentPagePoint, originPagePoint } = this.eventManager.snapshot;
-    return  Math.abs(originPagePoint.y - currentPagePoint.y);
+    return Math.abs(originPagePoint.y - currentPagePoint.y);
   }
 
-  destroy(){
+  destroy() {
     this.group.removeNodeById(this.id);
     super.destroy();
   }

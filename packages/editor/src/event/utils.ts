@@ -1,4 +1,3 @@
-
 const edgeRange = [15, 5]; // 距离边缘15px匀加速至5px，距离边缘<=5px速度最大并匀速更新viewport
 const speedRange = [0.1, 1]; // px/ms，表示15px-100px/s,5px-1000px/s
 const [maxDis, minDis] = edgeRange;
@@ -17,7 +16,6 @@ export function getSpeed(distance: number) {
   if (distance <= minDis) {
     return maxSp;
   }
-  const ratio = (maxDis- distance) / (maxDis - minDis);
+  const ratio = (maxDis - distance) / (maxDis - minDis);
   return (maxSp - minSp) * ratio + minSp;
 }
-

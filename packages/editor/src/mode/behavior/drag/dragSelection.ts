@@ -36,17 +36,16 @@ export class DragSelectionBehavior extends DragBaseBehaviorNode {
   }
 
   onDragStart: TJsDragMoveEvent = (message, positionMessage) => {
-    const {dragBox} = this;
-    if(!dragBox){
+    const { dragBox } = this;
+    if (!dragBox) {
       return;
     }
     dragBox.setPosition(dragBox.x, dragBox.y);
   };
 
-
   onDragMove: TJsDragMoveEvent = (message, positionMessage) => {
-    const eventManager =  this.view.eventManager;
-    if(!eventManager){
+    const eventManager = this.view.eventManager;
+    if (!eventManager) {
       return;
     }
     const dragBox = this._dragBox;

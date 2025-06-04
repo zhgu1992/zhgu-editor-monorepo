@@ -68,7 +68,7 @@ const mergeTransaction = (base: Transaction, more: Transaction): Transaction => 
     const bs: ElementChange[] = [];
     for (; i < base.length; i++) {
       const b = base[i];
-      if (!more.some((m) => coversElementChange(b, m))) {
+      if (!more.some(m => coversElementChange(b, m))) {
         bs.push(b);
       }
     }
@@ -78,7 +78,7 @@ const mergeTransaction = (base: Transaction, more: Transaction): Transaction => 
 };
 
 const interchangeableTransaction = (a: Transaction, b: Transaction): boolean => {
-  return a.every((aa) => b.every((bb) => interchangeableElementChange(aa, bb)));
+  return a.every(aa => b.every(bb => interchangeableElementChange(aa, bb)));
 };
 
 export {

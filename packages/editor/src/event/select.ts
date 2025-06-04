@@ -2,10 +2,9 @@ import type { EventBus } from './eventBus';
 import type { IBaseNode } from '../interface';
 import { ESelectEventType } from '../const';
 
-export class Select{
+export class Select {
   private _eventBus: EventBus;
   private _selectNodes: IBaseNode[] = [];
-
 
   constructor(eventBus: EventBus) {
     this._eventBus = eventBus;
@@ -16,14 +15,14 @@ export class Select{
   }
 
   getSelectIds() {
-    return this._selectNodes.map(v=> v.id);
+    return this._selectNodes.map(v => v.id);
   }
 
   setSelectNodes(value: IBaseNode[], isForce = false) {
-    this._selectNodes.forEach(v =>{
+    this._selectNodes.forEach(v => {
       v.showSelectBox(false);
     });
-    value.forEach(v =>{
+    value.forEach(v => {
       v.showSelectBox(true);
     });
     this._selectNodes = value;

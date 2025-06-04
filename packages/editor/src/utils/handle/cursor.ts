@@ -61,11 +61,7 @@ function getCornerAngle(options: { apoints: vec2[]; key: CornerDirection }) {
   const pr = apoints[(i + 1) % 4];
   const vl = vec2.sub(vec2.create(), pl, pm);
   const vr = vec2.sub(vec2.create(), pr, pm);
-  const v = vec2.add(
-    vec2.create(),
-    vec2.normalize(vec2.create(), vl),
-    vec2.normalize(vec2.create(), vr),
-  );
+  const v = vec2.add(vec2.create(), vec2.normalize(vec2.create(), vl), vec2.normalize(vec2.create(), vr));
 
   return (Math.atan2(v[1], v[0]) / Math.PI) * 180;
 }

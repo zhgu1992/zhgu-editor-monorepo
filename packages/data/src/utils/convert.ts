@@ -22,5 +22,5 @@ export function mat2obj(v: mat3): Transform {
 }
 
 export function radians(angle: number) {
-  return Math.PI * angle / 180;
+  return (Math.PI * angle) / 180;
 }

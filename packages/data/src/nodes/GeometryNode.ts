@@ -2,22 +2,15 @@ import { Node } from './Node';
 import { mat3, vec2 } from 'gl-matrix';
 import { obj2mat } from '../utils';
 import { aabb, getObbPoints } from '../utils';
-import type {
-  Transform,
-  XYWH,
-  XYPos,
-  RenderCategorySet,
-} from '@zhgu/type';
+import type { Transform, XYWH, XYPos, RenderCategorySet } from '@zhgu/type';
 import type { IGeometryNode } from '../interface';
 import { TransformProps } from '../dataUtil';
 
 const AT_RENDERCATEGORYSET = new Set([...TransformProps.keys]) as RenderCategorySet;
 
 class GeometryNode extends Node implements IGeometryNode {
-
   private _relative: mat3 = mat3.create();
   private _at: mat3 = mat3.create();
-
 
   get rt(): mat3 {
     if (this.props.transform) {
@@ -133,7 +126,7 @@ class GeometryNode extends Node implements IGeometryNode {
 
   updateNodeAt() {
     this.updateRenderNode(AT_RENDERCATEGORYSET);
-    this.children.forEach((node) => node.updateNodeAt());
+    this.children.forEach(node => node.updateNodeAt());
   }
 }
 

@@ -9,4 +9,4 @@ export function alignToGrid(val: number, alignSpacings: number) {
 }
 
 // 为了保持向后兼容，保留原函数名
-export const getFixPixelGridAlignmentVal = alignToGrid; 
+export const getFixPixelGridAlignmentVal = alignToGrid;

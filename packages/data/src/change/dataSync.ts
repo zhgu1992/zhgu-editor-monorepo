@@ -1,5 +1,5 @@
 import type { ISyncClientFollower, ISavingTransaction } from '../interface';
-import type {ElementChange, Transaction} from '@zhgu/type';
+import type { ElementChange, Transaction } from '@zhgu/type';
 import type { DocExchange } from './DocExchange';
 import { isNullOrUndefined } from '../utils';
 import { mergeTransaction } from '../dataUtil';
@@ -10,7 +10,7 @@ class PendingChange implements ISavingTransaction {
   constructor(
     readonly transaction: Transaction,
     readonly reverse: Transaction,
-    public time = -1,
+    public time = -1
   ) {}
 }
 
@@ -36,16 +36,12 @@ class DataSync {
   }
 
   private processTransaction(transaction: Transaction, isIgnoreRevTransaction = false) {
-    return this.docExchange.tryTransact(
-      transaction,
-      this.follower?.transactionFollower,
-      isIgnoreRevTransaction,
-    );
+    return this.docExchange.tryTransact(transaction, this.follower?.transactionFollower, isIgnoreRevTransaction);
   }
 
   transactLocal(transaction: Transaction) {
     const isIgnoreRevTransaction = this.stateCompressor.isIgnoreRevTransaction;
-    const [ reverse ] = this.processTransaction(transaction, isIgnoreRevTransaction)!;
+    const [reverse] = this.processTransaction(transaction, isIgnoreRevTransaction)!;
     let pendingChange = new PendingChange(transaction, reverse);
 
     if (this.stateCompressor.enabled) {

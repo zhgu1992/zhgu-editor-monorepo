@@ -1,8 +1,6 @@
 import type { ElementChangeProps, RenderCategorySet, RenderCategory } from '@zhgu/type';
 
-const elementProps2RenderCategorySet = (
-  elementChangeProps: ElementChangeProps,
-): RenderCategorySet => {
+const elementProps2RenderCategorySet = (elementChangeProps: ElementChangeProps): RenderCategorySet => {
   const renderCategory: RenderCategorySet = new Set();
   const propsKeyList = Object.keys(elementChangeProps) as RenderCategory[];
   for (const key of propsKeyList) {

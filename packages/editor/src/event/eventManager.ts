@@ -4,9 +4,9 @@ import { EventEntry } from './eventEntry';
 import { ViewPort } from '../viewport';
 import type { IEventArgs, CustomEventType } from '../const';
 import { EventBus } from './eventBus.ts';
-import { Hover} from './hover';
-import  {Select} from './select';
-import type {RenderManager} from "../render";
+import { Hover } from './hover';
+import { Select } from './select';
+import type { RenderManager } from '../render';
 /**
  * 事件管理器，管理事件和快照
  * 最底层方法，可以在上层所有业务复用，viewport除外
@@ -24,7 +24,7 @@ export class EventManager {
     this.hover = new Hover(this.eventBus, this.select);
   }
 
-  resetEventEntry(){
+  resetEventEntry() {
     this.eventEntry.reset();
   }
 
@@ -32,15 +32,15 @@ export class EventManager {
     return this._viewPort;
   }
 
-  get hoverNode(){
+  get hoverNode() {
     return this.hover.getHoverNode();
   }
 
-  set hoverNode(value: IBaseNode | null){
+  set hoverNode(value: IBaseNode | null) {
     this.hover.setHoverNode(value);
   }
 
-  get selectedNodes(){
+  get selectedNodes() {
     return this.select.getSelectNodes();
   }
 
@@ -52,16 +52,15 @@ export class EventManager {
     this.select.setSelectNodes(value);
   }
 
-
-  get snapshot(){
+  get snapshot() {
     return this.eventEntry.snapshot;
   }
 
-  get customListeners(){
+  get customListeners() {
     return this.eventBus.listeners;
   }
 
-  get eventEntryListeners(){
+  get eventEntryListeners() {
     return this.eventEntry.eventListener;
   }
 
@@ -77,22 +76,22 @@ export class EventManager {
    * @param {(...args: any[]) => any} cb
    */
   on(type: CustomEventType | MouseEventType, cb: (...args: any[]) => any) {
-    if(mouseEventEnum.includes(type)){
+    if (mouseEventEnum.includes(type)) {
       this.eventEntry.addMouseEvent(type as MouseEventType, cb);
-    }else{
+    } else {
       this.eventBus.on(type, cb);
     }
   }
 
-  off(type: CustomEventType | MouseEventType,  cb: (...args: any[]) => any){
-    if(mouseEventEnum.includes(type)){
+  off(type: CustomEventType | MouseEventType, cb: (...args: any[]) => any) {
+    if (mouseEventEnum.includes(type)) {
       this.eventEntry.removeMouseEvent(type as MouseEventType, cb);
-    }else{
+    } else {
       this.eventBus.off(type, cb);
     }
   }
 
-  emit(type: string, data: IEventArgs){
+  emit(type: string, data: IEventArgs) {
     this.eventBus.emit(type, data);
   }
 
@@ -103,5 +102,3 @@ export class EventManager {
     this.eventBus.removeAllListeners();
   }
 }
-
-

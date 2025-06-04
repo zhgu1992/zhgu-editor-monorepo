@@ -11,7 +11,6 @@ const _rotateCache = {
 };
 
 export function rotate(at: mat3, rotation: number, apivot: vec2) {
-
   // 移动到旋转中心平移矩阵
   const toPivotMat = mat3.fromTranslation(_rotateCache.mat1, vec2.negate(_rotateCache.vec2, apivot));
   // 回到原点平移矩阵
@@ -22,8 +21,7 @@ export function rotate(at: mat3, rotation: number, apivot: vec2) {
   mat3.mul(_rotateCache.resultAt, rotationMat, _rotateCache.resultAt);
   mat3.mul(_rotateCache.resultAt, fromPivotMat, _rotateCache.resultAt);
   return _rotateCache.resultAt;
-};
-
+}
 
 /**
  * [以_centerXY为旋转中心，3点钟方向逆时针获取角度]

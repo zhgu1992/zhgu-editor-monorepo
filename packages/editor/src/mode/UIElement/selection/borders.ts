@@ -22,7 +22,6 @@ export class LBorderResizeEventArea extends BaseResizeEventArea {
   }
 }
 
-
 export class RBorderResizeEventArea extends BaseResizeEventArea {
   protected _resizeType: AllDirection = 'r';
 
@@ -98,7 +97,3 @@ export class BBorderResizeEventArea extends BaseResizeEventArea {
     };
   }
 }
-
-
-
-

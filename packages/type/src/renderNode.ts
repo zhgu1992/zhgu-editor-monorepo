@@ -8,8 +8,17 @@ type RenderCategory =
   | 'strokePaints'
   | 'strokeWeight';
 
-type RenderCategorySet = Set<RenderCategory>
+type RenderCategorySet = Set<RenderCategory>;
 
-const AllRenderCategorySet: RenderCategorySet = new Set(['transform', 'size', 'fillPaints', 'isVisible', 'opacity','stroke', 'strokePaints', 'strokeWeight']);
+const AllRenderCategorySet: RenderCategorySet = new Set([
+  'transform',
+  'size',
+  'fillPaints',
+  'isVisible',
+  'opacity',
+  'stroke',
+  'strokePaints',
+  'strokeWeight',
+]);
 
 export { RenderCategory, RenderCategorySet, AllRenderCategorySet };

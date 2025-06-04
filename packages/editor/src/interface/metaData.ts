@@ -1,10 +1,10 @@
-export type IModuleMetaDataConfig = number
+export type IModuleMetaDataConfig = number;
 
 // 基础属性相关的key
 // 模块相关的key
 export type TMetaDataKey = keyof typeof DEFAULT_META_DATA;
 export type TModuleMetaDataKey = keyof typeof DEFAULT_MODULE_META_DATA;
-export type IMetaData = Record<Exclude<TMetaDataKey, 'type'>, IMetaDataConfig>
+export type IMetaData = Record<Exclude<TMetaDataKey, 'type'>, IMetaDataConfig>;
 
 export type IModuleMetaData = Record<Exclude<TModuleMetaDataKey, 'type'>, IModuleMetaDataConfig> & {
   type: string;

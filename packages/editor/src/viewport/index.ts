@@ -4,8 +4,7 @@ import { clamp } from 'lodash-es';
 import BezierEasing from 'bezier-easing';
 import { EViewPortEventType } from '../const';
 import type { EventBus } from '../event';
-import type { RenderManager } from "../render";
-
+import type { RenderManager } from '../render';
 
 export class ViewPort {
   private _zoom = 1;
@@ -61,7 +60,7 @@ export class ViewPort {
       return;
     }
     this.renderManager.setViewPortPosition(position);
-    this._position = {x: position.x, y: position.y};
+    this._position = { x: position.x, y: position.y };
     this.renderManager.update();
     this.emitPositionChange(position);
   }
@@ -77,8 +76,8 @@ export class ViewPort {
   get center(): XYPos {
     const { x, y, w, h } = this.canvasViewBox;
     return {
-      x: x + (w / 2),
-      y: y + (h / 2)
+      x: x + w / 2,
+      y: y + h / 2,
     };
   }
 
@@ -124,11 +123,7 @@ export class ViewPort {
     const { x: px, y: py } = this.position;
 
     // 目标放大倍数（以宽、高最小缩放比为基准）
-    let targetZoom = clamp(
-      Math.min((width / 2 - 2 * sph) / maxW, (height / 2 - 2 * spv) / maxH),
-      0.02,
-      4,
-    );
+    let targetZoom = clamp(Math.min((width / 2 - 2 * sph) / maxW, (height / 2 - 2 * spv) / maxH), 0.02, 4);
 
     // 页面移动的目标位置，调整公式确保是移动到屏幕的正中心
     const targetPos = {
@@ -156,14 +151,14 @@ export class ViewPort {
    * 在该位置处进行缩放
    */
   zoomAt(position: XYPos, options: ZoomAtOptions) {
-    let {state, zoom = this.zoom} = options;
+    let { state, zoom = this.zoom } = options;
     if (state) {
       zoom = getNextZoom(this.zoom, state);
     }
     const oldZoom = this.zoom;
     this.zoom = zoom;
     const { x: oldX, y: oldY } = this.position;
-    const {x, y} = position;
+    const { x, y } = position;
     const currentScreenPointX = (x - oldX) * oldZoom;
     const currentScreenPointY = (y - oldY) * oldZoom;
     const offsetX = currentScreenPointX;
@@ -175,12 +170,12 @@ export class ViewPort {
 
   private cubicChangeViewport(
     [originX, originY, originZoom]: [number, number, number],
-    [deltaX, deltaY, deltaZoom]: [number, number, number],
+    [deltaX, deltaY, deltaZoom]: [number, number, number]
   ) {
     const ease = BezierEasing(0.42, 0, 0.58, 1);
     const duration = 400;
     let start: number | undefined = undefined;
-    const timingHandle: FrameRequestCallback = (timestamp) => {
+    const timingHandle: FrameRequestCallback = timestamp => {
       if (start === undefined) {
         start = timestamp;
       }
@@ -205,14 +200,14 @@ export class ViewPort {
     requestAnimationFrame(timingHandle);
   }
   emitZoomChange(value: number, oldZoom: number) {
-    this._eventBus.emit(EViewPortEventType.ZoomChange, {data:value});
-    if(Math.abs(Math.ceil(value) - Math.ceil(oldZoom))>=1){
-      this._eventBus.emit(EViewPortEventType.ZoomLevelChange, {data:value});
+    this._eventBus.emit(EViewPortEventType.ZoomChange, { data: value });
+    if (Math.abs(Math.ceil(value) - Math.ceil(oldZoom)) >= 1) {
+      this._eventBus.emit(EViewPortEventType.ZoomLevelChange, { data: value });
     }
   }
 
   emitPositionChange(position: XYPos) {
-    this._eventBus.emit(EViewPortEventType.PositionChange, {data:position});
+    this._eventBus.emit(EViewPortEventType.PositionChange, { data: position });
   }
 }
 

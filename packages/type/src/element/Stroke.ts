@@ -105,12 +105,4 @@ interface IStrokePaintsProps {
 
 interface IStrokeProps extends IStrokeBaseProps, IStrokePaintsProps {}
 
-export {
-  EStrokeCap,
-  EStrokeAlign,
-  EStrokeJoin,
-  IStrokeProps,
-  IStrokePaintsProps,
-  IStrokeBaseProps,
-  StrokePaints,
-};
+export { EStrokeCap, EStrokeAlign, EStrokeJoin, IStrokeProps, IStrokePaintsProps, IStrokeBaseProps, StrokePaints };

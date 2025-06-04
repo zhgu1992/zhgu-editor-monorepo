@@ -4,7 +4,6 @@ import { StateFactory } from '../../base/factory';
 import { EEditorStateName } from '../../../const';
 
 export class CreateRectTangleStateNode extends ActiveStateNode {
-
   initBehaviors(): void {
     const behaviors = [
       new ClickCreationBehaviorNode(this.view, this.collectionUIManager, this),

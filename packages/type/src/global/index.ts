@@ -1,7 +1,7 @@
 import type { IDocumentOrElement } from '../element';
 
 interface Blob {
-  byte: number[]
+  byte: number[];
 }
 
 type Blobs = Blob[];
@@ -14,14 +14,6 @@ type DocumentData = {
 
 type ChangeRecipe<T> = (draft: T) => T | void;
 
-export type IRect = [
-  left: number,
-  top: number,
-  right: number,
-  bottom: number,
-];
+export type IRect = [left: number, top: number, right: number, bottom: number];
 
-export {
-  DocumentData,
-  ChangeRecipe
-};
+export { DocumentData, ChangeRecipe };

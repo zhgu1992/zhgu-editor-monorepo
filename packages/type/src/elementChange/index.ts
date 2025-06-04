@@ -35,11 +35,7 @@ type MoveElementChange = {
   parentIndex: ParentIndex;
 };
 
-type ElementChange =
-  | PropsElementChange
-  | AddElementChange
-  | DeleteElementChange
-  | MoveElementChange;
+type ElementChange = PropsElementChange | AddElementChange | DeleteElementChange | MoveElementChange;
 
 export {
   ElementChangeKeyof,

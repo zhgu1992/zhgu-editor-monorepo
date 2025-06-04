@@ -1,10 +1,10 @@
-import {CustomCollection} from '../../../../node';
-import type {IBaseNode, ICollection} from '../../../../interface';
-import {mat3} from 'gl-matrix';
-import {EImageScaleMode, EPaintType} from '@zhgu/type';
-import {COLOR_CONFIG} from '../../../../const';
-import {calcWHSignTranslate, canvasConfig, drawSvgPath, fillRoundRect, getSignText} from './utils';
-import type {View} from '../../../../view';
+import { CustomCollection } from '../../../../node';
+import type { IBaseNode, ICollection } from '../../../../interface';
+import { mat3 } from 'gl-matrix';
+import { EImageScaleMode, EPaintType } from '@zhgu/type';
+import { COLOR_CONFIG } from '../../../../const';
+import { calcWHSignTranslate, canvasConfig, drawSvgPath, fillRoundRect, getSignText } from './utils';
+import type { View } from '../../../../view';
 
 export class WHSignRenderNode extends CustomCollection {
   private _ctx?: OffscreenCanvasRenderingContext2D;
@@ -22,14 +22,14 @@ export class WHSignRenderNode extends CustomCollection {
     //y 值最小的 point
 
     if (startPoint[0] < endPoint[0]) {
-      const rMat = mat3.fromRotation(mat3.create(), rotation * Math.PI / 180);
+      const rMat = mat3.fromRotation(mat3.create(), (rotation * Math.PI) / 180);
       const at = mat3.mul(mat3.create(), mat3.fromTranslation(mat3.create(), startPoint), rMat);
       return mat3.translate(mat3.create(), at, [
         w / 2 - signWidth / 2,
         this.eventManager.viewPort.screen2page(top) as number,
       ]);
     } else {
-      const rMat = mat3.fromRotation(mat3.create(), (rotation + 180) * Math.PI / 180);
+      const rMat = mat3.fromRotation(mat3.create(), ((rotation + 180) * Math.PI) / 180);
       const newAt = mat3.mul(mat3.create(), mat3.fromTranslation(mat3.create(), endPoint), rMat);
       return mat3.translate(mat3.create(), newAt, [
         w / 2 - signWidth / 2,
@@ -44,17 +44,12 @@ export class WHSignRenderNode extends CustomCollection {
     const { multiple } = canvasConfig;
     const lastWidth = width / multiple;
     return this.eventManager.viewPort.screen2page(
-        lastWidth +
-        canvasConfig.hPadding +
-        canvasConfig.wordGap +
-        canvasConfig.svgWidth,
+      lastWidth + canvasConfig.hPadding + canvasConfig.wordGap + canvasConfig.svgWidth
     ) as number;
   }
 
   get h() {
-    return this.eventManager.viewPort.screen2page(
-        canvasConfig.height + canvasConfig.vPadding,
-    ) as number;
+    return this.eventManager.viewPort.screen2page(canvasConfig.height + canvasConfig.vPadding) as number;
   }
 
   get at() {
@@ -107,29 +102,21 @@ export class WHSignRenderNode extends CustomCollection {
         this.cacheCanvas.width,
         this.cacheCanvas.height,
         canvasConfig.radius * multiple,
-        fillColor,
+        fillColor
       );
       const sumWidth =
-        this._ctx?.measureText(
-          `${getSignText(this.collection, 'hori')}${getSignText(this.collection, 'vertical')}`,
-        ).width +
-        (canvasConfig.wordGap + canvasConfig.svgWidth) *
-          canvasConfig.multiple;
+        this._ctx?.measureText(`${getSignText(this.collection, 'hori')}${getSignText(this.collection, 'vertical')}`)
+          .width +
+        (canvasConfig.wordGap + canvasConfig.svgWidth) * canvasConfig.multiple;
       const startX = (this.cacheCanvas?.width - sumWidth) / 2;
       const horiWord = `${getSignText(this.collection, 'hori')}`;
       const horiWidth = this._ctx?.measureText(horiWord).width;
       this._ctx.fillText(horiWord, startX, this.cacheCanvas?.height / 2);
       drawSvgPath(
         this._ctx,
-        startX +
-          horiWidth +
-          (canvasConfig.wordGap / 2) * canvasConfig.multiple,
-        ((canvasConfig.height +
-          canvasConfig.vPadding -
-          canvasConfig.svgWidth) /
-          2) *
-          canvasConfig.multiple,
-        canvasConfig.multiple,
+        startX + horiWidth + (canvasConfig.wordGap / 2) * canvasConfig.multiple,
+        ((canvasConfig.height + canvasConfig.vPadding - canvasConfig.svgWidth) / 2) * canvasConfig.multiple,
+        canvasConfig.multiple
       );
       const verticalWord = `${getSignText(this.collection, 'vertical')}`;
       this._ctx.fillText(
@@ -138,7 +125,7 @@ export class WHSignRenderNode extends CustomCollection {
           horiWidth +
           canvasConfig.svgWidth * canvasConfig.multiple +
           canvasConfig.wordGap * canvasConfig.multiple,
-        this.cacheCanvas?.height / 2,
+        this.cacheCanvas?.height / 2
       );
     }
   }
@@ -156,12 +143,13 @@ export class WHSignRenderNode extends CustomCollection {
     this.renderSign();
 
     const bitmap = this.cacheCanvas!.transferToImageBitmap();
-    this.fillPaints = [{
-      type: EPaintType.Image,
-      image: bitmap,
-      imageScaleMode: EImageScaleMode.FIT,
-      isEnabled: true,
-    }] as any;
+    this.fillPaints = [
+      {
+        type: EPaintType.Image,
+        image: bitmap,
+        imageScaleMode: EImageScaleMode.FIT,
+        isEnabled: true,
+      },
+    ] as any;
   }
-
 }

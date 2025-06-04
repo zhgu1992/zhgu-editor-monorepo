@@ -6,18 +6,18 @@ import type { View } from '../../../view';
 /**
  * 屏幕自由滚动行为
  */
-export class ScreenScrollingBehaviorNode extends BehaviorNode{
+export class ScreenScrollingBehaviorNode extends BehaviorNode {
   zoomSpeed = 1;
   panSpeed = 2;
   constructor(view: View, collectionUIManager: ICollectionUIManager) {
     super(view, 'screen-scroll', collectionUIManager);
   }
 
-  override onWheel: TJsPointerEvent = (inputSnapshot) => {
-    const {zoomSpeed, panSpeed: PAN_SPEED} = this;
+  override onWheel: TJsPointerEvent = inputSnapshot => {
+    const { zoomSpeed, panSpeed: PAN_SPEED } = this;
     const { wheelDeltaXY, ctrlKey, cmdKey, currentPagePoint, shiftKey } = inputSnapshot;
     let { x: dx, y: dy } = wheelDeltaXY;
-    const  viewPort = this.view.eventManager!.viewPort;
+    const viewPort = this.view.eventManager!.viewPort;
 
     if (ctrlKey || cmdKey) {
       // 缩放
@@ -28,14 +28,14 @@ export class ScreenScrollingBehaviorNode extends BehaviorNode{
       if (dy >= 0) {
         const ratio = setRegion(1 - (dy * 1.96) / 200, 0.5, 1); // 根据老项目变化推出1.96 / 200变化率约等于0.039
         scaleZoom = oldZoom * ratio * zoomSpeed;
-      } else { // 放大，zoom变大
+      } else {
+        // 放大，zoom变大
         const ratio = setRegion(1 + (dy * 1.96) / 200, 0.5, 1);
-        scaleZoom = oldZoom / ratio * zoomSpeed;
+        scaleZoom = (oldZoom / ratio) * zoomSpeed;
       }
 
-
       const newZoom = Math.min(256, Math.max(0.02, scaleZoom));
-      viewPort.zoomAt(currentPagePoint, {state: 0, zoom: newZoom});
+      viewPort.zoomAt(currentPagePoint, { state: 0, zoom: newZoom });
     } else {
       if (shiftKey && dx === 0) {
         const middle = dx;
