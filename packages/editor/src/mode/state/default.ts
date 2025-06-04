@@ -21,7 +21,7 @@ import {
   RTPointResizeEventArea,
   RTPointRotateEventArea,
   TBorderResizeEventArea
-} from '../customNode';
+} from '../UIElement';
 import { BaseCollectionArea } from '../../node';
 import { StateFactory } from '../base/factory';
 import { EEditorStateName } from '../../const';

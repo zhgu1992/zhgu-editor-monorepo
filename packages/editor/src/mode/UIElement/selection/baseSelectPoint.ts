@@ -1,10 +1,10 @@
-import { getResizeCursor, getRotateCursor, type CornerDirection } from '../../../../utils';
-import { BaseCollectionArea, CustomCollection } from '../../../../node';
-import type { ICollection, ICustomStyledOptions } from '../../../../interface';
-import { COLOR_CONFIG } from '../../../../const';
-import type { AllEventType } from '../../../../interface';
-import type { AllDirection } from '../../../../utils';
-import type { View } from '../../../../view';
+import { getResizeCursor, getRotateCursor, type CornerDirection } from '../../../utils';
+import { BaseCollectionArea, CustomCollection } from '../../../node';
+import type { ICollection, ICustomStyledOptions } from '../../../interface';
+import { COLOR_CONFIG } from '../../../const';
+import type { AllEventType } from '../../../interface';
+import type { AllDirection } from '../../../utils';
+import type { View } from '../../../view';
 import {mat3} from "gl-matrix";
 
 // 选中框的四个角的热区， 是vector

@@ -5,7 +5,7 @@ import { CollectionUIManager } from '../../node';
 import { BaseModelNode } from '../base';
 import { EStateEvent } from '../../const';
 import { CustomCollection } from '../../node';
-import { LBPointRenderNode, LTPointRenderNode, RBPointRenderNode, RTPointRenderNode, WHSignRenderNode, BaseSelectBorder } from '../customNode';
+import { LBPointRenderNode, LTPointRenderNode, RBPointRenderNode, RTPointRenderNode, WHSignRenderNode, BaseSelectBorder } from '../UIElement';
 
 export abstract class ActiveStateNode extends BaseModelNode implements IStateNode{
   private _behaviorCache = new Map<string, BehaviorNode>();

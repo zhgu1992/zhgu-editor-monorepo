@@ -1,4 +1,4 @@
-import type { IBaseNode, ICollection } from '../../../../../interface';
+import type { IBaseNode, ICollection } from '../../../../interface';
 import { getTwoDecimal } from '@zhgu/data';
 import { vec2, mat3 } from 'gl-matrix';
 

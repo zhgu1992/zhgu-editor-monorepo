@@ -1,7 +1,7 @@
 import { DragBaseBehaviorNode } from './dragBase';
 import type { ICollectionUIManager, ICustomCollection, IInputSnapshot, TJsDragMoveEvent } from '../../../interface';
 import type { View } from '../../../view';
-import { DragNodeState } from '../../customNode';
+import { DragNodeState } from '../../UIElement';
 /**
  * 框选
  */

@@ -1,4 +1,4 @@
-import type { AllDirection } from '../../../../utils';
+import type { AllDirection } from '../../../utils';
 import { BaseResizeEventArea } from './baseSelectPoint';
 
 /**

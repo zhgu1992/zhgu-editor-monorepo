@@ -7,7 +7,7 @@ import type {
 import type { View } from '../../../view/';
 import { mat3 } from 'gl-matrix';
 import { type Transaction, type XYPos } from '@zhgu/type';
-import type { BaseRotatePoint } from '../../customNode';
+import type { BaseRotatePoint } from '../../UIElement';
 import { getAngleByRotate, getMaxAABB } from '@zhgu/data';
 import { getRotateCursor, type CornerDirection } from '../../../utils';
 

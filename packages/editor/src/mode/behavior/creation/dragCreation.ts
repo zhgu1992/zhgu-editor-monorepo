@@ -37,7 +37,7 @@ export class DragCreationBehaviorNode extends DragBaseBehaviorNode {
       return;
     }
     this._clickState.exitToDefault();
-    this.view.eventManager.selectedNodes = [this.node];
+    this.view.eventManager!.selectedNodes = [this.node];
   };
 
   private createAndDragMoving(inputSnapshot: IInputSnapshot) {
@@ -84,9 +84,9 @@ export class DragCreationBehaviorNode extends DragBaseBehaviorNode {
         data: element,
       }]);
 
-      const node = view.scene.getNodeById(element.id);
+      const node = view.scene.getNodeById(element.id) as IBaseNode;
       this.node = node;
-      this.view.eventManager.selectedNodes = [this.node];
+      this.view.eventManager!.selectedNodes = [this.node];
     } else {
       this.resizeFromAToB(currentPagePoint, originPagePoint, shiftKey, altKey);
     }

@@ -1,10 +1,10 @@
-import {CustomCollection} from '../../../../../node';
-import type {IBaseNode, ICollection} from '../../../../../interface';
+import {CustomCollection} from '../../../../node';
+import type {IBaseNode, ICollection} from '../../../../interface';
 import {mat3} from 'gl-matrix';
 import {EImageScaleMode, EPaintType} from '@zhgu/type';
-import {COLOR_CONFIG} from '../../../../../const';
+import {COLOR_CONFIG} from '../../../../const';
 import {calcWHSignTranslate, canvasConfig, drawSvgPath, fillRoundRect, getSignText} from './utils';
-import type {View} from '../../../../../view';
+import type {View} from '../../../../view';
 
 export class WHSignRenderNode extends CustomCollection {
   private _ctx?: OffscreenCanvasRenderingContext2D;

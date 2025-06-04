@@ -10,7 +10,7 @@ import { mat3, vec2 } from 'gl-matrix';
 import { flipXWithMyself, flipYWithMyself, getMaxAABB} from '@zhgu/data';
 import type { AllDirection } from '../../../utils';
 import type { Transaction } from '@zhgu/type';
-import type { BaseResizeEventArea } from '../../customNode';
+import type { BaseResizeEventArea } from '../../UIElement';
 
 const Vec_Cache = {
   v1: vec2.create(),

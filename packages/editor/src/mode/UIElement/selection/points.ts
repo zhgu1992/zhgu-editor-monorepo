@@ -1,4 +1,4 @@
-import type { CornerDirection } from '../../../../utils';
+import type { CornerDirection } from '../../../utils';
 import { BaseRectangleResizePoint, BaseRectangleRotatePoint, BaseRenderPoint } from './baseSelectPoint';
 
 /**
