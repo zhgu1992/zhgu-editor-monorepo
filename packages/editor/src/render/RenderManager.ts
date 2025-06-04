@@ -1,8 +1,10 @@
-import { CustomNode, Scene } from '../node';
+import type { Scene } from '../node';
+import { CustomNode } from '../node';
 import { IRenderNode, WebGLRender } from '@zhgu/render';
 import { ERenderGroupKey } from '../const';
 import { NodeGroup } from './nodeGroup.ts';
-import { type IBaseNode, ICustomNode } from '../interface';
+import type { ICustomNode } from '../interface';
+import { type IBaseNode } from '../interface';
 
 export class RenderManager extends WebGLRender {
   private group: Map<ERenderGroupKey, NodeGroup> = new Map();

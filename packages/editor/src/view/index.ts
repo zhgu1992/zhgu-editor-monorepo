@@ -1,4 +1,5 @@
-import { DocumentData, EElementChangeType, ElementChange, Transaction } from '@zhgu/type';
+import type { DocumentData, ElementChange, Transaction } from '@zhgu/type';
+import { EElementChangeType } from '@zhgu/type';
 import type { ElementData } from '@zhgu/data';
 import { DataSync, DocExchange } from '@zhgu/data';
 import type { IBaseNodeOrNodeModel } from '../interface';

@@ -105,7 +105,7 @@ function drawPath(cxt: OffscreenCanvasRenderingContext2D, points: [number, numbe
 }
 
 export function getSignText(node: IBaseNode | ICollection, direction: string) {
-  let { w, h } = node as IBaseNode;
+  const { w, h } = node as IBaseNode;
   return `${getTwoDecimal(direction === 'hori' ? w : h)}`;
 }
 

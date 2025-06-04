@@ -1,9 +1,11 @@
 import { BaseCollection } from './collection';
 import type { View } from '../../view';
-import { EHistoryEvent, ESelectEventType, EViewPortEventType, IEventArgs } from '../../const';
+import type { IEventArgs } from '../../const';
+import { EHistoryEvent, ESelectEventType, EViewPortEventType } from '../../const';
 import type { ICollectionUIManager, IBehaviorNode, ICustomCollection } from '../../interface';
 import autobind from 'autobind-decorator';
-import { type RenderCategorySet, XYPos } from '@zhgu/type';
+import type { XYPos } from '@zhgu/type';
+import { type RenderCategorySet } from '@zhgu/type';
 
 /**
  * 热区管理类，用户可以通过该类进行热区绑定和更新操作

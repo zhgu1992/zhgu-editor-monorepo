@@ -25,7 +25,7 @@ export function getRotateCursor(options: { apoints: vec2[]; key: CornerDirection
  */
 export function getResizeCursor(options: { apoints: vec2[]; key: AllDirection }) {
   const angle = getResizeAngle(options);
-  let thisDeg = angle >= 180 ? angle - 180 : angle;
+  const thisDeg = angle >= 180 ? angle - 180 : angle;
   return `cursor-scale-${thisDeg}`;
 }
 

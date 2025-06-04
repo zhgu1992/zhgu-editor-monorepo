@@ -1,7 +1,8 @@
 import { Application, Graphics, Container, Texture, Matrix } from 'pixi.js';
-import { INodeModel } from '@zhgu/data';
-import { EPaintType, IImagePaintProps, ISolidPaintProps, XYPos } from '@zhgu/type';
-import { IRenderNode } from './interface';
+import type { INodeModel } from '@zhgu/data';
+import type { IImagePaintProps, ISolidPaintProps, XYPos } from '@zhgu/type';
+import { EPaintType } from '@zhgu/type';
+import type { IRenderNode } from './interface';
 import type { mat3 } from 'gl-matrix';
 
 export class WebGLRender {

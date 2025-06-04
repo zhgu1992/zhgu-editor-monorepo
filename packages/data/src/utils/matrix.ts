@@ -88,8 +88,8 @@ export function doScale(originMatrix: mat3, w: number, h: number, scaleMat: mat3
   const p1 = vec2.transformMat3(vec2.create(), [w, 0], resultMatrix);
   const p2 = vec2.transformMat3(vec2.create(), [w, h], resultMatrix);
 
-  let newW = vec2.distance(p0, p1);
-  let newH = vec2.distance(p1, p2);
+  const newW = vec2.distance(p0, p1);
+  const newH = vec2.distance(p1, p2);
 
   // 计算变换 wh 后的变换矩阵
   const dscale = vec2.fromValues(w / newW, h / newH);

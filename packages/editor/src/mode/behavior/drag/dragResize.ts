@@ -69,7 +69,7 @@ export class DragResizeBehavior extends DragBaseBehaviorNode {
     const { nodes } = this.dragResizeState;
     const nodeLength = nodes?.length ?? 0;
     const isOneNode = nodeLength === 1;
-    let isRotate = false,
+    const isRotate = false,
       isContainer = false,
       whRelation = false;
     if (isOneNode) {
@@ -159,13 +159,13 @@ export class DragResizeBehavior extends DragBaseBehaviorNode {
       const ap1 = vec2.transformMat3(Vec_Cache.v2, [originW || 0.01, 0], transformRt); // 右上角在整个拖拽框变换后的坐标
       const ap2 = vec2.transformMat3(Vec_Cache.v3, [originW || 0.01, originH || 0.01], transformRt); // 右下角在整个拖拽框变换后的坐标
 
-      let w = vec2.dist(ap0, ap1);
-      let h = vec2.dist(ap1, ap2);
+      const w = vec2.dist(ap0, ap1);
+      const h = vec2.dist(ap1, ap2);
       // const isRotate = isRotated(node);
       // const signX = 1 || Math.sign(node.rt[0]);
       // const signY = 1 || Math.sign(node.rt[3]);
       const scaleMat = mat3.fromScaling(Mat_Cache.m1, [(originNodeInfo.w || 0.01) / w, (originNodeInfo.h || 0.01) / h]);
-      let at = mat3.mul(Mat_Cache.m1, transformRt, scaleMat);
+      const at = mat3.mul(Mat_Cache.m1, transformRt, scaleMat);
       // 旋转node不需要对齐像素格子
       // const { x: pgaX, y: pgaY, w: pgaW, h: pgaH } = this.getFixPixelGridBoundByPGA({ x: at[6], y: at[7], w: signX * w, h: signY * h }, {
       //   isRotate,
@@ -416,8 +416,8 @@ export class DragState {
       return;
     }
 
-    let nw = (Math.sign(size[0]) || 1) * absW; // 取符号
-    let nh = (Math.sign(size[1]) || 1) * absH;
+    const nw = (Math.sign(size[0]) || 1) * absW; // 取符号
+    const nh = (Math.sign(size[1]) || 1) * absH;
 
     this.dw = nw - (this.currentDragBounds.w ?? 0); // 变化的宽度
     this.dh = nh - (this.currentDragBounds.h ?? 0);

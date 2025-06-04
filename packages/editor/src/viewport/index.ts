@@ -123,7 +123,7 @@ export class ViewPort {
     const { x: px, y: py } = this.position;
 
     // 目标放大倍数（以宽、高最小缩放比为基准）
-    let targetZoom = clamp(Math.min((width / 2 - 2 * sph) / maxW, (height / 2 - 2 * spv) / maxH), 0.02, 4);
+    const targetZoom = clamp(Math.min((width / 2 - 2 * sph) / maxW, (height / 2 - 2 * spv) / maxH), 0.02, 4);
 
     // 页面移动的目标位置，调整公式确保是移动到屏幕的正中心
     const targetPos = {

@@ -6,7 +6,7 @@ import { COLOR_CONFIG } from '../../const';
 import type { ICustomNode, ICustomStyledOptions } from '../../interface';
 import type { View } from '../../view';
 import type { EventManager } from '../../event';
-import { IRenderNode } from '@zhgu/render';
+import type { IRenderNode } from '@zhgu/render';
 import { Matrix } from 'pixi.js';
 
 // const pathCache = new Map<string, PxPath>();

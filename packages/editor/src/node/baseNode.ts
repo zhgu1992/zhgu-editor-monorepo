@@ -19,10 +19,10 @@ import { EElementChangeType } from '@zhgu/type';
 import { mat3 } from 'gl-matrix';
 import { mat2obj, PaintProps, isPolygonInRect, isPolygonIntersectRect, rotate } from '@zhgu/data';
 import type { View } from '../view';
-import { IRenderNode } from '@zhgu/render';
+import type { IRenderNode } from '@zhgu/render';
 import { BaseCustomUnit } from './customNode';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
+ 
 const _matCache = {
   m1: mat3.create(),
   m2: mat3.create(),
@@ -126,8 +126,8 @@ export class BaseNode extends NodeModel implements IBaseNode {
 
   changeAbsolutePos(pos: XYPos) {
     const parentNode = this.parent!;
-    let rt = this.rt;
-    let at = mat3.clone(this.at);
+    const rt = this.rt;
+    const at = mat3.clone(this.at);
     const { x, y } = pos;
     at[6] = x;
     at[7] = y;
@@ -388,7 +388,7 @@ export class BaseNode extends NodeModel implements IBaseNode {
   }
 
   traverseParent(callBack: (node: IBaseNode) => boolean | void) {
-    let parent = this.parent;
+    const parent = this.parent;
     if (!parent) {
       return;
     }

@@ -157,7 +157,7 @@ class DocExchange {
             };
           }
           const nextElement = { ...element };
-          for (let key of elementChangeKeyof) {
+          for (const key of elementChangeKeyof) {
             const value = elementChangeProps[key];
             if (!isNullOrUndefined(value)) {
               // @ts-ignore

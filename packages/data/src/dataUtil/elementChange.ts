@@ -32,7 +32,7 @@ const interchangeableElementChange = (base: ElementChange, more: ElementChange):
 const coversElementChange = (base: ElementChange, more: ElementChange): boolean => {
   if (base.type === EElementChangeType.Props && more.type === EElementChangeType.Props) {
     if (base.id === more.id) {
-      for (let baseKey in base.props) {
+      for (const baseKey in base.props) {
         if ((more.props as any)[baseKey] === undefined) {
           return false;
         }

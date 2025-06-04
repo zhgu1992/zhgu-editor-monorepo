@@ -1,4 +1,4 @@
-import { INode } from '../interface';
+import type { INode } from '../interface';
 import type { DocExchange } from './DocExchange';
 import { isNullOrUndefined } from '../utils';
 import type { Node } from '../nodes';
