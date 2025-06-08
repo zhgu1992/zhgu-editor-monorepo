@@ -2,7 +2,7 @@ import type { DocumentData, ElementChange, Transaction } from '@zhgu/type';
 import { EElementChangeType } from '@zhgu/type';
 import type { ElementData } from '@zhgu/data';
 import { DataSync, DocExchange } from '@zhgu/data';
-import type { IBaseNodeOrNodeModel } from '../interface';
+import type { IBaseNodeOrNodeModel, IBaseNode } from '../interface';
 import { NodeFactory, Scene } from '../node';
 import { RenderManager } from '../render';
 import { EditorCanvasManager, EventManager } from '../event';
@@ -84,6 +84,7 @@ export class View {
 
   public loadFile(documentData: DocumentData) {
     this.documentExchange.updateVersion(documentData.version);
+    // @ts-ignore
     this._scene.buildTree(this.documentExchange, documentData, (elementData: ElementData): IBaseNodeOrNodeModel => {
       const node = NodeFactory.transform(elementData, this);
       return node;
@@ -137,6 +138,21 @@ export class View {
    * todo 暂时这样处理，后续需要将select记录到数据上,便于可以撤回到对应情况到select状态
    */
   processUpdate() {
+    const currentSelectedNodes = this.eventManager!.selectedNodes;
+    let isChanged = false;
+    const result: IBaseNode[] = [];
+    for (let i = 0, len = currentSelectedNodes.length; i < len; i++) {
+      const node = currentSelectedNodes[i];
+      const isExisted = this.scene.getNodeById(node.id);
+      if (!isExisted) {
+        isChanged = true;
+      } else {
+        result.push(node);
+      }
+    }
+    if (isChanged) {
+      this.eventManager!.selectedNodes = result;
+    }
     this.renderManager?.dirty();
   }
 

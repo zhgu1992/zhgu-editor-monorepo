@@ -10,15 +10,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@types/lodash-es": "^4.17.12",
     "@zhgu/type": "workspace:*",
-    "gl-matrix": "^3.4.3",
-    "lodash-es": "^4.17.21",
     "mutative": "^1.2.0",
     "nanoid": "^5.1.5"
   },
+  "peerDependencies": {
+    "gl-matrix": "^3.4.3",
+    "lodash-es": "^4.17.21"
+  },
   "devDependencies": {
     "typescript": "~5.8.3",
+    "@types/lodash-es": "^4.17.12",
     "vite": "^6.3.5"
   }
 }
