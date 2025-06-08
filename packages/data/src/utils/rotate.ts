@@ -33,7 +33,7 @@ export function getAngleByRotate(centerXY: XYPos, endXY: XYPos) {
     x: endXY.x - centerXY.x,
     y: endXY.y - centerXY.y,
   };
-  if (endPos.x == 0 && endPos.y == 0) {
+  if (endPos.x === 0 && endPos.y === 0) {
     return 0;
   }
   const angle = getAngleByThreePoint([0, 0], [100, 0], [endPos.x, endPos.y]);

@@ -7,7 +7,7 @@ export type CustomEventType =
   | EHistoryEvent;
 
 export type IEventArgs = {
-  data: any;
+  data: never;
 };
 
 export enum EViewPortEventType {

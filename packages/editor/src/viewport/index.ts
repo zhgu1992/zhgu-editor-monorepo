@@ -151,7 +151,8 @@ export class ViewPort {
    * 在该位置处进行缩放
    */
   zoomAt(position: XYPos, options: ZoomAtOptions) {
-    let { state, zoom = this.zoom } = options;
+    const { state } = options;
+    let { zoom = this.zoom } = options;
     if (state) {
       zoom = getNextZoom(this.zoom, state);
     }

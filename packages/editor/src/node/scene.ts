@@ -1,9 +1,11 @@
+import type { NodeModel } from '@zhgu/data';
 import { ElementTree } from '@zhgu/data';
+import type { BaseNode } from './baseNode';
 
 /**
  * 场景树
  */
-export class Scene extends ElementTree<any> {
+export class Scene extends ElementTree<BaseNode> {
   get currentPage() {
     return this.rootNode.children[0];
   }

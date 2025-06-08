@@ -132,7 +132,7 @@ export type KeyboardEventType = 'keydown' | 'keyup';
 export type DomEventType = Exclude<AllEventType, TransEventType>;
 
 export interface ICanvasEdgeMovementCbProps {
-  autoChangePos: { autoChangePosX: any; autoChangePosY: any };
+  autoChangePos: { autoChangePosX: never; autoChangePosY: never };
   ratio?: number[];
   inputSnapshot: IInputSnapshot;
 }
@@ -230,8 +230,6 @@ export type TJsFunction = () => void;
 export type TJsPointerEvent = (inputSnapshot: IInputSnapshot) => void;
 
 export type TJsKeyboardEvent = (inputSnapshot: IInputSnapshot) => void;
-
-export type TJsEnterEventHandler = (info: any, from: string) => void;
 
 export type TJsPointerDragEvent = () => DragEventOptions;
 

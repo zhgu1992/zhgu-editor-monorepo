@@ -37,7 +37,6 @@ export class WebGLRender {
   get app() {
     return this._app;
   }
-
   get canvas() {
     return this._app.canvas;
   }
@@ -105,10 +104,10 @@ export class WebGLRender {
     const fillPaints = props.fillPaints ?? [];
     if (fillPaints.length > 0) {
       const fill = props.fillPaints[0] as ISolidPaintProps;
-      // @ts-ignore
+      // @ts-ignore 暂时不处理
       if (fill.type === EPaintType.Image) {
         const imageFill = fill as unknown as IImagePaintProps;
-        const texture = Texture.from(imageFill.image);
+        const texture = Texture.from(imageFill.image!);
         graphics.fill(texture);
       } else {
         graphics.fill(this.processColor(fill));

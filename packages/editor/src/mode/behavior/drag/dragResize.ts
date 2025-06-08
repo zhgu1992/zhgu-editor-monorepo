@@ -110,7 +110,8 @@ export class DragResizeBehavior extends DragBaseBehaviorNode {
       needFlipX,
       needFlipY,
     } = dragResizeState!;
-    let { w, h, x, y } = bounds;
+    let { w, h } = bounds;
+    const { x, y } = bounds;
 
     w = Math.abs(w);
     h = Math.abs(h);
@@ -305,6 +306,7 @@ export class DragState {
 
     const { w, h, invAt, at } = this.startDragBounds;
     const [ap0] = this.startPoints;
+    // @ts-ignore
     const rStartPos = this.fixDragPoint(vec2.transformMat3(vec2.create(), this.startPos, invAt)); // 相对坐标系的起始拖拽点
     const rCurrentPos = vec2.transformMat3(vec2.create(), this.currentPos, invAt); // 相对坐标系的当前点
     const rpivot = vec2.transformMat3(vec2.create(), this.startPivot, invAt); // 相对坐标系下的旋转中心
@@ -450,7 +452,7 @@ export class DragState {
    * @test: 将拖拽点修正到准确的位置上
    * @return {*}
    */
-  fixDragPoint(rStartPos: any) {
+  fixDragPoint(rStartPos: [number, number]) {
     const { cursorKey } = this;
     const { w, h } = this.startDragBounds;
 

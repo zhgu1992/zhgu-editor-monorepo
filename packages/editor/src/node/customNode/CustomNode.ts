@@ -7,7 +7,7 @@ import type { ICustomNode, ICustomStyledOptions } from '../../interface';
 import type { View } from '../../view';
 import type { EventManager } from '../../event';
 import type { IRenderNode } from '@zhgu/render';
-import { Matrix } from 'pixi.js';
+import type { INodeModel } from '@zhgu/data';
 
 // const pathCache = new Map<string, PxPath>();
 
@@ -112,7 +112,7 @@ export class CustomNode implements ICustomNode {
   setDefaultStyle() {
     this.setDefaultPaint();
     this.setDefaultStroke();
-    this.renderManager.updateRenderNode(this.renderNode, this as any);
+    this.renderManager.updateRenderNode(this.renderNode, this as unknown as INodeModel);
   }
 
   get renderManager() {
@@ -128,7 +128,7 @@ export class CustomNode implements ICustomNode {
   }
 
   setSize(w: number, h: number) {
-    this.renderNode.setSize([w, h]);
+    this.renderNode.setSize(w, h);
   }
 
   get isCustomNode() {
@@ -139,7 +139,7 @@ export class CustomNode implements ICustomNode {
     return this._renderNode;
   }
 
-  set renderNode(renderNode: any) {
+  set renderNode(renderNode: IRenderNode) {
     this._renderNode = renderNode;
   }
 
@@ -186,7 +186,7 @@ export class CustomNode implements ICustomNode {
 
   update() {
     // this.renderNode.setDirty();
-    this.renderManager.updateRenderNode(this.renderNode, this as any);
+    this.renderManager.updateRenderNode(this.renderNode, this as unknown as INodeModel);
   }
 
   updateByCategory(renderCategorySet: RenderCategorySet) {

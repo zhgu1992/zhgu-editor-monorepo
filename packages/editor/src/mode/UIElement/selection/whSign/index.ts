@@ -1,7 +1,7 @@
 import { CustomCollection } from '../../../../node';
 import type { IBaseNode, ICollection } from '../../../../interface';
 import { mat3 } from 'gl-matrix';
-import { EImageScaleMode, EPaintType } from '@zhgu/type';
+import { EImageScaleMode, EPaintType, type FillPaints } from '@zhgu/type';
 import { COLOR_CONFIG } from '../../../../const';
 import { calcWHSignTranslate, canvasConfig, drawSvgPath, fillRoundRect, getSignText } from './utils';
 import type { View } from '../../../../view';
@@ -150,6 +150,6 @@ export class WHSignRenderNode extends CustomCollection {
         imageScaleMode: EImageScaleMode.FIT,
         isEnabled: true,
       },
-    ] as any;
+    ] as FillPaints;
   }
 }

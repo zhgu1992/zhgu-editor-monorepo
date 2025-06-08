@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 module.exports = {
   // 每行代码数量
   printWidth: 120,

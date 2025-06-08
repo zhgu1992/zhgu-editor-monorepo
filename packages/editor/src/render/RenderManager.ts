@@ -34,7 +34,7 @@ export class RenderManager extends WebGLRender {
 
   setRenderNode(id: string, node: IBaseNode) {
     const renderNodeGroup = this.group.get(ERenderGroupKey.Render)!;
-    renderNodeGroup.addNode(node as any as ICustomNode);
+    renderNodeGroup.addNode(node as unknown as ICustomNode);
   }
 
   getRenderNode(id: string): ICustomNode | undefined {
@@ -71,7 +71,6 @@ export class RenderManager extends WebGLRender {
     selectGroup.removeNodeById(id);
   }
 
-  // @ts-ignore
   render(scene: Scene) {}
 
   getNodeGroup(key: ERenderGroupKey) {

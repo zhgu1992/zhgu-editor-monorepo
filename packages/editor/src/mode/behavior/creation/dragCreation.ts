@@ -45,7 +45,8 @@ export class DragCreationBehaviorNode extends DragBaseBehaviorNode {
   };
 
   private createAndDragMoving(inputSnapshot: IInputSnapshot) {
-    let { originPagePoint, currentPagePoint, shiftKey, altKey } = inputSnapshot;
+    let { originPagePoint, currentPagePoint } = inputSnapshot;
+    const { shiftKey, altKey } = inputSnapshot;
     const { view, node } = this;
     // 像素网格对齐处理
     const parentNode = view.scene.currentPage;
@@ -70,6 +71,7 @@ export class DragCreationBehaviorNode extends DragBaseBehaviorNode {
       rt[7] = fixBox.y;
       const transform = mat2obj(rt);
       const parentId = parentNode.id;
+      // @ts-ignore
       const parentPosition = parentNode.parentPositionEnd();
 
       const element = view.documentExchange.createElement(this.creationType, {

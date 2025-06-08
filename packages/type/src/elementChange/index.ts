@@ -4,7 +4,6 @@ type ElementChangeProps = Partial<IAllElementProps> & Partial<{ type: EElementTy
 type ElementChangeKeyof = keyof ElementChangeProps;
 type Transaction = ElementChange[];
 
-// @ts-ignore
 enum EElementChangeType {
   Props = 'Props',
   Add = 'Add',

@@ -1,7 +1,6 @@
-import {
+import type {
   IElementBaseProps,
   IPageElementProps,
-  ISceneElementBaseProps,
   IGroupElementProps,
   IFrameElementProps,
   IRectangleElementProps,

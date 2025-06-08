@@ -28,7 +28,7 @@ interface IPageElementProps extends IElementBaseProps, ITransformSizeProps, IBac
 
 interface ISceneElementBaseProps extends IElementBaseProps, ITreeToggleProps, ITransformSizeProps {}
 
-interface IGroupElementProps extends IElementBaseProps {}
+type IGroupElementProps = IElementBaseProps;
 
 interface IShapeElementProps extends ISceneElementBaseProps, IHasGeometryProps {}
 

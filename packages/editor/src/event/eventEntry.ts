@@ -23,6 +23,7 @@ export class EventEntry {
   // 拖拽的阈值，当 x 或 y 的位移大于这个值时，识别为拖拽，否则识别为点击
   static DRAG_THRESHOLD = 4;
   // 事件管理器、用户事件函数
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   private _eventListener = new Map<MouseEventType, Set<Function>>();
   // 最终的完整事件执行函数
   private _eventHandlers?: IEventHandles;
@@ -115,6 +116,7 @@ export class EventEntry {
    * @param type
    * @param cb
    */
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   addMouseEvent<T extends Function>(type: MouseEventType, cb: T) {
     const eventMap = this.eventListener;
     const event = eventMap.get(type);
@@ -131,6 +133,7 @@ export class EventEntry {
    * @param type
    * @param cb
    */
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   removeMouseEvent<T extends Function>(type: MouseEventType, cb: T) {
     const eventMap = this.eventListener;
     const res = eventMap.get(type);
@@ -453,11 +456,11 @@ export class EventEntry {
 
     const { x: clientX, y: clientY } = currentScreenPoint;
     let speedX = -getSpeed(clientX - canvasX);
-    if (speedX == 0) {
+    if (speedX === 0) {
       speedX = getSpeed(width + canvasX - clientX);
     }
     let speedY = -getSpeed(clientY - canvasY);
-    if (speedY == 0) {
+    if (speedY === 0) {
       speedY = getSpeed(height + canvasY - clientY);
     }
 

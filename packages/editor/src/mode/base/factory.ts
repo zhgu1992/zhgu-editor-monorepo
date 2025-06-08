@@ -3,7 +3,7 @@ import { EEditorStateName } from '../../const';
 import type { IStateNode } from '../../interface';
 import type { Mode } from '../mode';
 
-type StateNodeConstructor = new (...args: any) => IStateNode;
+type StateNodeConstructor = new (...args: never) => IStateNode;
 export class StateFactory {
   static map = new Map<EEditorStateName, StateNodeConstructor>();
 
@@ -13,6 +13,7 @@ export class StateFactory {
 
   static init(view: View, mode: Mode) {
     this.map.forEach((constructor, id) => {
+      // @ts-ignore
       const state = new constructor(view, id);
       mode.registerState(state, id === EEditorStateName.Default);
     });

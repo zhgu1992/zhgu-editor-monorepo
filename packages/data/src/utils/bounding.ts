@@ -12,7 +12,7 @@ export function getMaxAABB(boxes: IBox[]) {
     return { ...boxes[0].absoluteAABB };
   }
 
-  let maxPosition: [number, number, number, number] = [Infinity, Infinity, -Infinity, -Infinity];
+  const maxPosition: [number, number, number, number] = [Infinity, Infinity, -Infinity, -Infinity];
 
   boxes.forEach(box => {
     if (!box) {

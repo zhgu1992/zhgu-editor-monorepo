@@ -102,7 +102,7 @@ export function getDefaultStyle(type: ESceneElementType, view: View): Partial<IE
             blendMode: EBlendMode.Normal,
           },
         ],
-        // @ts-ignore
+        // @ts-ignore 暂时不处理
         cornerRadius: 4,
         blendMode: EBlendMode.PassThrough,
       };

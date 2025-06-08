@@ -66,7 +66,7 @@ interface IImagePaintProps extends IPaintBaseProps {
   transform?: Transform;
   imageId: string;
   imageUrl: string;
-  image?: any;
+  image?: ImageBitmap;
   imageScaleMode: EImageScaleMode;
   rotation: number;
   scale: number;

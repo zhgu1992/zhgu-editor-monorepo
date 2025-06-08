@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-ignore 暂时不处理
 import './style.css';
 import { Application, Graphics, Texture, Assets } from 'pixi.js';
 
