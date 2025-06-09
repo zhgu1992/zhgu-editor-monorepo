@@ -8,6 +8,7 @@ import { RenderManager } from '../render';
 import { EditorCanvasManager, EventManager } from '../event';
 import { Picker } from '../picker';
 import { ModeManager } from '../mode';
+import { EHistoryEvent } from '../const';
 
 export class View {
   private _documentExchange: DocExchange;
@@ -119,7 +120,7 @@ export class View {
       }
     });
     this.processUpdate();
-    // this.eventManager.emit(EHistoryEvent.UndoRedo, {data: this});
+    this.eventManager!.emit(EHistoryEvent.UndoRedo, { data: this });
   }
 
   public undoHistory() {
@@ -131,7 +132,7 @@ export class View {
       }
     });
     this.processUpdate();
-    // this.eventManager.emit(EHistoryEvent.UndoRedo, {data: this});
+    this.eventManager!.emit(EHistoryEvent.UndoRedo, { data: this });
   }
 
   /**

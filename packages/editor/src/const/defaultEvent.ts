@@ -7,7 +7,8 @@ export type CustomEventType =
   | EHistoryEvent;
 
 export type IEventArgs = {
-  data: never;
+  // todo 后续定义类型
+  data: any;
 };
 
 export enum EViewPortEventType {
