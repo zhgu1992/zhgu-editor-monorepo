@@ -17,10 +17,8 @@
     "strict": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "erasableSyntaxOnly": false,
     "noFallthroughCasesInSwitch": true,
     "experimentalDecorators": true,
     "noUncheckedSideEffectImports": true
-  },
-  "include": ["src"]
+  }
 }

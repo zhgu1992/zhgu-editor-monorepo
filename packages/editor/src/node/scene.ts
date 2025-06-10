@@ -10,6 +10,10 @@ export class Scene extends ElementTree<BaseNode> {
     return this.rootNode.children[0];
   }
 
+  get pages() {
+    return this.rootNode.children;
+  }
+
   getNodes() {
     return this.currentPage.children;
   }

@@ -43,6 +43,10 @@ export class View {
     this._eventManager = new EventManager(canvas, this._renderManager);
   }
 
+  public get pages() {
+    return this.scene.pages;
+  }
+
   public get modeManager() {
     return this._modeManager;
   }

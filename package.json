@@ -5,11 +5,13 @@
   "main": "index.js",
   "scripts": {
     "format": "prettier --write './**/*.{ts,tsx}'",
-    "lint:fix": "eslint . --ext .ts,.tsx --cache --color --fix",
-    "lint:check": "eslint . --ext .ts,.tsx --cache --color",
-    "lint:error": "eslint . --ext .ts,.tsx --cache --color --quiet",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --cache --color --fix",
+    "lint:check": "eslint . --ext .ts,.tsx,.js,.jsx --cache --color",
+    "lint:error": "eslint . --ext .ts,.tsx,.js,.jsx --cache --color --quiet",
     "prepare": "husky",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "dev:editor": "pnpm --filter zhgu-editor dev",
+    "build:editor": "pnpm --filter zhgu-editor build"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +24,8 @@
     "@types/node": "^22.15.21",
     "eslint": "^9.28.0",
     "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.2.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.0",
@@ -31,6 +35,6 @@
     "vite": "^6.3.5"
   },
   "lint-staged": {
-    "*.{ts,tsx}": ["eslint --fix", "prettier --write"]
+    "*.{ts,tsx,js,jsx}": ["eslint --fix", "prettier --write"]
   }
 }
