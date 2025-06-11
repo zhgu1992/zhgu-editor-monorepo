@@ -36,6 +36,7 @@ interface INode {
   doOnPropsChanged: (elementChangeProps: ElementChangeProps) => void;
   updateRenderNode: (renderCategorySet: RenderCategorySet) => void;
   updateNodeAt: () => void;
+  // parentPositionEnd: () => string;
 }
 
 interface IGeometryNode extends INode {

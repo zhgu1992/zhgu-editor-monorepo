@@ -1,30 +1,38 @@
 import React, { useState } from 'react';
 import {
   Plus,
-  Download,
-  Settings,
-  Palette,
+  Minus,
+  Eye,
+  EyeOff,
   ChevronDown,
   ChevronRight,
-  Paintbrush,
+  Download,
+  Copy,
+  Share2,
+  HelpCircle,
+  Palette,
   Square,
-  CornerUpLeft,
+  Circle,
+  Triangle,
+  Image as ImageIcon,
+  Type,
+  Layers,
+  Zap,
+  MoreHorizontal,
+  Settings,
+  Monitor,
+  Smartphone,
+  Tablet,
+  Printer,
+  Bold,
+  Italic,
+  Underline,
   AlignLeft,
   AlignCenter,
   AlignRight,
   AlignJustify,
-  Bold,
-  Italic,
-  Underline,
-  Sliders,
-  Layers3,
-  Link,
-  Eye,
-  EyeOff,
-  Minus,
-  MoreHorizontal,
 } from 'lucide-react';
-import { useEditorStore } from '../store';
+import { useEditorStore, EditorInitState } from '../store';
 import HelpMenu from './HelpMenu';
 
 interface RightPanelProps {
@@ -32,7 +40,8 @@ interface RightPanelProps {
 }
 
 const RightPanel: React.FC<RightPanelProps> = ({ onShowShortcutHelp }) => {
-  const { pages, currentPageId, selectedLayerIds } = useEditorStore();
+  const { initState, getPages, getCurrentPage, getSelectedNodes } = useEditorStore();
+
   const [expandedSections, setExpandedSections] = useState({
     layout: true,
     appearance: true,
@@ -41,8 +50,21 @@ const RightPanel: React.FC<RightPanelProps> = ({ onShowShortcutHelp }) => {
     export: true,
   });
 
-  const currentPage = pages.find(page => page.id === currentPageId);
-  const selectedLayers = currentPage?.layers.filter(layer => selectedLayerIds.includes(layer.id)) || [];
+  // 获取真实数据
+  const pages = getPages();
+  const currentPage = getCurrentPage();
+  const selectedNodes = getSelectedNodes();
+
+  // 如果editor未就绪，显示加载状态
+  if (initState !== EditorInitState.READY) {
+    return (
+      <div className="w-80 bg-white border-l border-gray-200 flex items-center justify-center">
+        <div className="text-center text-gray-500">
+          <div className="text-sm">属性面板加载中...</div>
+        </div>
+      </div>
+    );
+  }
 
   const toggleSection = (section: keyof typeof expandedSections) => {
     setExpandedSections(prev => ({
@@ -113,26 +135,26 @@ const RightPanel: React.FC<RightPanelProps> = ({ onShowShortcutHelp }) => {
       <div className="flex-1 overflow-y-auto">
         {/* 高级布局属性 */}
         <CollapsibleSection title="高级布局" sectionKey="layout">
-          {selectedLayers.length > 0 ? (
+          {selectedNodes.length > 0 ? (
             <div className="space-y-3">
-              {selectedLayers.map((layer, index) => (
-                <div key={layer.id} className="space-y-2">
-                  {selectedLayers.length > 1 && (
-                    <div className="text-xs font-medium text-gray-600 pb-1 border-b border-gray-100">{layer.name}</div>
+              {selectedNodes.map((node, index) => (
+                <div key={node.id} className="space-y-2">
+                  {selectedNodes.length > 1 && (
+                    <div className="text-xs font-medium text-gray-600 pb-1 border-b border-gray-100">{node.name}</div>
                   )}
 
                   {/* 位置属性 */}
                   <div className="grid grid-cols-2 gap-2">
                     <PropertyInput
                       label="X"
-                      value={layer.x || 0}
-                      onChange={value => handleLayoutChange(`${layer.id}.x`, value)}
+                      value={(node as any).x || 0}
+                      onChange={value => handleLayoutChange(`${node.id}.x`, value)}
                       type="number"
                     />
                     <PropertyInput
                       label="Y"
-                      value={layer.y || 0}
-                      onChange={value => handleLayoutChange(`${layer.id}.y`, value)}
+                      value={(node as any).y || 0}
+                      onChange={value => handleLayoutChange(`${node.id}.y`, value)}
                       type="number"
                     />
                   </div>
@@ -141,14 +163,14 @@ const RightPanel: React.FC<RightPanelProps> = ({ onShowShortcutHelp }) => {
                   <div className="grid grid-cols-2 gap-2">
                     <PropertyInput
                       label="宽度"
-                      value={layer.width || 0}
-                      onChange={value => handleLayoutChange(`${layer.id}.width`, value)}
+                      value={(node as any).width || 0}
+                      onChange={value => handleLayoutChange(`${node.id}.width`, value)}
                       type="number"
                     />
                     <PropertyInput
                       label="高度"
-                      value={layer.height || 0}
-                      onChange={value => handleLayoutChange(`${layer.id}.height`, value)}
+                      value={(node as any).height || 0}
+                      onChange={value => handleLayoutChange(`${node.id}.height`, value)}
                       type="number"
                     />
                   </div>
@@ -158,24 +180,24 @@ const RightPanel: React.FC<RightPanelProps> = ({ onShowShortcutHelp }) => {
                     <PropertyInput
                       label="旋转"
                       value={0}
-                      onChange={value => handleLayoutChange(`${layer.id}.rotation`, value)}
+                      onChange={value => handleLayoutChange(`${node.id}.rotation`, value)}
                       type="number"
                     />
                     <PropertyInput
                       label="透明度"
                       value={100}
-                      onChange={value => handleLayoutChange(`${layer.id}.opacity`, value)}
+                      onChange={value => handleLayoutChange(`${node.id}.opacity`, value)}
                       type="number"
                     />
                   </div>
 
                   {/* 圆角 */}
-                  {layer.type === 'rectangle' && (
+                  {node.type === 'rectangle' && (
                     <div className="grid grid-cols-2 gap-2">
                       <PropertyInput
                         label="圆角"
                         value={0}
-                        onChange={value => handleLayoutChange(`${layer.id}.borderRadius`, value)}
+                        onChange={value => handleLayoutChange(`${node.id}.borderRadius`, value)}
                         type="number"
                       />
                     </div>
@@ -190,7 +212,7 @@ const RightPanel: React.FC<RightPanelProps> = ({ onShowShortcutHelp }) => {
 
         {/* 外观属性 */}
         <CollapsibleSection title="外观" sectionKey="appearance">
-          {selectedLayers.length > 0 ? (
+          {selectedNodes.length > 0 ? (
             <div className="space-y-4">
               {/* 填充 */}
               <div className="space-y-2">
@@ -250,7 +272,7 @@ const RightPanel: React.FC<RightPanelProps> = ({ onShowShortcutHelp }) => {
               </div>
 
               {/* 文本属性（仅文本图层） */}
-              {selectedLayers.some(layer => layer.type === 'text') && (
+              {selectedNodes.some(node => node.type === 'text') && (
                 <div className="space-y-2">
                   <span className="text-xs font-medium text-gray-700">文本</span>
 
@@ -308,7 +330,7 @@ const RightPanel: React.FC<RightPanelProps> = ({ onShowShortcutHelp }) => {
 
         {/* 效果 */}
         <CollapsibleSection title="效果" sectionKey="effects">
-          {selectedLayers.length > 0 ? (
+          {selectedNodes.length > 0 ? (
             <div className="space-y-3">
               {/* 阴影 */}
               <div className="space-y-2">

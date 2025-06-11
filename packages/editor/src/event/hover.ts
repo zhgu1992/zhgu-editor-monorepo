@@ -17,7 +17,7 @@ export class Hover {
     return this._hoverNode;
   }
 
-  setHoverNode(value: IBaseNode | null) {
+  setHoverNode(value: IBaseNode | null, useEvent = true) {
     const hoverNode = this._hoverNode;
     if (hoverNode) {
       hoverNode.showHover(false);
@@ -25,7 +25,11 @@ export class Hover {
     if (value) {
       value.showHover(true);
     }
+    if (useEvent) {
+      if (this._hoverNode !== value) {
+        this._eventBus.emit(EHoverEventType.HoverChange, { data: value });
+      }
+    }
     this._hoverNode = value;
-    this._eventBus.emit(EHoverEventType.HoverChange, { data: value });
   }
 }

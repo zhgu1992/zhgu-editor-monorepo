@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import {
   Plus,
@@ -18,11 +18,14 @@ import {
 } from 'lucide-react';
 import { useEditorStore, EditorInitState } from '../store';
 import type { IBaseNode } from '@zhgu/editor';
+import { EHistoryEvent } from '@zhgu/editor';
+import { ESelectEventType, EHoverEventType } from '@zhgu/editor';
 
 // 图层项组件
 interface LayerItemProps {
   node: IBaseNode;
   isSelected: boolean;
+  isHovered: boolean;
   onSelect: (node: IBaseNode, multi: boolean) => void;
   onToggleVisibility: (node: IBaseNode) => void;
   onToggleLock: (node: IBaseNode) => void;
@@ -32,6 +35,7 @@ interface LayerItemProps {
 const LayerItem: React.FC<LayerItemProps> = ({
   node,
   isSelected,
+  isHovered,
   onSelect,
   onToggleVisibility,
   onToggleLock,
@@ -39,6 +43,9 @@ const LayerItem: React.FC<LayerItemProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(node.name || 'Unnamed');
+
+  // 获取editor实例来设置hover状态
+  const { editor, initState } = useEditorStore();
 
   const handleDoubleClick = () => {
     setIsEditing(true);
@@ -61,6 +68,32 @@ const LayerItem: React.FC<LayerItemProps> = ({
     }
   };
 
+  // 鼠标进入时设置hover状态
+  const handleMouseEnter = () => {
+    if (editor && initState === EditorInitState.READY && editor.eventManager) {
+      try {
+        // 通过editor API设置hover节点
+        editor.hoverNodeId = node.id;
+        console.log('设置hover节点:', node.id);
+      } catch (error) {
+        console.warn('设置hover状态失败:', error);
+      }
+    }
+  };
+
+  // 鼠标离开时清除hover状态
+  const handleMouseLeave = () => {
+    if (editor && initState === EditorInitState.READY && editor.eventManager) {
+      try {
+        // 清除hover节点
+        editor.hoverNodeId = '';
+        console.log('清除hover节点');
+      } catch (error) {
+        console.warn('清除hover状态失败:', error);
+      }
+    }
+  };
+
   const getLayerIcon = () => {
     // 根据node的type决定图标
     switch (node.type) {
@@ -76,15 +109,21 @@ const LayerItem: React.FC<LayerItemProps> = ({
   return (
     <div
       className={`flex items-center gap-2 px-3 py-1.5 hover:bg-gray-50 cursor-pointer ${
-        isSelected ? 'bg-blue-50 border-r-2 border-blue-500' : ''
+        isSelected
+          ? 'bg-blue-50 border-r-2 border-blue-500'
+          : isHovered
+            ? 'bg-yellow-50 border-r-2 border-yellow-400'
+            : ''
       }`}
       onClick={e => onSelect(node, e.metaKey || e.ctrlKey)}
+      // onMouseEnter={handleMouseEnter}
+      // onMouseLeave={handleMouseLeave}
     >
       {/* 图层图标 */}
       <div className="text-gray-400">{getLayerIcon()}</div>
 
       {/* 图层名称 */}
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 text-left  min-w-0">
         {isEditing ? (
           <input
             type="text"
@@ -142,16 +181,18 @@ const LayerItem: React.FC<LayerItemProps> = ({
 const LayerTree: React.FC<{
   nodes: IBaseNode[];
   selectedNodes: IBaseNode[];
+  hoveredNode: IBaseNode | null;
   onSelect: (node: IBaseNode, multi: boolean) => void;
   onToggleVisibility: (node: IBaseNode) => void;
   onToggleLock: (node: IBaseNode) => void;
   onRename: (node: IBaseNode, name: string) => void;
   level?: number;
-}> = ({ nodes, selectedNodes, onSelect, onToggleVisibility, onToggleLock, onRename, level = 0 }) => {
+}> = ({ nodes, selectedNodes, hoveredNode, onSelect, onToggleVisibility, onToggleLock, onRename, level = 0 }) => {
   return (
     <div>
       {nodes.map(node => {
         const isSelected = selectedNodes.some(selected => selected.id === node.id);
+        const isHovered = hoveredNode?.id === node.id;
 
         return (
           <div key={node.id}>
@@ -160,6 +201,7 @@ const LayerTree: React.FC<{
               <LayerItem
                 node={node}
                 isSelected={isSelected}
+                isHovered={isHovered}
                 onSelect={onSelect}
                 onToggleVisibility={onToggleVisibility}
                 onToggleLock={onToggleLock}
@@ -172,6 +214,7 @@ const LayerTree: React.FC<{
               <LayerTree
                 nodes={node.children as IBaseNode[]}
                 selectedNodes={selectedNodes}
+                hoveredNode={hoveredNode}
                 onSelect={onSelect}
                 onToggleVisibility={onToggleVisibility}
                 onToggleLock={onToggleLock}
@@ -188,19 +231,58 @@ const LayerTree: React.FC<{
 
 // 左侧面板主组件
 const LeftPanel: React.FC = () => {
-  const { initState, getPages, getCurrentPage, getSelectedNodes, selectNodes, clearSelection } = useEditorStore();
+  const { initState, getPages, getCurrentPage, getSelectedNodes, getHoveredNode, selectNodes, clearSelection } =
+    useEditorStore();
 
   const [pagesExpanded, setPagesExpanded] = useState(true);
   const [layersExpanded, setLayersExpanded] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [showLayerActions, setShowLayerActions] = useState(false);
+  const [, forceUpdate] = useState({});
 
-  // 获取真实数据
+  useEffect(() => {
+    const { editor } = useEditorStore.getState();
+
+    if (!editor || initState !== EditorInitState.READY) {
+      return;
+    }
+
+    const eventManager = editor.eventManager;
+    if (!eventManager) {
+      return;
+    }
+
+    const handleSelectionChange = () => {
+      console.log('选中数据变更，刷新组件显示');
+      forceUpdate({});
+    };
+
+    const handleHoverChange = () => {
+      console.log('hover数据变更，刷新组件显示');
+      forceUpdate({});
+    };
+
+    const handleUndoRedoChange = () => {
+      console.log('undoredo数据变更，刷新组件显示');
+      forceUpdate({});
+    };
+
+    eventManager.on(ESelectEventType.SelectChange, handleSelectionChange);
+    eventManager.on(EHoverEventType.HoverChange, handleHoverChange);
+    eventManager.on(EHistoryEvent.UndoRedo, handleUndoRedoChange);
+
+    return () => {
+      eventManager.off(ESelectEventType.SelectChange, handleSelectionChange);
+      eventManager.off(EHoverEventType.HoverChange, handleHoverChange);
+      eventManager.off(EHistoryEvent.UndoRedo, handleUndoRedoChange);
+    };
+  }, [initState]);
+
   const pages = getPages();
   const currentPage = getCurrentPage();
   const selectedNodes = getSelectedNodes();
+  const hoveredNode = getHoveredNode();
 
-  // 如果editor未就绪，显示加载状态
   if (initState !== EditorInitState.READY) {
     return (
       <div className="w-72 bg-white border-r border-gray-200 flex items-center justify-center">
@@ -215,36 +297,29 @@ const LeftPanel: React.FC = () => {
     if (multi) {
       const isSelected = selectedNodes.some(selected => selected.id === node.id);
       if (isSelected) {
-        // 取消选择
         const newSelection = selectedNodes.filter(selected => selected.id !== node.id);
         selectNodes(newSelection);
       } else {
-        // 添加到选择
         selectNodes([...selectedNodes, node]);
       }
     } else {
-      // 单选
       selectNodes([node]);
     }
   };
 
   const handleToggleVisibility = (node: IBaseNode) => {
-    // TODO: 需要实现通过editor API切换可见性
     console.log('切换可见性:', node.id);
   };
 
   const handleToggleLock = (node: IBaseNode) => {
-    // TODO: 需要实现通过editor API切换锁定状态
     console.log('切换锁定:', node.id);
   };
 
   const handleRename = (node: IBaseNode, name: string) => {
-    // TODO: 需要实现通过editor API重命名
     console.log('重命名:', node.id, name);
   };
 
   const handleDeleteSelectedLayers = () => {
-    // TODO: 需要实现通过editor API删除节点
     selectedNodes.forEach(node => {
       console.log('删除节点:', node.id);
     });
@@ -256,7 +331,6 @@ const LeftPanel: React.FC = () => {
     setShowLayerActions(false);
   };
 
-  // 获取当前页面的子节点（图层）
   const layers = currentPage?.children || [];
   const filteredLayers = layers.filter(layer =>
     ((layer as any).name || '').toLowerCase().includes(searchTerm.toLowerCase())
@@ -264,9 +338,7 @@ const LeftPanel: React.FC = () => {
 
   return (
     <div className="w-72 bg-white border-r border-gray-200 flex flex-col h-full">
-      {/* 页面管理区域 */}
       <div className="border-b border-gray-100" style={{ minHeight: '200px' }}>
-        {/* 页面标题栏 */}
         <div
           className="flex items-center justify-between px-3 py-2 bg-gray-50 border-b border-gray-100 cursor-pointer hover:bg-gray-100"
           onClick={() => setPagesExpanded(!pagesExpanded)}
@@ -288,7 +360,6 @@ const LeftPanel: React.FC = () => {
           </button>
         </div>
 
-        {/* 页面列表 */}
         {pagesExpanded && (
           <div className="max-h-32 overflow-y-auto">
             {pages.map((page, index) => (
@@ -308,9 +379,7 @@ const LeftPanel: React.FC = () => {
         )}
       </div>
 
-      {/* 图层管理区域 */}
       <div className="flex-1 flex flex-col min-h-0">
-        {/* 图层标题栏 */}
         <div
           className="flex items-center justify-between px-3 py-2 bg-gray-50 border-b border-gray-100 cursor-pointer hover:bg-gray-100"
           onClick={() => setLayersExpanded(!layersExpanded)}
@@ -364,7 +433,6 @@ const LeftPanel: React.FC = () => {
           </div>
         </div>
 
-        {/* 搜索栏 */}
         {layersExpanded && (
           <div className="px-3 py-2 border-b border-gray-100">
             <div className="relative">
@@ -380,12 +448,12 @@ const LeftPanel: React.FC = () => {
           </div>
         )}
 
-        {/* 图层树 */}
         {layersExpanded && (
           <div className="flex-1 overflow-auto">
             <LayerTree
               nodes={filteredLayers}
               selectedNodes={selectedNodes}
+              hoveredNode={hoveredNode}
               onSelect={handleSelectNode}
               onToggleVisibility={handleToggleVisibility}
               onToggleLock={handleToggleLock}
@@ -394,7 +462,6 @@ const LeftPanel: React.FC = () => {
           </div>
         )}
 
-        {/* 底部统计信息 */}
         <div className="px-3 py-2 border-t border-gray-100 text-xs text-gray-500">
           共 {layers.length} 个图层
           {selectedNodes.length > 0 && ` • 已选择 ${selectedNodes.length} 个`}

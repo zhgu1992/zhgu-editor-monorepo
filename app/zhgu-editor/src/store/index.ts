@@ -1,42 +1,7 @@
 import { create } from 'zustand';
 import { createHelloWorldFileData } from '../mock/mockFunc.ts';
-import type { IBaseNode } from '@zhgu/editor';
+import type { IBaseNode, EEditorStateName } from '@zhgu/editor';
 import { Editor } from '@zhgu/editor';
-
-// 图层类型定义
-export interface Layer {
-  id: string;
-  name: string;
-  type: 'rectangle' | 'text' | 'group';
-  visible: boolean;
-  locked: boolean;
-  children?: Layer[];
-  x?: number;
-  y?: number;
-  width?: number;
-  height?: number;
-}
-
-// 页面类型定义
-export interface Page {
-  id: string;
-  name: string;
-  layers: Layer[];
-}
-
-// 工具类型定义
-export type ToolType =
-  | 'select'
-  | 'move'
-  | 'rectangle'
-  | 'text'
-  | 'ai'
-  | 'pen'
-  | 'edit'
-  | 'copy'
-  | 'comment'
-  | 'component'
-  | 'search';
 
 // 初始化状态枚举
 export enum EditorInitState {
@@ -54,13 +19,6 @@ interface EditorState {
   initState: EditorInitState;
   initError: string | null;
 
-  // 页面相关
-  pages: Page[];
-  currentPageId: string;
-
-  // 图层相关
-  selectedLayerIds: string[];
-
   // 工具相关
   currentTool: ToolType;
 
@@ -72,33 +30,26 @@ interface EditorState {
   // 调试模式
   debugMode: boolean;
 
-  // Actions
   // Editor操作
   createEditor: () => Promise<void>; // 第一阶段：创建editor实例
   bindCanvas: (canvasId?: string) => void; // 第二阶段：绑定canvas
-  setInitState: (state: EditorInitState) => void;
-  setInitError: (error: string | null) => void;
 
-  // 从editor同步数据
-  syncFromEditor: () => void;
+  // 获取真实数据的getter方法
+  getPages: () => IBaseNode[];
+  getCurrentPage: () => IBaseNode | null;
+  getSelectedNodes: () => IBaseNode[];
+  getHoveredNode: () => IBaseNode | null;
 
-  // 页面操作
+  // 页面操作（调用editor API）
   addPage: () => void;
   deletePage: (pageId: string) => void;
   switchPage: (pageId: string) => void;
 
-  // 图层操作
-  addLayer: (layer: Omit<Layer, 'id'>) => void;
+  // 图层操作（调用editor API）
   deleteLayer: (layerId: string) => void;
   toggleLayerVisibility: (layerId: string) => void;
   toggleLayerLock: (layerId: string) => void;
-  selectLayer: (layerId: string, multi?: boolean) => void;
   renameLayer: (layerId: string, name: string) => void;
-
-  // 获取真实数据的getter
-  getPages: () => IBaseNode[];
-  getCurrentPage: () => IBaseNode | null;
-  getSelectedNodes: () => IBaseNode[];
 
   // 工具操作
   setCurrentTool: (tool: ToolType) => void;
@@ -118,44 +69,11 @@ interface EditorState {
   setDebugMode: (enabled: boolean) => void;
 }
 
-// 创建默认页面
-const createDefaultPage = (): Page => ({
-  id: 'page-1',
-  name: '页面 1',
-  layers: [
-    {
-      id: 'layer-1',
-      name: '矩形 1',
-      type: 'rectangle',
-      visible: true,
-      locked: false,
-      x: 100,
-      y: 100,
-      width: 200,
-      height: 150,
-    },
-    {
-      id: 'layer-2',
-      name: '矩形 2',
-      type: 'rectangle',
-      visible: true,
-      locked: false,
-      x: 350,
-      y: 100,
-      width: 180,
-      height: 180,
-    },
-  ],
-});
-
 export const useEditorStore = create<EditorState>((set, get) => ({
   // 初始状态
   editor: null,
   initState: EditorInitState.IDLE,
   initError: null,
-  pages: [createDefaultPage()],
-  currentPageId: 'page-1',
-  selectedLayerIds: [],
   currentTool: 'select',
   canvasZoom: 1,
   canvasOffsetX: 0,
@@ -209,14 +127,8 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       const file = createHelloWorldFileData();
       editor.loadFile(file);
 
-      // 渲染
-      editor.render();
-
       // 初始化编辑模式
       editor.initEditorMode();
-
-      // 同步初始数据
-      get().syncFromEditor();
 
       set({ initState: EditorInitState.READY });
       console.log('Editor完全就绪！');
@@ -229,165 +141,12 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     }
   },
 
-  setInitState: (state: EditorInitState) => {
-    set({ initState: state });
-  },
-
-  setInitError: (error: string | null) => {
-    set({ initError: error });
-  },
-
-  // 从editor同步数据到store
-  syncFromEditor: () => {
-    const { editor } = get();
-    if (!editor) return;
-
-    try {
-      // 基于实际的Editor API进行数据同步
-      // 获取选中的节点
-      const selectedNodes = editor.eventManager?.selectedNodes || [];
-
-      console.log(
-        '数据同步完成，选中节点:',
-        selectedNodes.map(n => n.id)
-      );
-    } catch (error) {
-      console.error('数据同步失败:', error);
-    }
-  },
-
-  // 页面操作 - 目前主要更新store，后续可以扩展到editor
-  addPage: () => {
-    console.log('添加页面');
-    const newPage: Page = {
-      id: `page-${Date.now()}`,
-      name: `页面 ${get().pages.length + 1}`,
-      layers: [],
-    };
-
-    // 更新store
-    set(state => ({
-      pages: [...state.pages, newPage],
-      currentPageId: newPage.id,
-    }));
-
-    // 未来可以同步到editor
-    const { editor } = get();
-    if (editor && get().initState === EditorInitState.READY) {
-      // editor API扩展后可以添加页面管理
-      console.log('同步页面到editor（待实现）');
-    }
-  },
-
-  deletePage: (pageId: string) => {
-    console.log('删除页面:', pageId);
-    const pages = get().pages.filter(page => page.id !== pageId);
-    if (pages.length === 0) {
-      const defaultPage = createDefaultPage();
-      set({ pages: [defaultPage], currentPageId: defaultPage.id });
-    } else {
-      const currentPageId = get().currentPageId === pageId ? pages[0].id : get().currentPageId;
-      set({ pages, currentPageId });
-    }
-  },
-
-  switchPage: (pageId: string) => {
-    console.log('切换页面:', pageId);
-    set({ currentPageId: pageId, selectedLayerIds: [] });
-  },
-
-  // 图层操作
-  addLayer: layerData => {
-    console.log('添加图层:', layerData);
-    const layer: Layer = {
-      ...layerData,
-      id: `layer-${Date.now()}`,
-    };
-
-    set(state => ({
-      pages: state.pages.map(page =>
-        page.id === state.currentPageId ? { ...page, layers: [...page.layers, layer] } : page
-      ),
-    }));
-  },
-
-  deleteLayer: (layerId: string) => {
-    console.log('删除图层:', layerId);
-    set(state => ({
-      pages: state.pages.map(page =>
-        page.id === state.currentPageId ? { ...page, layers: page.layers.filter(layer => layer.id !== layerId) } : page
-      ),
-      selectedLayerIds: state.selectedLayerIds.filter(id => id !== layerId),
-    }));
-  },
-
-  toggleLayerVisibility: (layerId: string) => {
-    console.log('切换图层可见性:', layerId);
-    set(state => ({
-      pages: state.pages.map(page =>
-        page.id === state.currentPageId
-          ? {
-              ...page,
-              layers: page.layers.map(layer => (layer.id === layerId ? { ...layer, visible: !layer.visible } : layer)),
-            }
-          : page
-      ),
-    }));
-  },
-
-  toggleLayerLock: (layerId: string) => {
-    console.log('切换图层锁定:', layerId);
-    set(state => ({
-      pages: state.pages.map(page =>
-        page.id === state.currentPageId
-          ? {
-              ...page,
-              layers: page.layers.map(layer => (layer.id === layerId ? { ...layer, locked: !layer.locked } : layer)),
-            }
-          : page
-      ),
-    }));
-  },
-
-  selectLayer: (layerId: string, multi = false) => {
-    console.log('选择图层:', layerId, '多选:', multi);
-    if (!layerId) {
-      set({ selectedLayerIds: [] });
-      return;
-    }
-
-    set(state => {
-      const newSelectedIds = multi
-        ? state.selectedLayerIds.includes(layerId)
-          ? state.selectedLayerIds.filter(id => id !== layerId)
-          : [...state.selectedLayerIds, layerId]
-        : [layerId];
-
-      return { selectedLayerIds: newSelectedIds };
-    });
-  },
-
-  renameLayer: (layerId: string, name: string) => {
-    console.log('重命名图层:', layerId, '新名称:', name);
-    set(state => ({
-      pages: state.pages.map(page =>
-        page.id === state.currentPageId
-          ? {
-              ...page,
-              layers: page.layers.map(layer => (layer.id === layerId ? { ...layer, name } : layer)),
-            }
-          : page
-      ),
-    }));
-  },
-
   // 获取真实数据的getter方法
   getPages: () => {
     const { editor, initState } = get();
     if (!editor || initState !== EditorInitState.READY) return [];
 
     try {
-      // editor.pages返回INode[]，需要转换为IBaseNode[]
       return (editor.pages || []) as IBaseNode[];
     } catch (error) {
       console.error('获取页面数据失败:', error);
@@ -400,7 +159,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     if (!editor || initState !== EditorInitState.READY) return null;
 
     try {
-      // editor.scene.currentPage返回INode，需要转换为IBaseNode
       return (editor.scene.currentPage || null) as IBaseNode | null;
     } catch (error) {
       console.error('获取当前页面失败:', error);
@@ -420,23 +178,177 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     }
   },
 
+  getHoveredNode: () => {
+    const { editor, initState } = get();
+    if (!editor || initState !== EditorInitState.READY) return null;
+
+    try {
+      return editor.eventManager?.hoverNode || null;
+    } catch (error) {
+      console.error('获取hover节点失败:', error);
+      return null;
+    }
+  },
+
+  // 页面操作 - 调用editor的真实API
+  addPage: () => {
+    const { editor, initState } = get();
+    if (!editor || initState !== EditorInitState.READY) {
+      console.warn('Editor未就绪，无法添加页面');
+      return;
+    }
+
+    try {
+      console.log('添加新页面');
+      // 使用editor的createEmptyPage方法
+      if (editor.createEmptyPage) {
+        const newPage = editor.createEmptyPage();
+        console.log('新页面已创建:', newPage?.id);
+      } else {
+        console.warn('editor.createEmptyPage方法不存在');
+      }
+    } catch (error) {
+      console.error('添加页面失败:', error);
+    }
+  },
+
+  deletePage: (pageId: string) => {
+    const { editor, initState } = get();
+    if (!editor || initState !== EditorInitState.READY) {
+      console.warn('Editor未就绪，无法删除页面');
+      return;
+    }
+
+    try {
+      console.log('删除页面:', pageId);
+      // 调用editor的删除页面API（如果存在）
+      if (editor.deletePage) {
+        editor.deletePage(pageId);
+      } else {
+        console.warn('editor.deletePage方法不存在');
+      }
+    } catch (error) {
+      console.error('删除页面失败:', error);
+    }
+  },
+
+  switchPage: (pageId: string) => {
+    const { editor, initState } = get();
+    if (!editor || initState !== EditorInitState.READY) {
+      console.warn('Editor未就绪，无法切换页面');
+      return;
+    }
+
+    try {
+      console.log('切换页面:', pageId);
+      // 调用editor的页面切换API（如果存在）
+      if (editor.switchPage) {
+        editor.switchPage(pageId);
+      } else {
+        console.warn('editor.switchPage方法不存在');
+      }
+    } catch (error) {
+      console.error('切换页面失败:', error);
+    }
+  },
+
+  // 图层操作 - 调用editor的真实API
+  deleteLayer: (layerId: string) => {
+    const { editor, initState } = get();
+    if (!editor || initState !== EditorInitState.READY) {
+      console.warn('Editor未就绪，无法删除图层');
+      return;
+    }
+
+    try {
+      console.log('删除图层:', layerId);
+      // 调用editor的删除节点API（如果存在）
+      if ((editor as any).deleteNode) {
+        (editor as any).deleteNode(layerId);
+      } else {
+        console.warn('editor.deleteNode方法不存在');
+      }
+    } catch (error) {
+      console.error('删除图层失败:', error);
+    }
+  },
+
+  toggleLayerVisibility: (layerId: string) => {
+    const { editor, initState } = get();
+    if (!editor || initState !== EditorInitState.READY) {
+      console.warn('Editor未就绪，无法切换图层可见性');
+      return;
+    }
+
+    try {
+      console.log('切换图层可见性:', layerId);
+      // 调用editor的节点可见性API（如果存在）
+      // 需要先获取节点，然后调用其方法
+      const currentPage = editor.scene?.currentPage;
+      if (currentPage && currentPage.children) {
+        const node = findNodeById(currentPage.children as any[], layerId);
+        if (node && (node as any).setVisible) {
+          (node as any).setVisible(!node.isVisible);
+        }
+      }
+    } catch (error) {
+      console.error('切换图层可见性失败:', error);
+    }
+  },
+
+  toggleLayerLock: (layerId: string) => {
+    const { editor, initState } = get();
+    if (!editor || initState !== EditorInitState.READY) {
+      console.warn('Editor未就绪，无法切换图层锁定');
+      return;
+    }
+
+    try {
+      console.log('切换图层锁定:', layerId);
+      // 调用editor的节点锁定API（如果存在）
+      const currentPage = editor.scene?.currentPage;
+      if (currentPage && currentPage.children) {
+        const node = findNodeById(currentPage.children as any[], layerId);
+        if (node && (node as any).setLocked) {
+          (node as any).setLocked(!(node as any).isLocked);
+        }
+      }
+    } catch (error) {
+      console.error('切换图层锁定失败:', error);
+    }
+  },
+
+  renameLayer: (layerId: string, name: string) => {
+    const { editor, initState } = get();
+    if (!editor || initState !== EditorInitState.READY) {
+      console.warn('Editor未就绪，无法重命名图层');
+      return;
+    }
+
+    try {
+      console.log('重命名图层:', layerId, '新名称:', name);
+      // 调用editor的节点重命名API（如果存在）
+      const currentPage = editor.scene?.currentPage;
+      if (currentPage && currentPage.children) {
+        const node = findNodeById(currentPage.children as any[], layerId);
+        if (node && (node as any).setName) {
+          (node as any).setName(name);
+        }
+      }
+    } catch (error) {
+      console.error('重命名图层失败:', error);
+    }
+  },
+
   // 工具操作
-  setCurrentTool: (tool: ToolType) => {
+  setCurrentTool: (tool: EEditorStateName) => {
     console.log('切换工具:', tool);
     set({ currentTool: tool });
 
     const { editor, initState } = get();
     if (editor && initState === EditorInitState.READY) {
       // 根据工具类型切换编辑器状态
-      switch (tool) {
-        case 'rectangle':
-          editor.changeEditorState('CreateRectTangle');
-          break;
-        case 'select':
-        default:
-          editor.goToDefaultState('Default');
-          break;
-      }
+      editor.changeEditorState(tool);
     }
   },
 
@@ -532,3 +444,17 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     set({ debugMode: enabled });
   },
 }));
+
+// 辅助函数：递归查找节点
+function findNodeById(nodes: any[], id: string): any | null {
+  for (const node of nodes) {
+    if (node.id === id) {
+      return node;
+    }
+    if (node.children && node.children.length > 0) {
+      const found = findNodeById(node.children, id);
+      if (found) return found;
+    }
+  }
+  return null;
+}

@@ -71,8 +71,8 @@ export class DragCreationBehaviorNode extends DragBaseBehaviorNode {
       rt[7] = fixBox.y;
       const transform = mat2obj(rt);
       const parentId = parentNode.id;
-      // @ts-ignore
-      const parentPosition = parentNode.parentPositionEnd();
+      // todo
+      const parentPosition = parentNode.parentPosition;
 
       const element = view.documentExchange.createElement(this.creationType, {
         ...getDefaultStyle(this.creationType, this.view),

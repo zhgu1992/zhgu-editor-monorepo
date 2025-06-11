@@ -26,18 +26,9 @@ const ShortcutHelp: React.FC<ShortcutHelpProps> = ({ show, onClose }) => {
         { key: 'V', desc: '选择工具' },
         { key: 'M', desc: '移动工具' },
         { key: 'R', desc: '矩形工具' },
+        { key: 'F', desc: '画板工具' },
         { key: 'T', desc: '文本工具' },
         { key: 'Esc', desc: '取消选择' },
-      ],
-    },
-    {
-      category: '视图',
-      items: [
-        { key: 'Ctrl + +', desc: '放大' },
-        { key: 'Ctrl + -', desc: '缩小' },
-        { key: 'Ctrl + 0', desc: '适合窗口' },
-        { key: 'Space + 拖拽', desc: '平移画布' },
-        { key: 'Ctrl + ;', desc: '显示/隐藏网格' },
       ],
     },
     {
@@ -45,10 +36,6 @@ const ShortcutHelp: React.FC<ShortcutHelpProps> = ({ show, onClose }) => {
       items: [
         { key: 'Ctrl + G', desc: '编组' },
         { key: 'Ctrl + Shift + G', desc: '取消编组' },
-        { key: 'Ctrl + ]', desc: '上移一层' },
-        { key: 'Ctrl + [', desc: '下移一层' },
-        { key: 'Ctrl + Shift + ]', desc: '置于顶层' },
-        { key: 'Ctrl + Shift + [', desc: '置于底层' },
       ],
     },
   ];

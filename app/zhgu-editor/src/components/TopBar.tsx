@@ -1,9 +1,13 @@
 import React from 'react';
 import { Menu, ChevronDown, User, Undo2, Redo2, Share2, Minus, Plus, RotateCcw } from 'lucide-react';
-import { useEditorStore } from '../store';
+import { EditorInitState, useEditorStore } from '../store';
 
 const TopBar: React.FC = () => {
-  const { canvasZoom, setCanvasZoom } = useEditorStore();
+  const { canvasZoom, setCanvasZoom, initState, editor } = useEditorStore();
+
+  if (!editor || initState !== EditorInitState.READY) {
+    return;
+  }
 
   const handleFileAction = (action: string) => {
     console.log('文件操作:', action);
@@ -22,6 +26,11 @@ const TopBar: React.FC = () => {
 
   const handleEditAction = (action: string) => {
     console.log('编辑操作:', action);
+    if (action === 'undo') {
+      editor.undoHistory();
+    } else if (action === 'redo') {
+      editor.redoHistory();
+    }
   };
 
   return (

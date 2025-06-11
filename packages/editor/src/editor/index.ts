@@ -2,8 +2,8 @@ import { View } from '../view';
 import { EModeName, EEditorStateName } from '../const';
 import type { IInputSnapshot } from '../interface';
 import { appendCssToDom } from '../utils/css';
-import { EElementChangeType } from '@zhgu/type';
-import type { Transaction } from '@zhgu/type';
+import { EElementChangeType, EOtherElementType } from '@zhgu/type';
+import type { Transaction, EElementType, IElementPropsWithoutType } from '@zhgu/type';
 import { Mode, StateFactory } from '../mode';
 import style from '../assets/css/cursor.css?raw';
 
@@ -22,6 +22,50 @@ export class Editor extends View {
     this.registerShortCut();
     // 注册并默认进入浏览模式
     this.registerMode();
+  }
+
+  set hoverNodeId(elementId: string) {
+    const node = this.scene.getNodeById(elementId) ?? null;
+    this.eventManager!.hover.setHoverNode(node, false);
+  }
+
+  createNode(type: EElementType, props: IElementPropsWithoutType) {
+    const element = this.documentExchange.createElement(type, {});
+    const elementId = element.id;
+    this.applyTransaction([
+      {
+        type: EElementChangeType.Add,
+        id: elementId,
+        data: element,
+      },
+    ]);
+    const node = this.scene.getNodeById(elementId);
+    this.commitHistory();
+    return node;
+  }
+
+  createEmptyPage() {
+    return this.createNode(EOtherElementType.Page, {});
+  }
+
+  deletePage(id: string) {
+    // todo
+  }
+
+  switchPage(id: string) {
+    // todo
+  }
+
+  addLayer() {
+    // todo
+  }
+
+  deleteLayer(id: string) {
+    // todo
+  }
+
+  switchLayer(id: string) {
+    // todo
   }
 
   registerMode() {
@@ -107,7 +151,7 @@ export class Editor extends View {
         },
       },
       {
-        key: 'cmd+shift+z',
+        key: 'cmd+y',
         func: () => {
           this.redoHistory();
         },

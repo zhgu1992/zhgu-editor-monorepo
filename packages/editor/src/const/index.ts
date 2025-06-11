@@ -23,6 +23,7 @@ export const CREATION_CURSOR = {
 
 export enum EEditorStateName {
   Default = 'Default',
+  Move = 'Move',
   CreateRectTangle = 'CreateRectTangle',
   CreateFrame = 'CreateFrame',
 }

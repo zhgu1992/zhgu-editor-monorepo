@@ -1,13 +1,37 @@
 import React from 'react';
-import { useEditorStore } from '../store';
+import { useEditorStore, EditorInitState } from '../store';
 import { Mouse, Eye, Grid3x3, Ruler, Info, Wifi } from 'lucide-react';
 
 const StatusBar: React.FC = () => {
-  const { pages, currentPageId, selectedLayerIds, currentTool, canvasZoom } = useEditorStore();
+  const { initState, getPages, getCurrentPage, getSelectedNodes, currentTool, canvasZoom } = useEditorStore();
 
-  const currentPage = pages.find(page => page.id === currentPageId);
-  const totalLayers = currentPage?.layers.length || 0;
-  const visibleLayers = currentPage?.layers.filter(layer => layer.visible).length || 0;
+  // 如果editor未就绪，显示简化状态
+  if (initState !== EditorInitState.READY) {
+    return (
+      <div className="h-6 bg-gray-100 border-t border-gray-200 flex items-center justify-between px-4 text-xs text-gray-600">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1">
+            <Mouse size={12} />
+            <span>加载中...</span>
+          </div>
+        </div>
+        <div>编辑器正在初始化...</div>
+        <div className="flex items-center gap-1">
+          <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+          <span>连接中</span>
+        </div>
+      </div>
+    );
+  }
+
+  // 获取实际数据
+  const pages = getPages();
+  const currentPage = getCurrentPage();
+  const selectedNodes = getSelectedNodes();
+
+  const totalLayers = currentPage?.children?.length || 0;
+  const visibleLayers = currentPage?.children?.filter((node: any) => node.visible !== false).length || 0;
+  const currentPageIndex = pages.findIndex(p => p.id === currentPage?.id);
 
   const toolNames: Record<string, string> = {
     select: '选择工具',
@@ -24,19 +48,19 @@ const StatusBar: React.FC = () => {
         {/* 当前工具 */}
         <div className="flex items-center gap-1">
           <Mouse size={12} />
-          <span>{toolNames[currentTool]}</span>
+          <span>{toolNames[currentTool] || currentTool}</span>
         </div>
 
         {/* 选择信息 */}
-        {selectedLayerIds.length > 0 && (
+        {selectedNodes.length > 0 && (
           <div className="flex items-center gap-1">
-            <span>已选择: {selectedLayerIds.length} 个对象</span>
+            <span>已选择: {selectedNodes.length} 个对象</span>
           </div>
         )}
 
         {/* 页面信息 */}
         <div>
-          页面 {pages.findIndex(p => p.id === currentPageId) + 1} / {pages.length}
+          页面 {currentPageIndex >= 0 ? currentPageIndex + 1 : 1} / {pages.length}
         </div>
       </div>
 
