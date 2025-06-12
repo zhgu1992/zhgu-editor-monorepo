@@ -53,3 +53,30 @@ html, body {
   -ms-user-select: none;
   user-select: none;
 }
+
+/* 为所有UI组件全局应用禁用选择 */
+.editor-ui,
+.editor-ui * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 但保留输入框和文本域的选择功能 */
+.editor-ui input,
+.editor-ui textarea,
+.editor-ui [contenteditable="true"] {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* 放大整个颜色选择器组件 */
+.sketch-picker {
+  width: 250px !important;
+  height: auto !important;
+}
+
+

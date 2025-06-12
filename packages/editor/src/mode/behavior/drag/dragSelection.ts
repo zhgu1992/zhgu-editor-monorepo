@@ -29,10 +29,10 @@ export class DragSelectionBehavior extends DragBaseBehaviorNode {
   }
 
   shouldDrag(areaNode: ICustomCollection, inputSnapshot: IInputSnapshot): boolean {
-    if (areaNode && !inputSnapshot.cmdKey) {
+    if (!inputSnapshot.isCanvas) {
       return false;
     }
-    return true;
+    return !(areaNode && !inputSnapshot.cmdKey);
   }
 
   onDragStart: TJsDragMoveEvent = (message, positionMessage) => {

@@ -1,23 +1,22 @@
-import { NodeModel } from '@zhgu/data';
 import type { ElementData, GeometryNode } from '@zhgu/data';
+import { isPolygonInRect, isPolygonIntersectRect, mat2obj, NodeModel, PaintProps, rotate } from '@zhgu/data';
 import type { RenderManager } from '../render';
-import type { IMetaData, IModuleMetaData, ICustomNode, IBaseNode } from '../interface';
+import type { IBaseNode, ICustomNode, IMetaData, IModuleMetaData } from '../interface';
 import { DEFAULT_META_DATA, DEFAULT_MODULE_META_DATA } from '../interface';
 import { cloneDeep } from 'lodash-es';
 import type {
+  IRect,
   ISizeProps,
   ISolidPaintProps,
+  Paint,
+  PropsElementChange,
+  RenderCategorySet,
   RGBAColor,
   XYPos,
   XYWH,
-  IRect,
-  PropsElementChange,
-  Paint,
-  RenderCategorySet,
 } from '@zhgu/type';
 import { EElementChangeType } from '@zhgu/type';
 import { mat3 } from 'gl-matrix';
-import { mat2obj, PaintProps, isPolygonInRect, isPolygonIntersectRect, rotate } from '@zhgu/data';
 import type { View } from '../view';
 import type { IRenderNode } from '@zhgu/render';
 import { BaseCustomUnit } from './customNode';
@@ -190,7 +189,7 @@ export class BaseNode extends NodeModel implements IBaseNode {
     return elementChange;
   }
 
-  changeFillPaint(fillPaint: Paint, index: number) {
+  changeFillPaint(fillPaint: Paint, index = 0) {
     const fillPaints = this.fillPaints;
     const currentPaint = fillPaints && fillPaints[index];
     const elementChange = {
@@ -205,6 +204,51 @@ export class BaseNode extends NodeModel implements IBaseNode {
       };
     }
     return elementChange;
+  }
+
+  changeStrokePaintColor(color: RGBAColor, index = 0) {
+    const strokePaints = this.strokePaints;
+    const currentPaint = strokePaints && strokePaints[index];
+    const elementChange = {
+      id: this.id,
+      type: EElementChangeType.Props,
+      props: {},
+    } as PropsElementChange;
+    if (currentPaint) {
+      const newPaint = { ...currentPaint, color } as ISolidPaintProps;
+      const newStrokePaints = PaintProps.changeFillPaint(strokePaints, newPaint, index);
+      elementChange.props = {
+        strokePaints: newStrokePaints,
+      };
+    }
+    return elementChange;
+  }
+
+  changeStrokePaint(strokePaint: Paint, index: number) {
+    const strokePaints = this.strokePaints;
+    const currentPaint = strokePaints && strokePaints[index];
+    const elementChange = {
+      id: this.id,
+      type: EElementChangeType.Props,
+      props: {},
+    } as PropsElementChange;
+    if (currentPaint) {
+      const newStrokePaints = PaintProps.changeFillPaint(strokePaints, strokePaint, index);
+      elementChange.props = {
+        strokePaints: newStrokePaints,
+      };
+    }
+    return elementChange;
+  }
+
+  changeStrokeWeight(weight: number) {
+    return {
+      id: this.id,
+      type: EElementChangeType.Props,
+      props: {
+        strokeWeight: weight,
+      },
+    } as PropsElementChange;
   }
 
   addFillPaint(fillPaint: Paint, index?: number) {

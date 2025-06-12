@@ -43,17 +43,17 @@ const PageColorPanel: React.FC<PageColorPanelProps> = ({ onPageColorChange }) =>
   );
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {/* 背景色 */}
-      <div className="flex items-center justify-between">
-        <span className="text-xs text-gray-600">背景色</span>
-        <div className="flex items-center gap-2">
-          <ColorButton color={backgroundColor} onChange={handleColorChange} size="small" title="选择背景色" />
-          {/* 固定宽度的颜色字符串显示区域，防止布局抖动 */}
+      <div className="space-y-2">
+        <div className="text-xs font-medium text-gray-700 text-left">背景色</div>
+        <div className="flex items-center gap-3">
+          <ColorButton color={backgroundColor} onChange={handleColorChange} size="medium" title="选择背景色" />
+          {/* 统一样式的颜色字符串显示区域 */}
           <span
             className="text-xs text-gray-500 font-mono tabular-nums"
             style={{
-              minWidth: '60px',
+              minWidth: '55px',
               display: 'inline-block',
               textAlign: 'right',
             }}
@@ -74,21 +74,21 @@ const PageColorPanel: React.FC<PageColorPanelProps> = ({ onPageColorChange }) =>
         <span className="text-xs text-gray-600">导出包含背景色</span>
       </label>
 
-      {/* 显示页面颜色预设 */}
-      <div>
-        <div className="text-xs text-gray-600 mb-2">页面颜色预设</div>
-        <div className="grid grid-cols-6 gap-2">
-          {colorPresets.map(color => (
-            <button
-              key={color}
-              className="w-6 h-6 rounded border border-gray-300 hover:scale-110 transition-transform"
-              style={{ backgroundColor: color }}
-              onClick={() => handlePresetClick(color)}
-              title={color}
-            />
-          ))}
-        </div>
-      </div>
+      {/*/!* 页面颜色预设 *!/*/}
+      {/*<div className="space-y-2">*/}
+      {/*  <div className="text-xs text-gray-600 text-left">页面颜色预设</div>*/}
+      {/*  <div className="grid grid-cols-6 gap-2">*/}
+      {/*    {colorPresets.map(color => (*/}
+      {/*      <button*/}
+      {/*        key={color}*/}
+      {/*        className="w-7 h-7 rounded border border-gray-300 hover:scale-110 transition-transform"*/}
+      {/*        style={{ backgroundColor: color }}*/}
+      {/*        onClick={() => handlePresetClick(color)}*/}
+      {/*        title={color}*/}
+      {/*      />*/}
+      {/*    ))}*/}
+      {/*  </div>*/}
+      {/*</div>*/}
     </div>
   );
 };

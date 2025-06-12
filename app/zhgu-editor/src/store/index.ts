@@ -1,7 +1,10 @@
 import { create } from 'zustand';
 import { createHelloWorldFileData } from '../mock/mockFunc.ts';
-import type { IBaseNode, EEditorStateName } from '@zhgu/editor';
-import { Editor } from '@zhgu/editor';
+import type { IBaseNode } from '@zhgu/editor';
+import { Editor, EEditorStateName } from '@zhgu/editor';
+
+// 工具类型定义
+type ToolType = EEditorStateName;
 
 // 初始化状态枚举
 export enum EditorInitState {
@@ -74,7 +77,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   editor: null,
   initState: EditorInitState.IDLE,
   initError: null,
-  currentTool: 'select',
+  currentTool: EEditorStateName.Default,
   canvasZoom: 1,
   canvasOffsetX: 0,
   canvasOffsetY: 0,

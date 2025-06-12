@@ -80,7 +80,7 @@ function App() {
   const isUIReady = initState === EditorInitState.READY;
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-gray-50 fixed inset-0">
+    <div className="editor-ui h-screen w-screen flex flex-col bg-gray-50 fixed inset-0">
       {/* 顶部菜单栏 */}
       <TopBar />
 

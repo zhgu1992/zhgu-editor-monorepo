@@ -45,7 +45,7 @@ const createHelloWorldFileData = () => {
             type: EPaintType.Solid,
             opacity: 1,
             isEnabled: false,
-            color: { r: 217, g: 0, b: 0, a: 1 },
+            color: { r: 217, g: 217, b: 0, a: 1 },
           },
         ],
         transform: {
@@ -66,6 +66,15 @@ const createHelloWorldFileData = () => {
           m11: 1,
           m12: 150,
         },
+        strokeWeight: 5,
+        strokePaints: [
+          {
+            type: EPaintType.Solid,
+            opacity: 1,
+            isEnabled: true,
+            color: { r: 155, g: 155, b: 155, a: 1 },
+          },
+        ],
       }),
       // testRectangle(7, {
       //   transform: {

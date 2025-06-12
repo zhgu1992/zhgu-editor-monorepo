@@ -84,6 +84,9 @@ export interface IBaseNode extends INodeModel {
   changeSize: (size: Partial<ISizeProps>) => ElementChange;
   changeFillPaintColor: (color: RGBAColor, index?: number) => ElementChange;
   changeFillPaint: (fillPaint: Paint, index: number) => ElementChange;
+  changeStrokePaint: (strokePaint: Paint, index: number) => ElementChange;
+  changeStrokePaintColor: (color: RGBAColor, index?: number) => ElementChange;
+  changeStrokeWeight: (weight: number) => ElementChange;
   addFillPaint: (fillPaint: Paint, index?: number) => ElementChange;
   removeFillPaint: (index: number) => ElementChange;
   // changeParentIndex: (parentId: string, parentIndex?: number) => ElementChange;
