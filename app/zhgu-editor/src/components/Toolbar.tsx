@@ -17,6 +17,9 @@ import { EStateEvent, EEditorStateName } from '@zhgu/editor';
 const Toolbar: React.FC = () => {
   const { currentTool, setCurrentTool, editor, initState } = useEditorStore();
 
+  // 检查编辑器是否就绪
+  const isEditorReady = initState === EditorInitState.READY;
+
   // 本地UI状态，用于控制按钮选中显示
   const [uiSelectedTool, setUiSelectedTool] = React.useState<EEditorStateName>(currentTool);
 
@@ -75,6 +78,8 @@ const Toolbar: React.FC = () => {
   ];
 
   const handleToolSelect = (tool: EEditorStateName) => {
+    if (!isEditorReady) return;
+
     setCurrentTool(tool);
     setUiSelectedTool(tool); // 同时更新UI状态
     console.log(`选择工具: ${tool}`);
@@ -86,10 +91,15 @@ const Toolbar: React.FC = () => {
         <button
           key={tool.id}
           className={`w-10 h-10 flex items-center justify-center rounded-lg transition-colors group relative ${
-            uiSelectedTool === tool.id ? 'bg-blue-500 text-white shadow-sm' : 'hover:bg-gray-200 text-gray-600'
+            !isEditorReady
+              ? 'opacity-50 cursor-not-allowed text-gray-400'
+              : uiSelectedTool === tool.id
+                ? 'bg-blue-500 text-white shadow-sm'
+                : 'hover:bg-gray-200 text-gray-600'
           }`}
           onClick={() => handleToolSelect(tool.id)}
-          title={`${tool.label} (${tool.shortcut})`}
+          disabled={!isEditorReady}
+          title={isEditorReady ? `${tool.label} (${tool.shortcut})` : '编辑器加载中...'}
         >
           <tool.icon size={18} />
 

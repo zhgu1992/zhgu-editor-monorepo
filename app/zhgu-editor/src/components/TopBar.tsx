@@ -5,9 +5,7 @@ import { EditorInitState, useEditorStore } from '../store';
 const TopBar: React.FC = () => {
   const { canvasZoom, setCanvasZoom, initState, editor } = useEditorStore();
 
-  if (!editor || initState !== EditorInitState.READY) {
-    return;
-  }
+  const isEditorReady = editor && initState === EditorInitState.READY;
 
   const handleFileAction = (action: string) => {
     console.log('文件操作:', action);
@@ -26,10 +24,12 @@ const TopBar: React.FC = () => {
 
   const handleEditAction = (action: string) => {
     console.log('编辑操作:', action);
+    if (!isEditorReady) return;
+
     if (action === 'undo') {
-      editor.undoHistory();
+      editor!.undoHistory();
     } else if (action === 'redo') {
-      editor.redoHistory();
+      editor!.redoHistory();
     }
   };
 
@@ -60,16 +60,18 @@ const TopBar: React.FC = () => {
         {/* 撤销重做 */}
         <div className="flex items-center gap-1">
           <button
-            className="p-2 hover:bg-gray-100 rounded transition-colors"
+            className={`p-2 rounded transition-colors ${isEditorReady ? 'hover:bg-gray-100' : 'opacity-50 cursor-not-allowed'}`}
             onClick={() => handleEditAction('undo')}
-            title="撤销 (Ctrl+Z)"
+            disabled={!isEditorReady}
+            title={isEditorReady ? '撤销 (Ctrl+Z)' : '编辑器加载中...'}
           >
             <Undo2 size={14} />
           </button>
           <button
-            className="p-2 hover:bg-gray-100 rounded transition-colors"
+            className={`p-2 rounded transition-colors ${isEditorReady ? 'hover:bg-gray-100' : 'opacity-50 cursor-not-allowed'}`}
             onClick={() => handleEditAction('redo')}
-            title="重做 (Ctrl+Y)"
+            disabled={!isEditorReady}
+            title={isEditorReady ? '重做 (Ctrl+Y)' : '编辑器加载中...'}
           >
             <Redo2 size={14} />
           </button>
@@ -79,27 +81,30 @@ const TopBar: React.FC = () => {
         <div className="w-px h-6 bg-gray-300 mx-2" />
 
         {/* 缩放控制 */}
-        <div className="flex items-center gap-1 bg-gray-50 rounded-lg p-1">
+        <div className={`flex items-center gap-1 bg-gray-50 rounded-lg p-1 ${!isEditorReady ? 'opacity-50' : ''}`}>
           <button
-            className="p-1 hover:bg-white rounded transition-colors"
+            className={`p-1 rounded transition-colors ${isEditorReady ? 'hover:bg-white' : 'cursor-not-allowed'}`}
             onClick={() => handleViewAction('zoom-out')}
-            title="缩小"
+            disabled={!isEditorReady}
+            title={isEditorReady ? '缩小' : '编辑器加载中...'}
           >
             <Minus size={14} />
           </button>
 
           <button
-            className="px-3 py-1 text-sm hover:bg-white rounded transition-colors min-w-[50px] text-center"
+            className={`px-3 py-1 text-sm rounded transition-colors min-w-[50px] text-center ${isEditorReady ? 'hover:bg-white' : 'cursor-not-allowed'}`}
             onClick={() => handleViewAction('zoom-reset')}
-            title="重置缩放"
+            disabled={!isEditorReady}
+            title={isEditorReady ? '重置缩放' : '编辑器加载中...'}
           >
-            {Math.round(canvasZoom * 100)}%
+            {Math.round((canvasZoom || 1) * 100)}%
           </button>
 
           <button
-            className="p-1 hover:bg-white rounded transition-colors"
+            className={`p-1 rounded transition-colors ${isEditorReady ? 'hover:bg-white' : 'cursor-not-allowed'}`}
             onClick={() => handleViewAction('zoom-in')}
-            title="放大"
+            disabled={!isEditorReady}
+            title={isEditorReady ? '放大' : '编辑器加载中...'}
           >
             <Plus size={14} />
           </button>
@@ -107,9 +112,10 @@ const TopBar: React.FC = () => {
 
         {/* 重置视图 */}
         <button
-          className="p-2 hover:bg-gray-100 rounded transition-colors"
+          className={`p-2 rounded transition-colors ${isEditorReady ? 'hover:bg-gray-100' : 'opacity-50 cursor-not-allowed'}`}
           onClick={() => handleViewAction('reset-view')}
-          title="重置视图"
+          disabled={!isEditorReady}
+          title={isEditorReady ? '重置视图' : '编辑器加载中...'}
         >
           <RotateCcw size={14} />
         </button>

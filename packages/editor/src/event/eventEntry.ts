@@ -200,6 +200,7 @@ export class EventEntry {
       altKey: e[UserEnvironment.hotkeyMap.altKey],
       ctrlKey: e['ctrlKey'],
       button: e.button,
+      isCanvas: e.target === this.canvasDom,
     });
     if ((e.target as HTMLElement)?.id !== this.canvasDom.id) {
       return;
@@ -222,6 +223,7 @@ export class EventEntry {
       altKey: e[UserEnvironment.hotkeyMap.altKey],
       ctrlKey: e['ctrlKey'],
       button: e.button,
+      isCanvas: e.target === this.canvasDom,
     });
 
     // 没有进行拖拽并且再canvas画布上触发
@@ -264,6 +266,7 @@ export class EventEntry {
       altKey: e[UserEnvironment.hotkeyMap.altKey],
       ctrlKey: e['ctrlKey'],
       button: e.button,
+      isCanvas: e.target === this.canvasDom,
     });
 
     if (!this.firstDocumentMousedownEvent) {
@@ -330,7 +333,7 @@ export class EventEntry {
   @autobind
   handleDblClickEvent(e: MouseEvent) {
     // 没有点击在画布上, 则不触发dblclick事件
-    if ((e.target as HTMLElement)?.id !== this.canvasDom.id) {
+    if (e.target !== this.canvasDom) {
       return;
     }
 
@@ -510,5 +513,6 @@ function getDefaultSnapshot() {
     button: -1,
     copyMessage: { x: 0, y: 0 },
     key: '',
+    isCanvas: false,
   };
 }

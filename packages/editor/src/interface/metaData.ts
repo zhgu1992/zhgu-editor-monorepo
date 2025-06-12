@@ -17,6 +17,27 @@ export type IMetaDataConfig = {
   isVisible: boolean;
 };
 
+// 没有选中物体时的默认配置 - 只显示页面颜色
+export const EMPTY_SELECTION_META_DATA = {
+  type: 'empty',
+  baseAttribute: 0,
+  vectorEdit: 0,
+  frameDirect: 0,
+  responsive: 0,
+  autoLayout: 0,
+  grid: 0,
+  appearance: 0,
+  symbol: 0,
+  instance: 0,
+  fill: 0,
+  stroke: 0,
+  text: 0,
+  shadow: 0,
+  blur: 0,
+  export: 0,
+};
+
+// 完整功能的默认配置 - 用于选中物体时的fallback
 export const DEFAULT_MODULE_META_DATA = {
   type: 'default',
   // 基础属性 x y w h

@@ -283,15 +283,7 @@ const LeftPanel: React.FC = () => {
   const selectedNodes = getSelectedNodes();
   const hoveredNode = getHoveredNode();
 
-  if (initState !== EditorInitState.READY) {
-    return (
-      <div className="w-72 bg-white border-r border-gray-200 flex items-center justify-center">
-        <div className="text-center text-gray-500">
-          <div className="text-sm">加载图层数据中...</div>
-        </div>
-      </div>
-    );
-  }
+  const isEditorReady = initState === EditorInitState.READY;
 
   const handleSelectNode = (node: IBaseNode, multi: boolean) => {
     if (multi) {
@@ -362,19 +354,28 @@ const LeftPanel: React.FC = () => {
 
         {pagesExpanded && (
           <div className="max-h-32 overflow-y-auto">
-            {pages.map((page, index) => (
-              <div
-                key={page.id}
-                className={`px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 ${
-                  page.id === currentPage?.id ? 'bg-blue-50 border-r-2 border-blue-500' : ''
-                }`}
-                onClick={() => {
-                  console.log('切换页面:', page.id);
-                }}
-              >
-                {(page as any).name || `页面 ${index + 1}`}
+            {isEditorReady ? (
+              pages.map((page, index) => (
+                <div
+                  key={page.id}
+                  className={`px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 ${
+                    page.id === currentPage?.id ? 'bg-blue-50 border-r-2 border-blue-500' : ''
+                  }`}
+                  onClick={() => {
+                    console.log('切换页面:', page.id);
+                  }}
+                >
+                  {(page as any).name || `页面 ${index + 1}`}
+                </div>
+              ))
+            ) : (
+              <div className="px-3 py-2 text-sm text-gray-500">
+                <div className="animate-pulse">
+                  <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                </div>
               </div>
-            ))}
+            )}
           </div>
         )}
       </div>
@@ -439,10 +440,11 @@ const LeftPanel: React.FC = () => {
               <Search size={14} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="搜索图层..."
+                placeholder={isEditorReady ? '搜索图层...' : '加载中...'}
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="w-full pl-8 pr-3 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:border-blue-500"
+                disabled={!isEditorReady}
+                className={`w-full pl-8 pr-3 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:border-blue-500 ${!isEditorReady ? 'bg-gray-100 cursor-not-allowed' : ''}`}
               />
             </div>
           </div>
@@ -450,21 +452,42 @@ const LeftPanel: React.FC = () => {
 
         {layersExpanded && (
           <div className="flex-1 overflow-auto">
-            <LayerTree
-              nodes={filteredLayers}
-              selectedNodes={selectedNodes}
-              hoveredNode={hoveredNode}
-              onSelect={handleSelectNode}
-              onToggleVisibility={handleToggleVisibility}
-              onToggleLock={handleToggleLock}
-              onRename={handleRename}
-            />
+            {isEditorReady ? (
+              <LayerTree
+                nodes={filteredLayers}
+                selectedNodes={selectedNodes}
+                hoveredNode={hoveredNode}
+                onSelect={handleSelectNode}
+                onToggleVisibility={handleToggleVisibility}
+                onToggleLock={handleToggleLock}
+                onRename={handleRename}
+              />
+            ) : (
+              <div className="p-3 space-y-2">
+                <div className="animate-pulse">
+                  {[1, 2, 3].map(i => (
+                    <div key={i} className="flex items-center gap-2 py-2">
+                      <div className="w-4 h-4 bg-gray-200 rounded"></div>
+                      <div className="flex-1 h-4 bg-gray-200 rounded"></div>
+                      <div className="w-4 h-4 bg-gray-200 rounded"></div>
+                      <div className="w-4 h-4 bg-gray-200 rounded"></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
         <div className="px-3 py-2 border-t border-gray-100 text-xs text-gray-500">
-          共 {layers.length} 个图层
-          {selectedNodes.length > 0 && ` • 已选择 ${selectedNodes.length} 个`}
+          {isEditorReady ? (
+            <>
+              共 {layers.length} 个图层
+              {selectedNodes.length > 0 && ` • 已选择 ${selectedNodes.length} 个`}
+            </>
+          ) : (
+            '图层数据加载中...'
+          )}
         </div>
       </div>
     </div>

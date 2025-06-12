@@ -18,7 +18,7 @@ export class NodeSelectBehaviorNode extends BehaviorNode {
     const {
       view: { eventManager, picker, scene },
     } = this;
-    if (!eventManager || !picker) {
+    if (!inputSnapshot.isCanvas || !eventManager || !picker) {
       return;
     }
     const { shiftKey, currentPagePoint, button } = inputSnapshot;
@@ -35,7 +35,7 @@ export class NodeSelectBehaviorNode extends BehaviorNode {
     const {
       view: { eventManager, picker, scene },
     } = this;
-    if (!eventManager || !picker) {
+    if (!inputSnapshot.isCanvas || !eventManager || !picker) {
       return;
     }
     const { shiftKey, currentPagePoint, button } = inputSnapshot;

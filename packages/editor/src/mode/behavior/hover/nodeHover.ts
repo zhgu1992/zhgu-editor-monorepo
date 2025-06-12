@@ -15,7 +15,7 @@ export class NodeHoverBehaviorNode extends BehaviorNode {
     const {
       view: { eventManager, picker, scene },
     } = this;
-    if (!eventManager || !picker) {
+    if (!inputSnapshot.isCanvas || !eventManager || !picker) {
       return;
     }
     const area = this.collectionUIManager.pickArea(currentPagePoint);

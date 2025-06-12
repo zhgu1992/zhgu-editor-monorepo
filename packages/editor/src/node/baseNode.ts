@@ -22,7 +22,6 @@ import type { View } from '../view';
 import type { IRenderNode } from '@zhgu/render';
 import { BaseCustomUnit } from './customNode';
 
- 
 const _matCache = {
   m1: mat3.create(),
   m2: mat3.create(),
@@ -394,5 +393,9 @@ export class BaseNode extends NodeModel implements IBaseNode {
     }
     callBack(this);
     (parent as IBaseNode).traverseParent(callBack);
+  }
+
+  getMetaData() {
+    return DEFAULT_MODULE_META_DATA as unknown as IMetaData;
   }
 }
