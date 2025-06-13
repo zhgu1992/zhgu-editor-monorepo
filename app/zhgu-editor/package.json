@@ -14,6 +14,8 @@
     "@zhgu/data": "workspace:*",
     "@zhgu/editor": "workspace:*",
     "@zhgu/type": "workspace:*",
+    "@zhgu/utils": "workspace:*",
+    "@zhgu/ui": "workspace:*",
     "lucide-react": "^0.513.0",
     "react": "^19.1.0",
     "react-color": "^2.19.3",

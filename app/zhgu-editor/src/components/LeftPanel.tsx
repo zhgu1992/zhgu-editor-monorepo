@@ -164,9 +164,9 @@ const LayerItem: React.FC<LayerItemProps> = ({
             e.stopPropagation();
             onToggleLock(node);
           }}
-          title={(node as any).isLocked ? '解锁' : '锁定'}
+          title={node.props.isLocked ? '解锁' : '锁定'}
         >
-          {(node as any).isLocked ? (
+          {node.props.isLocked ? (
             <Lock size={12} className="text-gray-600" />
           ) : (
             <Unlock size={12} className="text-gray-400" />

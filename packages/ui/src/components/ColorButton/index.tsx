@@ -1,52 +1,55 @@
-import React, { useState, useRef, useMemo, useCallback } from 'react';
-import ColorPickerPortal from './ColorPickerPortal';
+import React, { useState, useCallback, useMemo } from 'react';
+import { SketchPicker } from 'react-color';
 import type { ColorResult } from 'react-color';
 
-interface ColorButtonProps {
+export interface ColorButtonProps {
   color: string;
   onChange: (color: string) => void;
   onStart?: () => void;
   onFinish?: () => void;
   size?: 'small' | 'medium' | 'large';
-  className?: string;
-  title?: string;
+  disabled?: boolean;
 }
 
-const ColorButton: React.FC<ColorButtonProps> = ({
+const sizeMap = {
+  small: {
+    width: '24px',
+    height: '24px',
+  },
+  medium: {
+    width: '32px',
+    height: '32px',
+  },
+  large: {
+    width: '40px',
+    height: '40px',
+  },
+};
+
+export const ColorButton: React.FC<ColorButtonProps> = ({
   color,
   onChange,
   onStart,
   onFinish,
   size = 'medium',
-  className = '',
-  title = '选择颜色',
+  disabled = false,
 }) => {
   const [showPicker, setShowPicker] = useState(false);
   const [editingColor, setEditingColor] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-
-  // 统一使用 medium 尺寸标准，提供更一致的视觉体验
-  const sizeClasses = useMemo(
-    () => ({
-      small: 'w-7 h-7', // 28px - 用于次要位置
-      medium: 'w-8 h-8', // 32px - 标准尺寸，推荐使用
-      large: 'w-8 h-8', // 32px - 与medium保持一致，避免视觉不协调
-    }),
-    []
-  );
 
   // 当前显示的颜色：编辑中使用编辑颜色，否则使用传入的颜色
   const displayColor = editingColor || color;
 
   // 开始编辑颜色
   const handleStartEdit = useCallback(() => {
-    if (isEditing) return;
+    if (disabled || isEditing) return;
 
     setIsEditing(true);
     setEditingColor(color); // 使用当前颜色作为编辑起点
+    setShowPicker(true);
     onStart?.();
-  }, [color, onStart, isEditing]);
+  }, [color, disabled, isEditing, onStart]);
 
   // 颜色变化处理
   const handleColorChange = useCallback(
@@ -63,32 +66,31 @@ const ColorButton: React.FC<ColorButtonProps> = ({
     if (!isEditing) return;
 
     setIsEditing(false);
+    setShowPicker(false);
     onFinish?.();
 
     // 延迟清除编辑状态，让外部有时间更新
     setTimeout(() => {
       setEditingColor(null);
     }, 50);
-  }, [onFinish, isEditing]);
+  }, [isEditing, onFinish]);
 
-  // 打开颜色选择器
-  const handleTogglePicker = useCallback(() => {
-    if (!showPicker) {
-      handleStartEdit();
-    }
-    setShowPicker(prev => !prev);
-  }, [showPicker, handleStartEdit]);
-
-  // 关闭颜色选择器
-  const handleClosePicker = useCallback(() => {
-    setShowPicker(false);
+  // 点击外部关闭
+  const handleClickOutside = useCallback(() => {
     handleFinishEdit();
   }, [handleFinishEdit]);
 
   // 使用 useMemo 缓存按钮样式，减少样式重新计算
   const buttonStyle = useMemo(
     () => ({
+      width: sizeMap[size].width,
+      height: sizeMap[size].height,
       backgroundColor: displayColor,
+      border: '1px solid #d9d9d9',
+      borderRadius: '4px',
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      opacity: disabled ? 0.5 : 1,
+      padding: 0,
       // 防止布局抖动的关键CSS
       contain: 'layout style paint size' as const,
       isolation: 'isolate' as const,
@@ -98,36 +100,35 @@ const ColorButton: React.FC<ColorButtonProps> = ({
       // 确保固定尺寸，防止内容改变导致的布局移动
       boxSizing: 'border-box' as const,
     }),
-    [displayColor]
+    [displayColor, size, disabled]
   );
 
   return (
-    <>
-      <button
-        ref={buttonRef}
-        onClick={handleTogglePicker}
-        className={`
-          ${sizeClasses[size]}
-          border border-gray-300 rounded cursor-pointer overflow-hidden
-          transform-gpu backface-hidden
-          hover:border-gray-400 transition-colors duration-150
-          flex-shrink-0
-          ${className}
-        `}
-        style={buttonStyle}
-        title={title}
-      />
-
+    <div style={{ position: 'relative' }}>
+      <button onClick={handleStartEdit} style={buttonStyle} />
       {showPicker && (
-        <ColorPickerPortal
-          color={displayColor}
-          onChange={handleColorChange}
-          onClose={handleClosePicker}
-          triggerRef={buttonRef}
-        />
+        <div
+          style={{
+            position: 'absolute',
+            zIndex: 2,
+            top: '100%',
+            left: 0,
+            marginTop: '8px',
+          }}
+        >
+          <div
+            style={{
+              position: 'fixed',
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0,
+            }}
+            onClick={handleClickOutside}
+          />
+          <SketchPicker color={displayColor} onChange={handleColorChange} onChangeComplete={handleFinishEdit} />
+        </div>
       )}
-    </>
+    </div>
   );
 };
-
-export default ColorButton;

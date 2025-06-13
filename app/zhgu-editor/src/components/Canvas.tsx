@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useEditorStore, EditorInitState } from '../store';
 import DebugPanel from './DebugPanel';
+import { LogUtils } from '@zhgu/utils';
 
 const Canvas: React.FC = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -11,7 +12,7 @@ const Canvas: React.FC = () => {
   // 第二阶段初始化：Canvas挂载后绑定editor
   useEffect(() => {
     if (initState === EditorInitState.WAITING_CANVAS && canvasContainerRef.current) {
-      console.log('Canvas已挂载，触发Editor第二阶段初始化...');
+      LogUtils.debug('Canvas已挂载，触发Editor第二阶段初始化...');
       // 传递canvas容器的ID
       bindCanvas('app');
     }
@@ -24,6 +25,12 @@ const Canvas: React.FC = () => {
       x: Math.round(e.clientX - rect.left),
       y: Math.round(e.clientY - rect.top),
     });
+  };
+
+  // 处理画布事件
+  const handleCanvasEvent = (event: string) => {
+    LogUtils.debug('画布事件:', event);
+    // TODO: 实现画布事件处理逻辑
   };
 
   // 显示加载状态

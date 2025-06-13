@@ -14,6 +14,12 @@ import {
 import { useEditorStore, EditorInitState } from '../store';
 import { EStateEvent, EEditorStateName } from '@zhgu/editor';
 
+interface StateEnterEvent {
+  data: {
+    id: EEditorStateName;
+  };
+}
+
 const Toolbar: React.FC = () => {
   const { currentTool, setCurrentTool, editor, initState } = useEditorStore();
 
@@ -46,8 +52,7 @@ const Toolbar: React.FC = () => {
     };
 
     // 状态进入处理
-    // @ts-ignore
-    const handleStateEnter = ev => {
+    const handleStateEnter = (ev: StateEnterEvent) => {
       console.log('监听到状态进入事件，UI按钮恢复到选择工具状态');
       // 只更新UI显示状态，不调用setCurrentTool避免死循环
       setUiSelectedTool(ev.data.id);

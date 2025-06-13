@@ -1,22 +1,28 @@
 import React from 'react';
-import type { IMetaData } from '@zhgu/editor';
+import type { IMetaData, IBaseNode } from '@zhgu/editor';
 
 interface BaseAttributePanelProps {
-  selectedNodes: any[];
-  metaData: IMetaData;
-  onLayoutChange: (property: string, value: any) => void;
+  selectedNodes: IBaseNode[];
+  metaData?: IMetaData;
+  sectionKey?: keyof IMetaData;
+  onLayoutChange: (property: string, value: number | string) => void;
 }
 
-const BaseAttributePanel: React.FC<BaseAttributePanelProps> = ({ selectedNodes, metaData, onLayoutChange }) => {
+const BaseAttributePanel: React.FC<BaseAttributePanelProps> = ({
+  selectedNodes,
+  metaData,
+  sectionKey,
+  onLayoutChange,
+}) => {
   // 渲染属性输入组件
   const PropertyInput: React.FC<{
     label: string;
     value: string | number;
-    onChange: (value: any) => void;
+    onChange: (value: number | string) => void;
     type?: 'text' | 'number' | 'color';
     metaKey: keyof IMetaData;
   }> = ({ label, value, onChange, type = 'text', metaKey }) => {
-    const config = metaData[metaKey];
+    const config = metaData?.[metaKey];
     if (!config?.isVisible) return null;
 
     return (
@@ -32,6 +38,11 @@ const BaseAttributePanel: React.FC<BaseAttributePanelProps> = ({ selectedNodes, 
       </div>
     );
   };
+
+  // 如果当前section被禁用，不渲染任何内容
+  if (metaData?.[sectionKey!]?.enabled === false) {
+    return null;
+  }
 
   if (selectedNodes.length === 0) {
     return <div className="text-xs text-gray-500 text-center py-4">选择图层以编辑属性</div>;
@@ -51,14 +62,14 @@ const BaseAttributePanel: React.FC<BaseAttributePanelProps> = ({ selectedNodes, 
             <div className="grid grid-cols-2 gap-3">
               <PropertyInput
                 label="X"
-                value={(node as any).x || 0}
+                value={node.x || 0}
                 onChange={value => onLayoutChange(`${node.id}.x`, value)}
                 type="number"
                 metaKey="x"
               />
               <PropertyInput
                 label="Y"
-                value={(node as any).y || 0}
+                value={node.y || 0}
                 onChange={value => onLayoutChange(`${node.id}.y`, value)}
                 type="number"
                 metaKey="y"
@@ -72,14 +83,14 @@ const BaseAttributePanel: React.FC<BaseAttributePanelProps> = ({ selectedNodes, 
             <div className="grid grid-cols-2 gap-3">
               <PropertyInput
                 label="宽度"
-                value={(node as any).width || 0}
+                value={node.w || 0}
                 onChange={value => onLayoutChange(`${node.id}.width`, value)}
                 type="number"
                 metaKey="w"
               />
               <PropertyInput
                 label="高度"
-                value={(node as any).height || 0}
+                value={node.h || 0}
                 onChange={value => onLayoutChange(`${node.id}.height`, value)}
                 type="number"
                 metaKey="h"
@@ -108,7 +119,7 @@ const BaseAttributePanel: React.FC<BaseAttributePanelProps> = ({ selectedNodes, 
           </div>
 
           {/* 圆角 */}
-          {node.type === 'rectangle' && metaData.cornerRadius?.isVisible && (
+          {node.type === 'rectangle' && metaData?.cornerRadius?.isVisible && (
             <div className="space-y-2">
               <div className="grid grid-cols-2 gap-3">
                 <PropertyInput

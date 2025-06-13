@@ -13,7 +13,7 @@
     "build:core": "pnpm --filter @zhgu/editor build",
     "build:all": "pnpm -r build",
     "clean": "pnpm -r clean && rm -rf node_modules",
-    "format": "prettier --write './**/*.{ts,tsx,js,jsx,md,json}'",
+    "format": "prettier --write './**/*.{ts,tsx,jsx,md,json}'",
     "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --cache --color --fix",
     "lint:check": "eslint . --ext .ts,.tsx,.js,.jsx --cache --color",
     "lint:error": "eslint . --ext .ts,.tsx,.js,.jsx --cache --color --quiet",

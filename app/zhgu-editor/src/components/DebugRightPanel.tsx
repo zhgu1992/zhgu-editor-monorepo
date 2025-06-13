@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useEditorStore } from '../store';
 import ConfigurableRightPanel from './ConfigurableRightPanel';
+import type { IBaseNode, IMetaData } from '@zhgu/editor';
 
 const DebugRightPanel: React.FC = () => {
   const { getSelectedNodes } = useEditorStore();
@@ -9,6 +10,10 @@ const DebugRightPanel: React.FC = () => {
 
   const handleShowShortcutHelp = () => {
     console.log('显示快捷键帮助');
+  };
+
+  const hasGetMetaData = (node: IBaseNode): boolean => {
+    return typeof node.getMetaData === 'function';
   };
 
   return (
@@ -47,14 +52,14 @@ const DebugRightPanel: React.FC = () => {
                         <strong>类型:</strong> {node.type || '未知'}
                       </div>
                       <div>
-                        <strong>getMetaData:</strong> {typeof (node as any).getMetaData === 'function' ? '✓' : '✗'}
+                        <strong>getMetaData:</strong> {hasGetMetaData(node) ? '✓' : '✗'}
                       </div>
-                      {typeof (node as any).getMetaData === 'function' && (
+                      {hasGetMetaData(node) && (
                         <div className="mt-2 space-x-2">
                           <button
                             onClick={() => {
                               try {
-                                const metaData = (node as any).getMetaData();
+                                const metaData = node.getMetaData();
                                 console.log('节点元数据:', metaData);
                               } catch (error) {
                                 console.error('获取元数据失败:', error);
@@ -123,7 +128,7 @@ const DebugRightPanel: React.FC = () => {
                         id: node.id,
                         name: node.name,
                         type: node.type,
-                        hasGetMetaData: typeof (node as any).getMetaData === 'function',
+                        hasGetMetaData: hasGetMetaData(node),
                       });
                     });
                   }}

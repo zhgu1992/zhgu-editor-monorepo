@@ -1,10 +1,12 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Eye, Plus } from 'lucide-react';
-import ColorButton from './ColorButton';
+import { ColorButton } from '@zhgu/ui';
 import { useColorTransaction } from '../../hooks/useColorTransaction';
+import type { IBaseNode } from '@zhgu/editor';
+import { colorToStr } from '@zhgu/data';
 
 interface AppearancePanelProps {
-  selectedNodes: any[];
+  selectedNodes: IBaseNode[];
   fillEnabled: boolean;
   strokeEnabled: boolean;
 }
@@ -24,12 +26,7 @@ const AppearancePanel: React.FC<AppearancePanelProps> = ({ selectedNodes, fillEn
     if (fillPaints && fillPaints.length > 0) {
       const firstPaint = fillPaints[0];
       if (firstPaint.type === 'SOLID' && firstPaint.color) {
-        const { r, g, b } = firstPaint.color;
-        // 将0-1范围的RGB值转换为0-255范围，然后转为hex
-        const red = Math.round(r);
-        const green = Math.round(g);
-        const blue = Math.round(b);
-        return `#${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue.toString(16).padStart(2, '0')}`;
+        return colorToStr(firstPaint.color);
       }
     }
 
@@ -46,12 +43,7 @@ const AppearancePanel: React.FC<AppearancePanelProps> = ({ selectedNodes, fillEn
     if (strokePaints && strokePaints.length > 0) {
       const firstPaint = strokePaints[0];
       if (firstPaint.type === 'SOLID' && firstPaint.color) {
-        const { r, g, b } = firstPaint.color;
-        // 将0-1范围的RGB值转换为0-255范围，然后转为hex
-        const red = Math.round(r);
-        const green = Math.round(g);
-        const blue = Math.round(b);
-        return `#${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue.toString(16).padStart(2, '0')}`;
+        return colorToStr(firstPaint.color);
       }
     }
 
@@ -156,7 +148,7 @@ const AppearancePanel: React.FC<AppearancePanelProps> = ({ selectedNodes, fillEn
               onStart={handleFillColorStart}
               onFinish={handleFillColorFinish}
               size="medium"
-              title="选择物体颜色"
+              disabled={!fillEnabled}
             />
             {/* 统一样式的颜色输入框 */}
             <input
@@ -192,7 +184,7 @@ const AppearancePanel: React.FC<AppearancePanelProps> = ({ selectedNodes, fillEn
               onStart={handleStrokeColorStart}
               onFinish={handleStrokeColorFinish}
               size="medium"
-              title="选择描边颜色"
+              disabled={!strokeEnabled}
             />
             <div className="grid grid-cols-2 gap-2 flex-1">
               <input

@@ -3,9 +3,8 @@
 基于 Vite + React + TypeScript 构建的现代化图形设计编辑器 Monorepo，类似 Figma 的界面和交互体验。
 
 ## 📋 项目状态与TODO
-右侧面板完全配置化
-多选后右侧面板的显示
-UI组件库搭建
+多选后的select对象设计以及getMetaData和组件库的联动
+颜色多选的话就把颜色去了吧，这个功能先不做
 
 ### 🚀 已完成功能
 - ✅ 核心编辑器架构(@zhgu/editor)

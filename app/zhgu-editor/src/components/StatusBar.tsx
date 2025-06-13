@@ -1,6 +1,7 @@
 import React from 'react';
 import { useEditorStore, EditorInitState } from '../store';
 import { Mouse, Eye, Grid3x3, Ruler, Info, Wifi } from 'lucide-react';
+import type { INode } from '@zhgu/data';
 
 const StatusBar: React.FC = () => {
   const { initState, getPages, getCurrentPage, getSelectedNodes, currentTool, canvasZoom } = useEditorStore();
@@ -30,7 +31,7 @@ const StatusBar: React.FC = () => {
   const selectedNodes = getSelectedNodes();
 
   const totalLayers = currentPage?.children?.length || 0;
-  const visibleLayers = currentPage?.children?.filter((node: any) => node.visible !== false).length || 0;
+  const visibleLayers = currentPage?.children?.filter((node: INode) => node.props.isVisible !== false).length || 0;
   const currentPageIndex = pages.findIndex(p => p.id === currentPage?.id);
 
   const toolNames: Record<string, string> = {

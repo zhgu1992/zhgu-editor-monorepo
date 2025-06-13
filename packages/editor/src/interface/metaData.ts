@@ -4,7 +4,14 @@ export type IModuleMetaDataConfig = number;
 // 模块相关的key
 export type TMetaDataKey = keyof typeof DEFAULT_META_DATA;
 export type TModuleMetaDataKey = keyof typeof DEFAULT_MODULE_META_DATA;
-export type IMetaData = Record<Exclude<TMetaDataKey, 'type'>, IMetaDataConfig>;
+export type IMetaData = Record<Exclude<TMetaDataKey, 'type'>, IMetaDataConfig> & {
+  baseAttribute?: IMetaDataConfig;
+  appearance?: IMetaDataConfig;
+  text?: IMetaDataConfig;
+  pageColor?: IMetaDataConfig;
+  cornerRadius?: IMetaDataConfig;
+  aspectRatio?: IMetaDataConfig;
+};
 
 export type IModuleMetaData = Record<Exclude<TModuleMetaDataKey, 'type'>, IModuleMetaDataConfig> & {
   type: string;
@@ -74,11 +81,6 @@ export const DEFAULT_MODULE_META_DATA = {
 
 // 右侧面板基础属性 x, y, w, h这些 元数据默认值
 export const DEFAULT_META_DATA = {
-  // 圆
-  arcData: {
-    isVisible: false,
-  },
-
   // 矢量编辑
   x: {
     enabled: true,
@@ -87,14 +89,6 @@ export const DEFAULT_META_DATA = {
   y: {
     enabled: true,
     isVisible: true,
-  },
-  absolute: {
-    enabled: true,
-    isVisible: false,
-  },
-  autoLayoutBase: {
-    // 自动布局frame才会展示的基础属性
-    isVisible: false,
   },
   w: {
     // ? 可能单个属性被禁用
@@ -106,39 +100,12 @@ export const DEFAULT_META_DATA = {
     enabled: true,
     isVisible: true,
   },
-  aspectRatio: {
-    enabled: true,
-    isVisible: true,
-  },
   rotation: {
     enabled: true,
     isVisible: true,
   },
-  cornerRadius: {
-    enabled: true,
-    isVisible: true,
-  },
-  rectangleRadius: {
-    enabled: true,
-    isVisible: true,
-  },
-  clipContent: {
-    enabled: false,
-    isVisible: false,
-  },
-  side: {
-    enabled: false,
-    isVisible: false,
-  },
-
-  horn: {
-    enabled: false,
-    isVisible: false,
-  },
-
-  // 直线
-  line: {
-    isVisible: false,
-  },
-  frameDirect: { isVisible: false },
+  // cornerRadius: {
+  //   enabled: true,
+  //   isVisible: true,
+  // },
 };

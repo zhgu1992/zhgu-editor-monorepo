@@ -86,3 +86,12 @@ export function getHSLLightness(r: number, g: number, b: number): number {
 
   return lightness;
 }
+
+export function colorToStr(color: RGBAColor) {
+  const { r, g, b } = color;
+  // 将0-1范围的RGB值转换为0-255范围，然后转为hex
+  const red = Math.round(r);
+  const green = Math.round(g);
+  const blue = Math.round(b);
+  return `#${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue.toString(16).padStart(2, '0')}`;
+}

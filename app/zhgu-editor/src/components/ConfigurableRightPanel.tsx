@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Plus } from 'lucide-react';
-import type { IModuleMetaData, IMetaData } from '@zhgu/editor';
+import type { IModuleMetaData, IMetaData, IBaseNode } from '@zhgu/editor';
 import {
   DEFAULT_META_DATA,
   DEFAULT_MODULE_META_DATA,
@@ -17,6 +17,11 @@ import TextPanel from './panels/TextPanel';
 import EffectsPanel from './panels/EffectsPanel';
 import PageColorPanel from './panels/PageColorPanel';
 import ExportPanel from './panels/ExportPanel';
+
+interface NodeMetaData {
+  moduleConfig?: IModuleMetaData;
+  metaDataConfig?: IMetaData;
+}
 
 interface ConfigurableRightPanelProps {
   onShowShortcutHelp: () => void;
@@ -57,12 +62,10 @@ const ConfigurableRightPanel: React.FC<ConfigurableRightPanelProps> = ({
     }
 
     const handleSelectionChange = () => {
-      console.log('右侧面板：选中数据变更，重新获取配置并刷新');
       forceUpdate({});
     };
 
     const handleUndoRedoChange = () => {
-      console.log('右侧面板：undoredo数据变更，刷新面板');
       forceUpdate({});
     };
 
@@ -101,14 +104,14 @@ const ConfigurableRightPanel: React.FC<ConfigurableRightPanelProps> = ({
     const firstNode = selectedNodes[0];
 
     try {
-      if (firstNode && typeof (firstNode as any).getMetaData === 'function') {
+      if (firstNode) {
         console.log('右侧面板：获取节点配置', {
           nodeId: firstNode.id,
           nodeName: firstNode.name,
           nodeType: firstNode.type,
         });
 
-        const nodeMetaData = (firstNode as any).getMetaData();
+        const nodeMetaData = firstNode.getMetaData() as NodeMetaData;
         console.log('右侧面板：节点配置结果', nodeMetaData);
 
         if (nodeMetaData) {
@@ -217,6 +220,8 @@ const ConfigurableRightPanel: React.FC<ConfigurableRightPanelProps> = ({
             title="位置和尺寸"
             isExpanded={expandedSections.baseAttribute}
             onToggle={() => toggleSection('baseAttribute')}
+            metaData={metaDataConfig}
+            sectionKey="baseAttribute"
           >
             <BaseAttributePanel
               selectedNodes={selectedNodes}
@@ -232,6 +237,8 @@ const ConfigurableRightPanel: React.FC<ConfigurableRightPanelProps> = ({
             title="物体颜色"
             isExpanded={expandedSections.appearance}
             onToggle={() => toggleSection('appearance')}
+            metaData={metaDataConfig}
+            sectionKey="appearance"
           >
             <AppearancePanel
               selectedNodes={selectedNodes}
@@ -244,7 +251,13 @@ const ConfigurableRightPanel: React.FC<ConfigurableRightPanelProps> = ({
 
         {/* 文本属性 */}
         {shouldShowText && selectedNodes.some(node => node.type === 'text') && (
-          <CollapsibleSection title="文本" isExpanded={expandedSections.text} onToggle={() => toggleSection('text')}>
+          <CollapsibleSection
+            title="文本"
+            isExpanded={expandedSections.text}
+            onToggle={() => toggleSection('text')}
+            metaData={metaDataConfig}
+            sectionKey="text"
+          >
             <TextPanel selectedNodes={selectedNodes} />
           </CollapsibleSection>
         )}
@@ -266,6 +279,8 @@ const ConfigurableRightPanel: React.FC<ConfigurableRightPanelProps> = ({
             title="页面颜色"
             isExpanded={expandedSections.pageColors}
             onToggle={() => toggleSection('pageColors')}
+            metaData={metaDataConfig}
+            sectionKey="pageColor"
           >
             <PageColorPanel onPageColorChange={handlePageColorChange} />
           </CollapsibleSection>
