@@ -1,6 +1,8 @@
 // @ts-ignore 暂时不处理
 import './style.css';
 import { Application, Graphics, Texture, Assets } from 'pixi.js';
+// 引入render包的源码，这样就可以调试源码了
+import { WebGLRender } from '../../src';
 
 testHelloRect();
 // 这里改造成基于数据结构去渲染
@@ -15,6 +17,9 @@ export async function testHelloRect() {
 
   // Append the application canvas to the document body
   parent.appendChild(app.canvas);
+
+  // 测试WebGLRender源码调试
+  console.log('WebGLRender class:', WebGLRender);
 
   const graphics = new Graphics();
   // Rectangle
@@ -34,7 +39,7 @@ export async function testHelloRect() {
   // // 将Canvas转换为Pixi纹理
   // const texture = Texture.from(canvas);
 
-  const texture = await Assets.load('../../public/vite.svg');
+  const texture = await Assets.load('/public/vite.svg');
   // 创建Graphics并开始纹理填充
   graphics.rect(530, 50, 100, 100);
   graphics.fill(texture);
