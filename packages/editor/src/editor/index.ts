@@ -6,11 +6,12 @@ import { EElementChangeType, EOtherElementType } from '@zhgu/type';
 import type { Transaction, EElementType, IElementPropsWithoutType } from '@zhgu/type';
 import { Mode, StateFactory } from '../mode';
 import style from '../assets/css/cursor.css?raw';
-
+import { SelectHelper } from './SelectHelper.ts';
 /**
  * 编辑器核心类，暴露给用户使用
  */
 export class Editor extends View {
+  selectHelper = new SelectHelper();
   constructor() {
     super();
   }

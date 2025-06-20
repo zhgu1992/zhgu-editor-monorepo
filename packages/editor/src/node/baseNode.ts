@@ -57,6 +57,10 @@ export class BaseNode extends NodeModel implements IBaseNode {
     return this._view;
   }
 
+  /**
+   * 设置 w、h
+   * @param size
+   */
   changeSize(size: Partial<ISizeProps>) {
     const { w, h } = size;
     return {
@@ -69,6 +73,11 @@ export class BaseNode extends NodeModel implements IBaseNode {
     } as PropsElementChange;
   }
 
+  /**
+   * 设置旋转角度
+   * @param rotation
+   * @param apivot
+   */
   changeRotation(rotation: number, apivot = this.apivot) {
     const at = rotate(this.at, rotation, apivot);
     const { rt } = this;
@@ -122,6 +131,10 @@ export class BaseNode extends NodeModel implements IBaseNode {
     } as PropsElementChange;
   }
 
+  /**
+   * 设置x、y
+   * @param pos
+   */
   changeAbsolutePos(pos: XYPos) {
     const parentNode = this.parent!;
     const rt = this.rt;
@@ -440,6 +453,10 @@ export class BaseNode extends NodeModel implements IBaseNode {
   }
 
   getMetaData() {
-    return DEFAULT_MODULE_META_DATA as unknown as IMetaData;
+    return this._metaData;
+  }
+
+  getModuleConfig() {
+    return this._moduleMetaData;
   }
 }

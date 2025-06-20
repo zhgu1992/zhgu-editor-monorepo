@@ -4,7 +4,8 @@ export type CustomEventType =
   | ESelectEventType
   | EConfigEventType
   | EStateEvent
-  | EHistoryEvent;
+  | EHistoryEvent
+  | ENodeChangeType;
 
 export type IEventArgs = {
   // todo 后续定义类型
@@ -27,6 +28,10 @@ export enum ESelectEventType {
 
 export enum EConfigEventType {
   PixelGridChange = 'PixelGridChange',
+}
+
+export enum ENodeChangeType {
+  BaseAttributeChange = 'BaseAttributeChange',
 }
 
 /**

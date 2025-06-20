@@ -13,6 +13,7 @@ import { flipXWithMyself, flipYWithMyself, getMaxAABB } from '@zhgu/data';
 import type { AllDirection } from '../../../utils';
 import type { Transaction } from '@zhgu/type';
 import type { BaseResizeEventArea } from '../../UIElement';
+import { ENodeChangeType } from '../../../const';
 
 const Vec_Cache = {
   v1: vec2.create(),
@@ -93,6 +94,7 @@ export class DragResizeBehavior extends DragBaseBehaviorNode {
       this.multiDragResize();
     }
     this.collectionUIManager.update(new Set(['transform', 'size']));
+    this.view.eventManager?.emit(ENodeChangeType.BaseAttributeChange, { data: nodes });
   };
 
   onDragEnd: TJsDragEndEvent = (areaNode, inputSnapshot) => {

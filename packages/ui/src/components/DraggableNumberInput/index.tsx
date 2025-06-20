@@ -154,8 +154,8 @@ export const DraggableNumberInput: React.FC<DraggableNumberInputProps> = ({
         background: '#fafafa',
         border: `1px solid ${hover ? '#bdbdbd' : '#e0e0e0'}`,
         borderRadius: 4,
-        padding: '2px 10px 2px 8px',
-        height: 32,
+        padding: '1px 6px 1px 6px',
+        height: 26,
         transition: 'border-color 0.15s',
         boxSizing: 'border-box',
       }}
@@ -164,11 +164,13 @@ export const DraggableNumberInput: React.FC<DraggableNumberInputProps> = ({
         style={{
           position: 'relative',
           cursor: 'ew-resize',
-          color: dragging ? '#000' : '#888',
-          fontWeight: 500,
-          fontSize: 15,
+          color: dragging ? '#222' : '#aaa',
+          fontWeight: 400,
+          fontSize: 13,
           transition: 'color 0.15s',
-          marginRight: 8,
+          marginRight: 6,
+          minWidth: 16,
+          textAlign: 'left',
         }}
         onMouseDown={handleMouseDown}
         onMouseEnter={handleXMouseEnter}
@@ -202,10 +204,7 @@ export const DraggableNumberInput: React.FC<DraggableNumberInputProps> = ({
           min={min}
           max={max}
           step={step}
-          style={{
-            ...inputNumberStyle,
-            cursor: dragging ? blackEwResizeCursor : 'default',
-          }}
+          style={{ ...inputNumberStyle, fontSize: 13, height: 22, width: 70 }}
           inputMode="numeric"
           // 隐藏number input的上下箭头（Chrome/Safari/Edge）
           className="no-spinner"

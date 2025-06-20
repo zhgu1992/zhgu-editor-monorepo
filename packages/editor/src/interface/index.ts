@@ -11,7 +11,7 @@ import type {
 } from '@zhgu/type';
 import type { INodeModel } from '@zhgu/data';
 import type { mat3, vec2 } from 'gl-matrix';
-import type { IMetaData } from './metaData.ts';
+import type { IMetaData, IModuleMetaData } from './metaData.ts';
 
 export interface IRenderNodeModel extends INodeModel {
   renderOrder: number;
@@ -94,6 +94,7 @@ export interface IBaseNode extends INodeModel {
   changeRtAndSize: (rt: mat3, w: number, h: number) => ElementChange;
   destroy: () => void;
   getMetaData: () => IMetaData;
+  getModuleConfig: () => IModuleMetaData;
 }
 
 export type IBaseNodeOrNodeModel = IBaseNode | INodeModel;

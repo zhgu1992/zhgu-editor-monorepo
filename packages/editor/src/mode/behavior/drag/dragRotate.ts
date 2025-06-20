@@ -12,6 +12,7 @@ import { type Transaction, type XYPos } from '@zhgu/type';
 import type { BaseRotatePoint } from '../../UIElement';
 import { getAngleByRotate, getMaxAABB } from '@zhgu/data';
 import { getRotateCursor, type CornerDirection } from '../../../utils';
+import { ENodeChangeType } from '../../../const';
 
 export class DragRotateBehavior extends DragBaseBehaviorNode {
   private startAngle: number = 0;
@@ -95,6 +96,7 @@ export class DragRotateBehavior extends DragBaseBehaviorNode {
     this.updateRotateCursor(collideArea.rotateType, dr);
     this.view.applyTransaction(transactions);
     this.collectionUIManager.update();
+    this.view.eventManager?.emit(ENodeChangeType.BaseAttributeChange, { data: nodes });
   }
 
   /**

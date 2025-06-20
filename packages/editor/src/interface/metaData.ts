@@ -22,6 +22,16 @@ export type IMetaDataConfig = {
   enabled?: boolean;
   // 是否显示
   isVisible: boolean;
+  // 标题
+  title?: string;
+  // 是否混合状态
+  mixed?: boolean;
+  // 最小值
+  min?: number;
+  // 最大值
+  max?: number;
+  // 步长
+  step?: number;
 };
 
 // 没有选中物体时的默认配置 - 只显示页面颜色
@@ -47,7 +57,7 @@ export const EMPTY_SELECTION_META_DATA = {
 // 完整功能的默认配置 - 用于选中物体时的fallback
 export const DEFAULT_MODULE_META_DATA = {
   type: 'default',
-  // 基础属性 x y w h
+  // 基础属性 x y w h r
   baseAttribute: 1,
   // 矢量编辑
   vectorEdit: 0,
@@ -85,24 +95,47 @@ export const DEFAULT_META_DATA = {
   x: {
     enabled: true,
     isVisible: true,
+    mixed: false,
+    min: -Infinity,
+    max: Infinity,
+    step: 10,
+    title: 'x',
   },
   y: {
     enabled: true,
     isVisible: true,
+    mixed: false,
+    min: -Infinity,
+    max: Infinity,
+    step: 10,
+    title: 'y',
   },
   w: {
-    // ? 可能单个属性被禁用
     enabled: true,
     isVisible: true,
+    mixed: false,
+    min: 0,
+    max: Infinity,
+    step: 5,
+    title: 'w',
   },
   h: {
-    // ? 可能单个属性被禁用
     enabled: true,
     isVisible: true,
+    mixed: false,
+    min: 0,
+    max: Infinity,
+    step: 5,
+    title: 'h',
   },
   rotation: {
     enabled: true,
     isVisible: true,
+    mixed: false,
+    min: 0,
+    max: 360,
+    step: 2,
+    title: 'r',
   },
   // cornerRadius: {
   //   enabled: true,

@@ -15,6 +15,7 @@ import type { XYPos, XYWH } from '@zhgu/type';
 import { mat3 } from 'gl-matrix';
 import type { View } from '../../../view';
 import type { Transaction } from '@zhgu/type';
+import { ENodeChangeType } from '../../../const';
 
 type INodeInfo = {
   index: number;
@@ -158,6 +159,7 @@ export class DragMovingBehavior extends DragBaseBehaviorNode {
       transactions.push(change);
     });
     view.applyTransaction(transactions);
+    view.eventManager?.emit(ENodeChangeType.BaseAttributeChange, { data: nodes });
     return true;
   }
 }

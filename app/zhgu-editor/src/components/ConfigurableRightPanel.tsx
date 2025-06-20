@@ -1,13 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Plus } from 'lucide-react';
-import type { IModuleMetaData, IMetaData, IBaseNode } from '@zhgu/editor';
-import {
-  DEFAULT_META_DATA,
-  DEFAULT_MODULE_META_DATA,
-  EMPTY_SELECTION_META_DATA,
-  ESelectEventType,
-  EHistoryEvent,
-} from '@zhgu/editor';
+import type { IModuleMetaData, IMetaData } from '@zhgu/editor';
+import { IBaseNode, ENodeChangeType } from '@zhgu/editor';
+import { ESelectEventType, EHistoryEvent } from '@zhgu/editor';
 import { useEditorStore, EditorInitState } from '../store';
 import HelpMenu from './HelpMenu';
 import CollapsibleSection from './panels/CollapsibleSection';
@@ -79,60 +74,6 @@ const ConfigurableRightPanel: React.FC<ConfigurableRightPanelProps> = ({
     };
   }, [initState]);
 
-  // 获取真实数据
-  const selectedNodes = getSelectedNodes();
-
-  // 动态获取配置：直接依赖getMetaData方法的结果
-  const { moduleConfig, metaDataConfig } = useMemo(() => {
-    // 如果有覆盖配置，优先使用
-    if (overrideModuleConfig) {
-      return {
-        moduleConfig: overrideModuleConfig,
-        metaDataConfig: overrideMetaDataConfig || DEFAULT_META_DATA,
-      };
-    }
-
-    // 没有选中节点时，使用空选择配置（只显示页面颜色）
-    if (selectedNodes.length === 0) {
-      return {
-        moduleConfig: EMPTY_SELECTION_META_DATA,
-        metaDataConfig: DEFAULT_META_DATA,
-      };
-    }
-
-    // 有选中节点时：直接使用节点的getMetaData结果
-    const firstNode = selectedNodes[0];
-
-    try {
-      if (firstNode) {
-        console.log('右侧面板：获取节点配置', {
-          nodeId: firstNode.id,
-          nodeName: firstNode.name,
-          nodeType: firstNode.type,
-        });
-
-        const nodeMetaData = firstNode.getMetaData() as NodeMetaData;
-        console.log('右侧面板：节点配置结果', nodeMetaData);
-
-        if (nodeMetaData) {
-          return {
-            moduleConfig: nodeMetaData.moduleConfig || DEFAULT_MODULE_META_DATA,
-            metaDataConfig: nodeMetaData.metaDataConfig || DEFAULT_META_DATA,
-          };
-        }
-      }
-    } catch (error) {
-      console.warn('右侧面板：获取节点配置失败:', error);
-    }
-
-    // 降级到默认配置
-    console.log('右侧面板：使用默认配置');
-    return {
-      moduleConfig: DEFAULT_MODULE_META_DATA,
-      metaDataConfig: DEFAULT_META_DATA,
-    };
-  }, [selectedNodes, overrideModuleConfig, overrideMetaDataConfig, forceUpdate]);
-
   // 如果editor未就绪，显示加载状态
   if (initState !== EditorInitState.READY) {
     return (
@@ -143,6 +84,11 @@ const ConfigurableRightPanel: React.FC<ConfigurableRightPanelProps> = ({
       </div>
     );
   }
+
+  // 获取真实数据
+  const selectedNodes = getSelectedNodes();
+  const { editor } = useEditorStore.getState();
+  const { moduleConfig, metaDataConfig } = editor!.selectHelper.getMetaDataByNodes(selectedNodes);
 
   const toggleSection = (section: keyof typeof expandedSections) => {
     setExpandedSections(prev => ({
