@@ -2,174 +2,239 @@
 
 基于 React + TypeScript + Vite 构建的现代化图形设计编辑器应用，集成了@zhgu/editor核心编辑器。
 
-## 🎉 核心架构
+## 🏗️ 整体架构
 
-### 两阶段初始化系统
-实现了从模拟数据到真实@zhgu/editor集成的完整数据驱动架构：
-
-#### 1. **TypeScript配置优化**
-- ✅ 简化TS配置：从3个配置文件合并为1个，继承monorepo根配置
-- ✅ 修复装饰器编译问题：从SWC切换到标准React插件支持@autobind
-
-#### 2. **两阶段初始化架构**
-- ✅ **Phase 1**: App启动时创建Editor实例（无DOM依赖）
-- ✅ **Phase 2**: Canvas挂载后绑定DOM容器完成初始化
-- ✅ 完整的状态管理：IDLE → CREATING → WAITING_CANVAS → READY → ERROR
-- ✅ 错误处理和加载状态完善
-
-#### 3. **真实Editor API集成**
-- ✅ **完全移除模拟数据**：删除所有Mock Page/Layer接口
-- ✅ **真实数据获取**：
-  - `getPages()` - 获取editor.pages真实页面数据
-  - `getCurrentPage()` - 获取editor.scene.currentPage
-  - `getSelectedNodes()` - 获取editor选中节点
-- ✅ **Editor操作代理**：selectNodes(), clearSelection(), undo/redo等
-
-#### 4. **组件架构重构**
-- ✅ **LeftPanel重构**：支持递归图层树，基于IBaseNode真实数据
-- ✅ **Canvas简化**：移除模拟渲染，editor完全控制画布
-- ✅ **Store优化**：Zustand性能优势，统一状态管理
-- ✅ **类型安全**：正确导入IBaseNode，类型断言处理兼容性
-
-#### 5. **开发者体验提升**
-- ✅ **DebugPanel组件**：统一调试面板，显示鼠标坐标、画布状态、选择信息等
-- ✅ **快捷键支持**：L键切换调试模式，完整快捷键系统
-- ✅ **错误边界**：完善的错误处理和用户提示
-
-### 当前架构优势
-- 🚀 **真实数据驱动**：UI完全基于editor的真实数据，无模拟逻辑
-- ⚡ **高性能**：Zustand状态管理，避免Context性能问题
-- 🔧 **完整初始化**：两阶段设计解决DOM依赖，确保editor正确绑定
-- 🌳 **递归图层**：支持复杂嵌套结构，真实反映设计文档层级
-- 🛡️ **类型安全**：TypeScript严格检查，运行时错误处理完善
-
-## UI 需求详细描述
-
-### 1. 整体布局
-- **三栏式布局**：左侧层级面板 + 中央画布区域 + 右侧属性面板
-- **顶部工具栏**：包含各种设计工具和操作选项
-- **色彩方案**：主要采用蓝白配色，现代化扁平设计风格
-
-### 2. 左侧层级面板
-- **页面管理区域**：页面列表，支持页面切换和添加/删除功能
-- **图层树结构**：层级结构显示、图层重命名、可见性开关、锁定功能、拖拽排序
-
-### 3. 顶部工具栏
-- **设计工具集**：选择工具、移动工具、矩形工具、文本工具等
-- **视图控制**：缩放比例显示
-- **协作功能**：分享按钮、用户头像等
-
-### 4. 中央画布区域
-- **无限画布**：支持拖拽平移和缩放操作
-- **图形元素渲染**：支持各种几何图形的显示和编辑
-- **选择框和控制点**：选中元素时显示变换控制点
-
-### 5. 右侧属性面板
-- **动态属性面板**：根据选中元素类型显示不同属性
-- **可配置系统**：基于metaData的动态面板组合
-
-## 🏗️ 技术架构详解
-
-### Editor初始化流程
-
-#### 两阶段初始化设计原理
-由于@zhgu/editor需要DOM容器才能完成初始化，设计了两阶段初始化：
-
-```typescript
-// Phase 1: 创建Editor实例
-store.createEditor = async () => {
-  const editor = new Editor();
-  set({ editor, initState: EditorInitState.WAITING_CANVAS });
-};
-
-// Phase 2: 绑定DOM容器
-store.bindCanvas = async (canvasId: string) => {
-  await editor.init(canvasId);
-  set({ initState: EditorInitState.READY });
-};
+### 应用结构
+```
+App (根组件)
+├── TopBar (顶部菜单栏)
+├── MainContent
+│   ├── Toolbar (左侧垂直工具栏)
+│   ├── LeftPanel (左侧面板)
+│   │   ├── PageList (页面列表)
+│   │   └── LayerTree (图层树 - 递归结构)
+│   ├── Canvas (中央画布区域)
+│   └── RightPanel (右侧属性面板)
+│       └── ConfigurableRightPanel (可配置属性面板)
+│           ├── BaseAttributePanel (位置和尺寸)
+│           ├── AppearancePanel (外观属性)
+│           ├── TextPanel (文本属性)
+│           ├── EffectsPanel (效果属性)
+│           ├── PageColorPanel (页面颜色)
+│           └── ExportPanel (导出设置)
+├── StatusBar (底部状态栏)
+└── ShortcutHelp (快捷键帮助)
 ```
 
-### Zustand数据流动机制
+### 状态管理架构
+- **Zustand Store**: 统一的全局状态管理
+- **Editor实例**: 核心编辑器实例，管理所有业务逻辑
+- **UI状态**: 工具选择、画布状态、调试模式等
+- **数据代理**: 通过getter方法获取editor真实数据
 
+## 🔄 Editor初始化流程
+
+### 两阶段初始化设计
+
+由于@zhgu/editor需要DOM容器才能完成初始化，采用了两阶段初始化策略：
+
+#### Phase 1: 创建Editor实例 (App.tsx)
 ```typescript
-interface EditorStore {
-  // 核心状态
-  editor: Editor | null;
-  initState: EditorInitState;
-  
-  // UI状态  
-  currentTool: EEditorStateName;
-  canvasZoom: number;
-  debugMode: boolean;
-  
-  // 数据获取方法
-  getPages: () => IBaseNode[];
-  getCurrentPage: () => IBaseNode | null;
-  getSelectedNodes: () => IBaseNode[];
-  
-  // 操作方法
-  selectNodes: (nodes: IBaseNode[]) => void;
-  undoHistory: () => void;
-  redoHistory: () => void;
+// 应用启动时立即执行
+useEffect(() => {
+  createEditor();
+}, [createEditor]);
+
+// Store中的实现
+createEditor: async () => {
+  set({ initState: EditorInitState.CREATING });
+  const editor = new Editor();
+  set({ 
+    editor, 
+    initState: EditorInitState.WAITING_CANVAS 
+  });
 }
 ```
 
-### 组件层次结构
+#### Phase 2: 绑定DOM容器 (Canvas.tsx)
+```typescript
+// Canvas挂载后触发第二阶段
+useEffect(() => {
+  if (initState === EditorInitState.WAITING_CANVAS && canvasContainerRef.current) {
+    bindCanvas('app'); // 传入canvas容器ID
+  }
+}, [initState, bindCanvas]);
 
-```
-App
-├── Toolbar (顶部工具栏)
-├── MainContent
-│   ├── LeftPanel (左侧面板)
-│   │   ├── PageList (页面列表)
-│   │   └── LayerTree (图层树)
-│   ├── Canvas (中央画布)
-│   └── RightPanel (右侧面板)
-│       ├── ConfigurableRightPanel
-│       │   ├── BaseAttributePanel
-│       │   ├── AppearancePanel
-│       │   ├── TextPanel
-│       │   └── EffectsPanel
-│       └── DebugPanel
-└── ErrorBoundary
+// Store中的实现
+bindCanvas: async (canvasId?: string) => {
+  await editor.init(canvasId); // 绑定DOM容器
+  editor.loadFile(file); // 加载初始数据
+  editor.initEditorMode(); // 初始化编辑模式
+  set({ initState: EditorInitState.READY });
+}
 ```
 
-## 🎨 可配置右侧面板系统
+### 初始化状态流转
+```
+IDLE → CREATING → WAITING_CANVAS → READY
+                ↓
+              ERROR (出错时)
+```
 
-### 元数据驱动配置
-- **模块级配置**：控制整个功能模块的显示/隐藏
-- **属性级配置**：控制具体属性的显示/启用状态
-- **动态组合**：根据选中节点类型动态显示相应面板
+## 📊 数据更新流程
 
-### 颜色选择器架构
-- **ColorButton**：通用UI组件，内置状态管理
-- **ColorPickerPortal**：纯颜色选择器组件
-- **useColorTransaction**：颜色修改事务管理
-- **三事件流程**：start → change → finish
+### 数据获取机制
 
-## 🔧 开发工具
+#### 1. 真实数据获取
+所有UI组件通过Store的getter方法获取editor真实数据：
 
-### 调试面板
-- **快捷键**: `L` 键切换调试模式
-- **显示信息**：鼠标坐标、画布状态、选中节点信息、编辑器状态
+```typescript
+// 页面数据
+getPages: () => editor.pages || []
 
-### 性能监控
-- Zustand状态变化追踪
-- 组件渲染次数统计
-- Editor操作性能分析
+// 当前页面
+getCurrentPage: () => editor.scene.currentPage || null
 
-## 🚀 构建与部署
+// 选中节点
+getSelectedNodes: () => editor.eventManager?.selectedNodes || []
 
-### 开发环境
+// 悬停节点
+getHoveredNode: () => editor.eventManager?.hoverNode || null
+```
+
+#### 2. 事件监听机制
+组件通过监听editor事件来响应数据变化：
+
+```typescript
+// 监听选中状态变化
+eventManager.on(ESelectEventType.SelectChange, handleSelectionChange);
+
+// 监听撤销重做
+eventManager.on(EHistoryEvent.UndoRedo, handleUndoRedoChange);
+
+// 监听节点变化
+eventManager.on(ENodeChangeType.NodeChange, handleNodeChange);
+```
+
+### 数据流向
+
+#### 单向数据流
+```
+Editor实例 → Store getter方法 → UI组件 → 用户操作 → Editor API → 数据更新
+```
+
+#### 具体流程示例
+1. **用户选择节点**: Canvas → Editor.eventManager → 触发SelectChange事件
+2. **UI响应更新**: LeftPanel/RightPanel 监听事件 → 重新获取数据 → 更新显示
+3. **属性修改**: RightPanel → Editor API → 触发NodeChange事件 → UI更新
+
+## 🎯 已完成的核心功能
+
+### ✅ Editor集成
+- **完整初始化流程**: 两阶段初始化，解决DOM依赖问题
+- **真实数据驱动**: 完全移除模拟数据，基于editor真实API
+- **错误处理**: 完善的错误边界和加载状态
+- **调试支持**: 全局editor实例暴露，方便调试
+
+### ✅ 左侧面板 (LeftPanel)
+- **页面管理**: 页面列表、添加/删除页面、页面切换
+- **图层树**: 递归渲染复杂嵌套结构，支持无限层级
+- **图层操作**: 重命名、显示/隐藏、锁定/解锁、删除
+- **选择同步**: 与Canvas选择状态实时同步
+- **悬停高亮**: 鼠标悬停时高亮对应图层
+
+### ✅ 右侧面板 (ConfigurableRightPanel)
+- **元数据驱动**: 根据选中节点类型动态显示面板
+- **可配置系统**: 基于moduleConfig和metaDataConfig控制面板显示
+- **面板组件**:
+  - BaseAttributePanel: 位置和尺寸属性
+  - AppearancePanel: 填充和描边颜色
+  - TextPanel: 文本属性编辑
+  - EffectsPanel: 阴影和模糊效果
+  - PageColorPanel: 页面背景颜色
+  - ExportPanel: 导出设置
+
+### ✅ 中央画布 (Canvas)
+- **Editor渲染**: 完全由editor控制画布渲染
+- **事件处理**: 鼠标事件、键盘事件、画布交互
+- **调试面板**: 显示鼠标坐标、画布状态等信息
+
+### ✅ 状态管理 (Store)
+- **Zustand集成**: 高性能状态管理
+- **Editor代理**: 所有editor操作通过store代理
+- **数据同步**: 实时同步editor状态到UI
+- **工具管理**: 当前工具状态、画布缩放等
+
+### ✅ 开发工具
+- **调试模式**: L键切换，显示详细调试信息
+- **快捷键系统**: 完整的快捷键支持
+- **错误边界**: 完善的错误处理和用户提示
+- **性能监控**: 状态变化追踪和性能分析
+
+## 🎨 可配置属性面板系统
+
+### 元数据驱动架构
+```typescript
+// 模块级配置 - 控制功能模块显示
+interface IModuleMetaData {
+  baseAttribute: number; // 位置和尺寸
+  appearance: number;    // 外观属性
+  text: number;          // 文本属性
+  shadow: number;        // 阴影效果
+  blur: number;          // 模糊效果
+  export: number;        // 导出功能
+}
+
+// 属性级配置 - 控制具体属性
+interface IMetaData {
+  baseAttribute: { x: number, y: number, width: number, height: number };
+  appearance: { fill: number, stroke: number };
+  // ... 更多属性配置
+}
+```
+
+### 动态面板组合
+- **智能显示**: 根据选中节点类型自动显示相关面板
+- **条件渲染**: 文本节点显示文本面板，图形节点显示外观面板
+- **权限控制**: 通过配置控制功能的启用/禁用状态
+
+## 🚀 技术特性
+
+### 性能优化
+- **Zustand状态管理**: 避免Context性能问题
+- **虚拟化渲染**: 大量图层时使用虚拟滚动
+- **事件优化**: 精确的事件监听和清理
+- **组件懒加载**: 按需加载面板组件
+
+### 类型安全
+- **完整TypeScript**: 严格的类型检查
+- **接口定义**: 完整的IBaseNode等类型定义
+- **类型断言**: 安全的类型转换和兼容性处理
+
+### 用户体验
+- **加载状态**: 完善的加载和错误状态
+- **快捷键**: 完整的快捷键支持
+- **调试工具**: 开发者友好的调试面板
+- **错误处理**: 用户友好的错误提示
+
+## 🔧 开发指南
+
+### 启动开发
 ```bash
 pnpm dev              # 启动开发服务器
 ```
 
-### 生产构建
+### 构建部署
 ```bash
 pnpm build            # 构建生产版本
 pnpm preview          # 预览生产版本
 ```
+
+### 调试技巧
+- **L键**: 切换调试模式
+- **?键**: 显示快捷键帮助
+- **Console**: 全局editor实例 (window.editor)
+- **Store**: 使用Redux DevTools查看状态变化
 
 ## 📝 核心Hooks
 
@@ -177,25 +242,7 @@ pnpm preview          # 预览生产版本
 编辑器状态管理hook，提供editor实例和所有操作方法。
 
 ### useColorTransaction
-颜色修改事务hook，支持start-change-finish三阶段操作：
-```typescript
-const colorTransaction = useColorTransaction({ type: 'fill' });
-
-// 开始修改
-colorTransaction.startColorTransaction();
-// 应用修改
-colorTransaction.applyColorChange(color);
-// 提交修改
-colorTransaction.commitColorTransaction();
-```
-
-## 🎯 设计原则
-
-1. **数据驱动**：基于editor实例的真实数据
-2. **组件化**：高内聚、低耦合的模块设计
-3. **可配置性**：元数据驱动的动态界面
-4. **类型安全**：完整的TypeScript类型定义
-5. **性能优化**：Zustand状态管理，避免不必要渲染
+颜色修改事务hook，支持start-change-finish三阶段操作。
 
 ---
 
