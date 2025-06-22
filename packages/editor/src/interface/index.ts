@@ -65,6 +65,11 @@ export interface IEditorCanvasData {
   clientY: number;
 }
 
+export interface IPage extends INodeModel {
+  setBackgroundColor: (color: RGBAColor) => ElementChange;
+  get backgroundColor(): RGBAColor;
+}
+
 export interface IBaseNode extends INodeModel {
   renderNode: IRenderNode;
   isVisible: boolean;

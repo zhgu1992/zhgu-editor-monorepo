@@ -261,9 +261,9 @@ export { SizeProps };
 namespace BackgroundProps {
   export const getDefaultProps = (): IBackgroundProps => ({
     backgroundColor: {
-      r: 245,
-      g: 245,
-      b: 245,
+      r: 145,
+      g: 145,
+      b: 145,
       a: 1,
     },
     backgroundEnabled: true,

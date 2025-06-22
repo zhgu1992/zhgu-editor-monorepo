@@ -105,6 +105,7 @@ export class View {
 
   public commitHistory() {
     this.syncClient.commitHistory();
+    this.eventManager!.emit(EHistoryEvent.Commit, { data: this });
   }
 
   public startCompressTransaction() {

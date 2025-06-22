@@ -1,12 +1,13 @@
 import { ElementTree } from '@zhgu/data';
 import type { BaseNode } from './baseNode';
+import type { IPage } from '../interface';
 
 /**
  * 场景树
  */
 export class Scene extends ElementTree<BaseNode> {
   get currentPage() {
-    return this.rootNode.children[0] as BaseNode;
+    return this.rootNode.children[0] as IPage;
   }
 
   get pages() {

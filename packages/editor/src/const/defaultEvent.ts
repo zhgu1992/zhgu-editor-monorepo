@@ -60,4 +60,5 @@ export enum EStateEvent {
 
 export enum EHistoryEvent {
   UndoRedo = 'undoRedo',
+  Commit = 'commit',
 }

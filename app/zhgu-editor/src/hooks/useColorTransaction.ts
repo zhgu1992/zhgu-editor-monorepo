@@ -52,10 +52,10 @@ export const useColorTransaction = (options: UseColorTransactionOptions = {}) =>
             let diff;
             if (options.type === 'stroke') {
               // 描边颜色修改（如果API支持的话）
-              diff = (node as any).changeStrokePaint?.(colorData);
+              diff = node.changeStrokePaintColor(colorData);
             } else {
               // 填充颜色修改
-              diff = (node as any).changeFillPaintColor?.(colorData);
+              diff = node.changeFillPaintColor(colorData);
             }
             if (diff) {
               editor.applyTransaction([diff]);
@@ -66,9 +66,9 @@ export const useColorTransaction = (options: UseColorTransactionOptions = {}) =>
           const diffs = selectedNodes
             .map(node => {
               if (options.type === 'stroke') {
-                return (node as any).changeStrokePaintColor?.(colorData);
+                return node.changeStrokePaintColor?.(colorData);
               } else {
-                return (node as any).changeFillPaintColor?.(colorData);
+                return node.changeFillPaintColor?.(colorData);
               }
             })
             .filter(Boolean);

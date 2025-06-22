@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { createHelloWorldFileData } from '../mock/mockFunc.ts';
-import type { IBaseNode } from '@zhgu/editor';
+import type { IBaseNode, IPage } from '@zhgu/editor';
 import { Editor, EEditorStateName } from '@zhgu/editor';
 
 // 工具类型定义
@@ -39,7 +39,7 @@ interface EditorState {
 
   // 获取真实数据的getter方法
   getPages: () => IBaseNode[];
-  getCurrentPage: () => IBaseNode | null;
+  getCurrentPage: () => IPage | null;
   getSelectedNodes: () => IBaseNode[];
   getHoveredNode: () => IBaseNode | null;
 
@@ -162,7 +162,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     if (!editor || initState !== EditorInitState.READY) return null;
 
     try {
-      return (editor.scene.currentPage || null) as IBaseNode | null;
+      return editor.scene.currentPage;
     } catch (error) {
       console.error('获取当前页面失败:', error);
       return null;

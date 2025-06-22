@@ -3,7 +3,7 @@ import { EModeName, EEditorStateName } from '../const';
 import type { IInputSnapshot } from '../interface';
 import { appendCssToDom } from '../utils/css';
 import { EElementChangeType, EOtherElementType } from '@zhgu/type';
-import type { Transaction, EElementType, IElementPropsWithoutType } from '@zhgu/type';
+import type { Transaction, EElementType, IElementPropsWithoutType, RGBAColor } from '@zhgu/type';
 import { Mode, StateFactory } from '../mode';
 import style from '../assets/css/cursor.css?raw';
 import { SelectHelper } from './SelectHelper.ts';
@@ -106,6 +106,11 @@ export class Editor extends View {
 
   registerCursor() {
     appendCssToDom(style);
+  }
+
+  setBackgroundColor(color: RGBAColor) {
+    const currentPage = this.scene.currentPage;
+    return currentPage.setBackgroundColor(color);
   }
 
   /**

@@ -1,6 +1,6 @@
-import { Application, Graphics, Container, Texture, Matrix } from 'pixi.js';
+import { Application, Graphics, Container, Texture, Matrix, Color } from 'pixi.js';
 import type { INodeModel } from '@zhgu/data';
-import type { IImagePaintProps, ISolidPaintProps, XYPos } from '@zhgu/type';
+import type { IImagePaintProps, ISolidPaintProps, XYPos, RGBAColor } from '@zhgu/type';
 import { EPaintType } from '@zhgu/type';
 import type { IRenderNode } from './interface';
 import type { mat3 } from 'gl-matrix';
@@ -136,5 +136,10 @@ export class WebGLRender {
     //         }
     //     }
     // });
+  }
+
+  setBackgroundColor(color: RGBAColor) {
+    const { r, g, b, a } = color;
+    this.app.renderer.background.color = new Color([r / 255, g / 255, b / 255, a]).toArray();
   }
 }

@@ -64,13 +64,19 @@ const ConfigurableRightPanel: React.FC<ConfigurableRightPanelProps> = ({
       forceUpdate({});
     };
 
+    const handleCommitChange = () => {
+      forceUpdate({});
+    };
+
     // 监听选中状态变化和撤销重做
     eventManager.on(ESelectEventType.SelectChange, handleSelectionChange);
     eventManager.on(EHistoryEvent.UndoRedo, handleUndoRedoChange);
+    eventManager.on(EHistoryEvent.Commit, handleCommitChange);
 
     return () => {
       eventManager.off(ESelectEventType.SelectChange, handleSelectionChange);
       eventManager.off(EHistoryEvent.UndoRedo, handleUndoRedoChange);
+      eventManager.off(EHistoryEvent.Commit, handleCommitChange);
     };
   }, [initState]);
 
@@ -103,6 +109,7 @@ const ConfigurableRightPanel: React.FC<ConfigurableRightPanelProps> = ({
 
   const handlePageColorChange = (color: string) => {
     console.log('页面颜色变更:', color);
+    // 这里不需要额外处理，因为PageColorPanel内部已经处理了背景色事务
   };
 
   const handleExport = (format: string) => {
