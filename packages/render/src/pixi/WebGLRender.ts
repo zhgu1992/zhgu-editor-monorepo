@@ -2,13 +2,15 @@ import { Application, Graphics, Container, Texture, Matrix, Color } from 'pixi.j
 import type { INodeModel } from '@zhgu/data';
 import type { IImagePaintProps, ISolidPaintProps, XYPos, RGBAColor } from '@zhgu/type';
 import { EPaintType } from '@zhgu/type';
-import type { IRenderNode } from './interface';
+import { type IRenderNodeProps, RenderNode } from './RenderNode';
 import type { mat3 } from 'gl-matrix';
+import type { IRenderNode } from '../interface';
+import { Viewport } from '../base';
 
 export class WebGLRender {
   private _app = new Application();
-  private _nodeCache = new Map<string, IRenderNode>();
-  private _viewPort: Container<IRenderNode> = new Container();
+  private _viewPort: Container<Graphics> = new Container();
+  private _viewPortCalculate?: Viewport;
   async init(id: string = 'app') {
     // Create a new application
     const app = this._app;
@@ -18,21 +20,48 @@ export class WebGLRender {
     // Append the application canvas to the document body
     parent.appendChild(app.canvas);
     app.stage.addChild(this._viewPort);
+    this._viewPortCalculate = new Viewport(app.canvas);
   }
 
   createEmptyNode() {
     const graphics = new Graphics();
     this._viewPort.addChild(graphics);
-    return graphics;
+    return new RenderNode(graphics) as IRenderNode;
   }
 
   setViewPortPosition(pos: XYPos) {
-    this._viewPort.position.set(pos.x, pos.y); // 向右下移动内容
+    // if(this._viewPortCalculate){
+    //   const mat3 = this._viewPortCalculate.setPosition(pos.x, pos.y).value();
+    //   const matrix = new Matrix(
+    //       mat3[0],
+    //       mat3[1],
+    //       mat3[3],
+    //       mat3[4],
+    //       mat3[6],
+    //       mat3[7]
+    //   );
+    //   this._viewPort.setFromMatrix(matrix);
+    // }
+    this._viewPort.position.set(pos.x, pos.y);
   }
 
   update() {}
 
-  setZoom(value: number) {}
+  setZoom(value: number) {
+    this._viewPort.scale.set(value);
+    // if(this._viewPortCalculate){
+    //   const mat3 = this._viewPortCalculate.setZoom(value).value();
+    //   const matrix = new Matrix(
+    //       mat3[0],
+    //       mat3[1],
+    //       mat3[3],
+    //       mat3[4],
+    //       mat3[6],
+    //       mat3[7]
+    //   );
+    //   this._viewPort.setFromMatrix(matrix);
+    // }
+  }
 
   get app() {
     return this._app;
@@ -71,21 +100,17 @@ export class WebGLRender {
     graphics.setFromMatrix(animPixiMatrix);
   }
 
-  updateWH(graphics: Graphics, w: number, h: number) {
-    graphics.rect(0, 0, w, h);
-  }
-
-  setRenderOrder(graphics: Graphics, order: number) {
-    graphics.zIndex = order;
+  setRenderOrder(renderNode: IRenderNode, order: number) {
+    renderNode.setRenderOrder(order);
   }
 
   /**
    * todo 后续再看看pixi，感觉性能不行，可能需要换three.js
-   * @param graphics
+   * @param node
    * @param props
-   * @param keySet
    */
-  updateRenderNode(graphics: Graphics, props: INodeModel) {
+  updateRenderNode(node: IRenderNode, props: INodeModel) {
+    const graphics = (node as IRenderNodeProps).graphics;
     graphics.clear();
     // Rectangle
     // graphics.rect(props.x, props.y, props.w, props.h);

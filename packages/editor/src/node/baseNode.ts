@@ -333,8 +333,7 @@ export class BaseNode extends NodeModel implements IBaseNode {
   }
 
   pick(pos: XYPos) {
-    const localPoint = this._renderNode.worldTransform.applyInverse(pos);
-    return this._renderNode?.containsPoint(localPoint);
+    return this._renderNode?.containsPoint(pos);
   }
   //
   pickByBox(rect: XYWH, strict = false) {

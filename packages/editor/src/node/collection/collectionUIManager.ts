@@ -63,9 +63,8 @@ export class CollectionUIManager extends BaseCollection implements ICollectionUI
     for (let i = 0; i < nodes.length; i++) {
       const areaNode = nodes[i];
       const renderNode = areaNode.renderNode;
-      const localPoint = renderNode.worldTransform.applyInverse(position);
       // todo 判定热区是否开启
-      const flag = renderNode.containsPoint(localPoint);
+      const flag = renderNode.containsPoint(position);
       if (flag && areaNode) {
         results.push(areaNode);
       }

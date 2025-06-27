@@ -149,8 +149,13 @@ export class EventEntry {
     }
 
     this._handledEventCache.add(mouseEvent);
-    // @ts-ignore
-    targetDom.addEventListener(mouseEvent, this._eventHandlers?.[mouseEvent] as EventListener);
+    if (mouseEvent === 'wheel') {
+      // @ts-ignore
+      targetDom.addEventListener(mouseEvent, this._eventHandlers?.[mouseEvent] as EventListener, { passive: false });
+    } else {
+      // @ts-ignore
+      targetDom.addEventListener(mouseEvent, this._eventHandlers?.[mouseEvent] as EventListener);
+    }
   }
 
   private removeNativeMouseEvent(mouseEvent: MouseEventType, targetDom: HTMLElement | Document = this.domWrapper) {
@@ -296,6 +301,7 @@ export class EventEntry {
   }
   @autobind
   handleWheelEvent(e: WheelEvent) {
+    e.preventDefault();
     if ((e.target as HTMLElement)?.id === this.canvasDom.id) {
       const { x, y } = this.getEventPagePos(e);
       this.setConfig({

@@ -145,7 +145,7 @@ export class CustomNode implements ICustomNode {
 
   set isVisible(value: boolean) {
     this._isVisible = value;
-    this.renderNode.visible = value;
+    this.renderNode.setVisible(value);
     // this.renderManager.renderer.update();
   }
 

@@ -1,2 +1,2 @@
-export * from './WebGLRender';
 export * from './interface';
+export * from './pixi';
